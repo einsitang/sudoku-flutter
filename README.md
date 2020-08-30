@@ -7,9 +7,7 @@ you can build the Sudoku Game just  for you own.
 
 ## snapshot
 
-![Bootstrap](./document/img/Jietu20200830-234059_jpg.jpg)
-
-![Game](./document/img/Jietu20200830-234139_jpg.jpg)
+![Bootstrap](./document/img/Jietu20200830-234059_jpg.jpg)![Game](./document/img/Jietu20200830-234139_jpg.jpg)
 
 ## todo list
 - [:white_check_mark:]  full experience of sudoku
