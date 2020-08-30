@@ -13,7 +13,7 @@ you can build the Sudoku Game just  for you own.
 ![Bootstrap](./document/img/Jietu20200830-234059_jpg.jpg)![Game](./document/img/Jietu20200830-234139_jpg.jpg)
 
 ## todo list
-- [:white_check_mark:]  full experience of sudoku
+- [:white_check_mark:]  full functional of sudoku
 - make some funny eggs
 - [:bangbang:] Sudoku puzzle Scaner
 
@@ -89,7 +89,7 @@ $> flutter build apk
 ```
 
 ## more flutter features
-see official [Flutter](https://flutter.dev/) website
+see the [Flutter](https://flutter.dev/) official website
 
 ## the end
 
