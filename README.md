@@ -3,6 +3,7 @@
 ## about
 
 A open source Sudoku game application powered by Flutter .
+
 you can build the Sudoku Game just  for you own.
 
 [Download](https://github-production-release-asset-2e65be.s3.amazonaws.com/291502708/946fed00-eb22-11ea-9f3b-e65b96746ed7?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200830%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200830T164712Z&X-Amz-Expires=300&X-Amz-Signature=8e3ec35a5237694414a4de94836a2480a439fe2249b8c895447e4e9e7a188a42&X-Amz-SignedHeaders=host&actor_id=1745525&key_id=0&repo_id=291502708&response-content-disposition=attachment%3B%20filename%3Dapp-release.apk&response-content-type=application%2Fvnd.android.package-archive) latest build apk(beta)
