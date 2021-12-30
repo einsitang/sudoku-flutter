@@ -92,6 +92,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.1.0"
+  camera:
+    dependency: "direct main"
+    description:
+      name: camera
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.8+5"
   characters:
     dependency: transitive
     description:
@@ -190,6 +197,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
+  ffi:
+    dependency: "direct main"
+    description:
+      name: ffi
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.3"
   file:
     dependency: transitive
     description:
@@ -209,6 +223,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.8"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -256,6 +277,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.14.0+3"
+  http:
+    dependency: transitive
+    description:
+      name: http
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.12.2"
   http_multi_server:
     dependency: transitive
     description:
@@ -270,6 +298,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.4"
+  image_picker:
+    dependency: "direct main"
+    description:
+      name: image_picker
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.7+7"
+  image_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: image_picker_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   intl:
     dependency: transitive
     description:
@@ -340,6 +382,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.0+1"
+  native_opencv:
+    dependency: "direct main"
+    description:
+      path: native_opencv
+      relative: true
+    source: path
+    version: "0.0.1"
   node_interop:
     dependency: transitive
     description:
@@ -362,14 +411,14 @@ packages:
     source: hosted
     version: "1.9.3"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.7.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.flutter-io.cn"
@@ -533,7 +582,7 @@ packages:
       name: sudoku_dart
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.8"
+    version: "0.1.0"
   term_glyph:
     dependency: transitive
     description:
@@ -606,4 +655,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.9.0-14.0.dev <3.0.0"
-  flutter: ">=1.12.13+hotfix.5 <2.0.0"
+  flutter: ">=1.20.0 <2.0.0"

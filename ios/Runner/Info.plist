@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+    <string>Use Camera take photo to OCR convert</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Read gallery photo to OCR convert</string>
 </dict>
 </plist>

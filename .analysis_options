@@ -1,0 +1,27 @@
+analyzer:
+  strong-mode: true
+  exclude:
+    - test/data/**
+  language:
+    enableSuperMixins: true
+linter:
+  rules:
+    # see http://dart-lang.github.io/linter/lints/
+    - always_declare_return_types
+    - always_specify_types
+    - camel_case_types
+    - constant_identifier_names
+    - empty_constructor_bodies
+    - implementation_imports
+    - library_names
+    - library_prefixes
+    - non_constant_identifier_names
+    - one_member_abstracts
+    - package_api_docs
+    - package_prefixed_library_names
+    - slash_for_doc_comments
+    - super_goes_last
+    - type_init_formals
+    #    - unnecessary_brace_in_string_interp
+    - unnecessary_getters_setters
+    - package_names

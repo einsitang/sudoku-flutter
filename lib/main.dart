@@ -9,9 +9,8 @@ import 'package:sudoku/state/sudoku_state.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  print("My App running...");
   runApp(MyApp());
 }
 
@@ -34,8 +33,7 @@ class MyApp extends StatelessWidget {
               alignment: Alignment.center,
               child: Center(
                   child: Text('Sudoku loading...',
-                      style: TextStyle(color: Colors.black),
-                      textDirection: TextDirection.ltr)));
+                      style: TextStyle(color: Colors.black), textDirection: TextDirection.ltr)));
         }
 
         SudokuState sudokuState = snapshot.data;
@@ -65,8 +63,7 @@ class MyApp extends StatelessWidget {
             home: bootstrapPage,
             routes: <String, WidgetBuilder>{
               "/bootstrap": (context) => bootstrapPage,
-              "/newGame": (context) =>
-                  SudokuGamePage(title: "Sudoku"),
+              "/newGame": (context) => SudokuGamePage(title: "Sudoku"),
               "/gaming": (context) => sudokuGamePage
             },
           ),

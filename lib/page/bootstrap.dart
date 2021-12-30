@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:sudoku/page/opencv_test.dart';
+import 'package:sudoku/page/scanner.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 
@@ -21,25 +24,28 @@ class BootstrapPage extends StatefulWidget {
   _BootstrapPageState createState() => _BootstrapPageState();
 }
 
-Widget _buttonWrapper(
-    BuildContext context, Widget childBuilder(BuildContext content)) {
-  return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      width: 300,
-      height: 60,
-      child: childBuilder(context));
+Widget _buttonWrapper(BuildContext context, Widget childBuilder(BuildContext content)) {
+  return Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10), width: 300, height: 60, child: childBuilder(context));
 }
 
 Widget _scanButton(BuildContext context) {
   return Offstage(
-      offstage: true,
+      offstage: false,
       child: _buttonWrapper(
           context,
           (content) => CupertinoButton(
                 color: Colors.blue,
                 child: Text("扫独解题"),
-                onPressed: () {
-                  log.d("scan");
+                onPressed: () async {
+                  log.d("open scanner");
+
+//                  WidgetsFlutterBinding.ensureInitialized();
+//                  final camera = (await availableCameras()).first;
+
+                  Navigator.push(context, PageRouteBuilder(pageBuilder:
+                      (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                    return OpenCVTestPage();
+                  }));
                 },
               )));
 }
@@ -55,15 +61,8 @@ Widget _continueGameButton(BuildContext context) {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                      child: Text("继续游戏",
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold))),
-                  Container(
-                      child: Text(
-                          '${LEVEL_NAMES[state.level]} - ${state.timer}',
-                          style: TextStyle(fontSize: 13)))
+                  Container(child: Text("继续游戏", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold))),
+                  Container(child: Text('${LEVEL_NAMES[state.level]} - ${state.timer}', style: TextStyle(fontSize: 13)))
                 ],
               ),
               onPressed: () {
@@ -94,16 +93,13 @@ Future _sudokuGenerate(BuildContext context, LEVEL level) async {
                 padding: EdgeInsets.all(10),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   CircularProgressIndicator(),
-                  Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text("正在为你加载数独,请稍后"))
+                  Container(margin: EdgeInsets.fromLTRB(10, 0, 0, 0), child: Text("正在为你加载数独,请稍后"))
                 ])));
       });
 
   ReceivePort receivePort = ReceivePort();
 
-  Isolate isolate = await Isolate.spawn(
-      _internalSudokuGenerate, [level, receivePort.sendPort]);
+  Isolate isolate = await Isolate.spawn(_internalSudokuGenerate, [level, receivePort.sendPort]);
   var data = await receivePort.first;
   Sudoku sudoku = data;
   SudokuState state = ScopedModel.of<SudokuState>(context);
@@ -164,8 +160,7 @@ Widget _newGameButton(BuildContext context) {
                               alignment: Alignment.center,
                               child: Center(
                                   child: Text('Sudoku loading...',
-                                      style: TextStyle(color: Colors.black),
-                                      textDirection: TextDirection.ltr)));
+                                      style: TextStyle(color: Colors.black), textDirection: TextDirection.ltr)));
                         },
                       )));
 
@@ -182,10 +177,7 @@ Widget _newGameButton(BuildContext context) {
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Material(
                         child: Container(
-                            height: 300,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: buttons))),
+                            height: 300, child: Column(mainAxisAlignment: MainAxisAlignment.end, children: buttons))),
                   ),
                 );
               },
@@ -215,8 +207,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
                     ))),
             Expanded(
                 flex: 1,
-                child:
-                    Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
                   // 继续游戏
                   _continueGameButton(context),
                   // 新游戏
@@ -227,7 +218,6 @@ class _BootstrapPageState extends State<BootstrapPage> {
           ],
         )));
 
-    return ScopedModelDescendant<SudokuState>(
-        builder: (context, child, model) => Scaffold(body: body));
+    return ScopedModelDescendant<SudokuState>(builder: (context, child, model) => Scaffold(body: body));
   }
 }
