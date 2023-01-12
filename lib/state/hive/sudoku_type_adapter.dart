@@ -14,7 +14,7 @@ class SudokuAdapter extends TypeAdapter<Sudoku>{
 
   @override
   Sudoku read(BinaryReader reader) {
-    List list = reader.readIntList();
+    List<int> list = reader.readIntList();
     return Sudoku(list);
   }
 }

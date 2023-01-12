@@ -3,7 +3,6 @@ import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -13,7 +12,7 @@ import 'package:sudoku_dart/sudoku_dart.dart';
 final Logger log = Logger();
 
 class BootstrapPage extends StatefulWidget {
-  BootstrapPage({Key key, this.title}) : super(key: key);
+  BootstrapPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -62,7 +61,7 @@ Widget _continueGameButton(BuildContext context) {
                               fontWeight: FontWeight.bold))),
                   Container(
                       child: Text(
-                          '${LEVEL_NAMES[state.level]} - ${state.timer}',
+                          '${LevelNames[state.level]} - ${state.timer}',
                           style: TextStyle(fontSize: 13)))
                 ],
               ),
@@ -77,10 +76,8 @@ void _internalSudokuGenerate(List<dynamic> args) {
   LEVEL level = args[0];
   SendPort sendPort = args[1];
 
-  Sudoku sudoku = Sudoku.generator(level);
-  List<int> puzzle = sudoku.puzzle;
+  Sudoku sudoku = Sudoku.generate(level);
   log.d("数独生成完毕");
-  log.d(puzzle);
   sendPort.send(sudoku);
 }
 
@@ -88,17 +85,15 @@ Future _sudokuGenerate(BuildContext context, LEVEL level) async {
   showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return Dialog(
-            child: Container(
-                padding: EdgeInsets.all(10),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  CircularProgressIndicator(),
-                  Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Text("正在为你加载数独,请稍后"))
-                ])));
-      });
+      builder: (context) => Dialog(
+          child: Container(
+              padding: EdgeInsets.all(10),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                CircularProgressIndicator(),
+                Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text("正在为你加载数独,请稍后"))
+              ]))));
 
   ReceivePort receivePort = ReceivePort();
 
@@ -141,7 +136,7 @@ Widget _newGameButton(BuildContext context) {
                     )));
 
             List<Widget> buttons = [];
-            LEVEL_NAMES.forEach((level, name) {
+            LevelNames.forEach((level, name) {
               var levelName = name;
 
               Widget button = SizedBox(
@@ -159,7 +154,7 @@ Widget _newGameButton(BuildContext context) {
                           await _sudokuGenerate(context, level);
                           Navigator.popAndPushNamed(context, "/gaming");
 
-                          return Container(
+                          Container(
                               color: Colors.white,
                               alignment: Alignment.center,
                               child: Center(
@@ -176,7 +171,7 @@ Widget _newGameButton(BuildContext context) {
 
             showCupertinoModalBottomSheet(
               context: context,
-              builder: (context, scrollController) {
+              builder: (context) {
                 return SafeArea(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
@@ -217,11 +212,11 @@ class _BootstrapPageState extends State<BootstrapPage> {
                 flex: 1,
                 child:
                     Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  // 继续游戏
+                  // continue the game
                   _continueGameButton(context),
-                  // 新游戏
+                  // new game
                   _newGameButton(context),
-                  // 扫一扫
+                  // scanner ?
                   _scanButton(context),
                 ]))
           ],

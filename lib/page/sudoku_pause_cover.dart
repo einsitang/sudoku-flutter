@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 
 class SudokuPauseCoverPage extends StatefulWidget {
-  SudokuPauseCoverPage({Key key}) : super(key: key);
+  SudokuPauseCoverPage({Key? key}) : super(key: key);
 
   @override
   _SudokuPauseCoverPageState createState() => _SudokuPauseCoverPageState();
@@ -22,7 +21,11 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
     Widget bodyView = Align(
         child: Column(children: [
       Expanded(flex: 3, child: titleView),
-      Expanded(flex: 5, child: Column(children: [Text("难度 [${LEVEL_NAMES[_state.level]}] 已用时 ${_state.timer}")])),
+      Expanded(
+          flex: 5,
+          child: Column(children: [
+            Text("难度 [${LevelNames[_state.level]}] 已用时 ${_state.timer}")
+          ])),
       Expanded(
         flex: 1,
         child: Align(alignment: Alignment.center, child: Text("双击屏幕继续游戏")),

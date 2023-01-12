@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
-
+import 'package:sudoku/Constant.dart';
 import 'package:sudoku/page/bootstrap.dart';
 import 'package:sudoku/page/sudoku_game.dart';
 import 'package:sudoku/state/sudoku_state.dart';
+
+final Logger log = Logger();
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,12 +39,14 @@ class MyApp extends StatelessWidget {
                       style: TextStyle(color: Colors.black),
                       textDirection: TextDirection.ltr)));
         }
-
-        SudokuState sudokuState = snapshot.data;
-        BootstrapPage bootstrapPage = BootstrapPage();
+        if (snapshot.hasError) {
+          log.e(snapshot.error, snapshot.stackTrace);
+        }
+        SudokuState sudokuState = snapshot.data ?? SudokuState();
+        BootstrapPage bootstrapPage = BootstrapPage(title: "Loading");
         SudokuGamePage sudokuGamePage = SudokuGamePage(title: "Sudoku");
 
-        return ScopedModel(
+        return ScopedModel<SudokuState>(
           model: sudokuState,
           child: MaterialApp(
             title: 'Sudoku',
@@ -65,8 +69,7 @@ class MyApp extends StatelessWidget {
             home: bootstrapPage,
             routes: <String, WidgetBuilder>{
               "/bootstrap": (context) => bootstrapPage,
-              "/newGame": (context) =>
-                  SudokuGamePage(title: "Sudoku"),
+              "/newGame": (context) => SudokuGamePage(title: "Sudoku"),
               "/gaming": (context) => sudokuGamePage
             },
           ),
