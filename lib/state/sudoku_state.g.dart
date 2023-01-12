@@ -17,7 +17,7 @@ class SudokuStateAdapter extends TypeAdapter<SudokuState> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SudokuState(
-      level: fields[2] as LEVEL?,
+      level: fields[2] as Level?,
       sudoku: fields[1] as Sudoku?,
     )
       ..status = fields[0] as SudokuGameStatus

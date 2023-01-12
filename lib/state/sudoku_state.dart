@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:logger/logger.dart';
+import 'package:logger/logger.dart' hide Level;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:sudoku/constant.dart';
@@ -19,10 +19,10 @@ class _Default {
 }
 
 const LevelNames = {
-  LEVEL.EASY: "简单",
-  LEVEL.MEDIUM: "中等",
-  LEVEL.HARD: "困难",
-  LEVEL.EXPERT: "专家"
+  Level.easy: "简单",
+  Level.medium: "中等",
+  Level.hard: "困难",
+  Level.expert: "专家"
 };
 
 const StatusNames = {
@@ -61,7 +61,7 @@ class SudokuState extends Model {
 
   // level
   @HiveField(2)
-  LEVEL? level;
+  Level? level;
 
   // timing
   @HiveField(3)
@@ -102,16 +102,16 @@ class SudokuState extends Model {
     return true;
   }
 
-  SudokuState({LEVEL? level, Sudoku? sudoku}) {
+  SudokuState({Level? level, Sudoku? sudoku}) {
     initialize(level: level, sudoku: sudoku);
   }
 
-  static SudokuState newSudokuState({LEVEL? level, Sudoku? sudoku}) {
+  static SudokuState newSudokuState({Level? level, Sudoku? sudoku}) {
     SudokuState state = new SudokuState(level: level, sudoku: sudoku);
     return state;
   }
 
-  void initialize({LEVEL? level, Sudoku? sudoku}) {
+  void initialize({Level? level, Sudoku? sudoku}) {
     status = SudokuGameStatus.initialize;
     this.sudoku = sudoku;
     this.level = level;
@@ -284,7 +284,7 @@ class SudokuState extends Model {
     notifyListeners();
   }
 
-  void updateLevel(LEVEL level) {
+  void updateLevel(Level level) {
     this.level = level;
     notifyListeners();
   }
@@ -353,7 +353,7 @@ class SudokuState extends Model {
       Hive.registerAdapter<SudokuGameStatus>(_sudokuGameStatusAdapter);
     }
     if (!Hive.isAdapterRegistered(_sudokuLevelAdapter.typeId)) {
-      Hive.registerAdapter<LEVEL>(_sudokuLevelAdapter);
+      Hive.registerAdapter<Level>(_sudokuLevelAdapter);
     }
   }
 }

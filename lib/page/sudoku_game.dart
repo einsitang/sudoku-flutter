@@ -516,11 +516,11 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   /// 笔记网格控件
   ///
   Widget _markGridWidget(
-      BuildContext context, int index, GestureTapCallback onTap) {
+      BuildContext context, int index, {GestureTapCallback? onTap}) {
     Widget markGrid = InkWell(
         highlightColor: Colors.blue,
         customBorder: Border.all(color: Colors.blue),
-        onTap: onTap,
+        // onTap: onTap,
         child: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.all(1),
@@ -627,8 +627,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                     _state.mark[index].any((element) => element);
 
                 if (isUserMark) {
-                  return _markGridWidget(
-                      context, index, _wellOnTapBuilder(index));
+                  return _markGridWidget(context, index);
+                  // return _markGridWidget(
+                  //     context, index, _wellOnTapBuilder(index));
                 }
 
                 return _gridInWellWidget(

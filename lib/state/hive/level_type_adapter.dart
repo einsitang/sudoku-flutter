@@ -1,24 +1,24 @@
 import 'package:hive/hive.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 
-class SudokuLevelAdapter extends TypeAdapter<LEVEL>{
+class SudokuLevelAdapter extends TypeAdapter<Level>{
 
   @override
   final typeId = 1;
 
   @override
-  void write(BinaryWriter writer, LEVEL obj) {
+  void write(BinaryWriter writer, Level obj) {
     writer.writeString(obj.toString());
   }
 
   @override
-  LEVEL read(BinaryReader reader) {
+  Level read(BinaryReader reader) {
     String levelStr = reader.readString();
-    for(LEVEL level in LEVEL.values){
+    for(Level level in Level.values){
       if(level.toString() == levelStr){
         return level;
       }
     }
-    return LEVEL.EASY;
+    return Level.easy;
   }
 }

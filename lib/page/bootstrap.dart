@@ -3,7 +3,7 @@ import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:logger/logger.dart' hide Level;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
@@ -73,7 +73,7 @@ Widget _continueGameButton(BuildContext context) {
 }
 
 void _internalSudokuGenerate(List<dynamic> args) {
-  LEVEL level = args[0];
+  Level level = args[0];
   SendPort sendPort = args[1];
 
   Sudoku sudoku = Sudoku.generate(level);
@@ -81,7 +81,7 @@ void _internalSudokuGenerate(List<dynamic> args) {
   sendPort.send(sudoku);
 }
 
-Future _sudokuGenerate(BuildContext context, LEVEL level) async {
+Future _sudokuGenerate(BuildContext context, Level level) async {
   showDialog(
       context: context,
       barrierDismissible: false,
