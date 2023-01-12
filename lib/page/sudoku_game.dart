@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:sudoku/Constant.dart';
+import 'package:sudoku/constant.dart';
 import 'package:sudoku/page/sudoku_pause_cover.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
@@ -97,7 +97,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   children: [
                     Text("Sudoku powered by Flutter",
                         style: TextStyle(fontSize: 12)),
-                    Text("OpenSource coming soon",
+                    Text("https://github.com/einsitang/sudoku-flutter",
                         style: TextStyle(fontSize: 12))
                   ]))
         ]);
