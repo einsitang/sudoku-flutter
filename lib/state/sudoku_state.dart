@@ -164,7 +164,7 @@ class SudokuState extends Model {
       notifyListeners();
       return;
     }
-
+    this.record[index] = num;
     // 清空笔记
     cleanMark(index);
 

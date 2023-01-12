@@ -114,14 +114,14 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     height: 25,
   );
 
-  bool _isOnlyReadGrid(int index) => _state.sudoku?.puzzle[index] != -1;
+  bool _isOnlyReadGrid(int index) => (_state.sudoku?.puzzle[index] ?? 0) != -1;
 
   // 触发游戏结束
   void _gameOver() {
     bool isWinner = _state.status == SudokuGameStatus.success;
     String title, conclusion;
     if (isWinner) {
-      title = "God Job!";
+      title = "Well Done!";
       conclusion = "恭喜你完成 [${LevelNames[_state.level]}] 数独挑战";
     } else {
       title = "Failure";
@@ -227,15 +227,31 @@ class _SudokuGamePageState extends State<SudokuGamePage>
             // 判断真伪
             if (_state.record[_chooseSudokuBox] != -1 &&
                 _state.sudoku!.answer[_chooseSudokuBox] != num) {
-              // 填入错误数字
+              // 填入错误数字 wrong answer on _chooseSudokuBox with num
               _state.lifeLoss();
               if (_state.life <= 0) {
                 // 游戏结束
                 return _gameOver();
               }
-              showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(content: Text("输入错误")));
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: Text("Oops..."),
+                  content:
+                      Text("\nWrong Input\nYou can't afford ${_state.life} more turnovers"),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: Text('Got It'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ),
+              );
+              // showDialog(
+              //     context: context,
+              //     builder: (_) => AlertDialog(content: Text("输入错误")));
 
               return;
             }
@@ -533,7 +549,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   }
 
   // well onTop function
-  _wellOnTapBuilder(index){
+  _wellOnTapBuilder(index) {
     // log.d("_wellOnTapBuilder build $index ...");
     return () {
       setState(() {
