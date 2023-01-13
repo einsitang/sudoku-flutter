@@ -6,7 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/constant.dart';
-import 'package:sudoku/effect/input_effect.dart';
+import 'package:sudoku/effect/sound_effect.dart';
 import 'package:sudoku/page/sudoku_pause_cover.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
@@ -121,15 +121,17 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   bool _isOnlyReadGrid(int index) => (_state.sudoku?.puzzle[index] ?? 0) != -1;
 
   // 触发游戏结束
-  void _gameOver() {
+  void _gameOver() async {
     bool isWinner = _state.status == SudokuGameStatus.success;
     String title, conclusion;
     if (isWinner) {
       title = "Well Done!";
       conclusion = "恭喜你完成 [${LevelNames[_state.level]}] 数独挑战";
+      await SoundEffect.solveVictory();
     } else {
       title = "Failure";
       conclusion = "很遗憾,本轮 [${LevelNames[_state.level]}] 数独错误次数太多，挑战失败!";
+      await SoundEffect.gameOver();
     }
 
     Navigator.of(context)
@@ -152,7 +154,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                                           color: isWinner
                                               ? Colors.black
                                               : Colors.redAccent,
-                                          fontSize: 22,
+                                          fontSize: 26,
                                           fontWeight: FontWeight.bold)))),
                           Expanded(
                               flex: 2,
@@ -254,7 +256,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   ],
                 ),
               );
-              await InputSoundEffect.tipWrongSound();
+              await SoundEffect.stuffError();
 
               return;
             }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:sudoku/effect/input_effect.dart';
+import 'package:sudoku/effect/sound_effect.dart';
 import 'package:sudoku/page/bootstrap.dart';
 import 'package:sudoku/page/sudoku_game.dart';
 import 'package:sudoku/state/sudoku_state.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 
   // initialization effect when application build before
   _initEffect() async {
-    await InputSoundEffect.init();
+    await SoundEffect.init();
   }
 
   Future<SudokuState> _loadState() async {
