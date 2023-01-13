@@ -37,6 +37,17 @@ final ButtonStyle primaryFlatButtonStyle = TextButton.styleFrom(
   ),
 );
 
+const Image ideaPng = Image(
+  image: AssetImage("assets/image/icon_idea.png"),
+  width: 25,
+  height: 25,
+);
+const Image lifePng = Image(
+  image: AssetImage("assets/image/icon_life.png"),
+  width: 25,
+  height: 25,
+);
+
 class SudokuGamePage extends StatefulWidget {
   SudokuGamePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -107,101 +118,98 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         ]);
   }
 
-  Image _ideaPng = Image(
-    image: AssetImage("assets/image/icon_idea.png"),
-    width: 25,
-    height: 25,
-  );
-  Image _lifePng = Image(
-    image: AssetImage("assets/image/icon_life.png"),
-    width: 25,
-    height: 25,
-  );
-
   bool _isOnlyReadGrid(int index) => (_state.sudoku?.puzzle[index] ?? 0) != -1;
 
-  // 触发游戏结束
+  /// game over trigger function
+  /// 游戏结束触发 执行判断逻辑
   void _gameOver() async {
     bool isWinner = _state.status == SudokuGameStatus.success;
     String title, conclusion;
+    Function playSoundEffect;
+
+    // @TODO this place wait for I18N support
     if (isWinner) {
       title = "Well Done!";
       conclusion = "恭喜你完成 [${LevelNames[_state.level]}] 数独挑战";
-      await SoundEffect.solveVictory();
+      playSoundEffect = SoundEffect.solveVictory;
     } else {
       title = "Failure";
       conclusion = "很遗憾,本轮 [${LevelNames[_state.level]}] 数独错误次数太多，挑战失败!";
-      await SoundEffect.gameOver();
+      playSoundEffect = SoundEffect.gameOver;
     }
 
-    Navigator.of(context)
-        .push(PageRouteBuilder(
-            opaque: false,
-            pageBuilder: (BuildContext context, _, __) {
-              return Scaffold(
-                  backgroundColor: Colors.white.withOpacity(0.80),
-                  body: Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                              flex: 1,
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(title,
-                                      style: TextStyle(
-                                          color: isWinner
-                                              ? Colors.black
-                                              : Colors.redAccent,
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold)))),
-                          Expanded(
-                              flex: 2,
-                              child: Column(children: [
-                                Text(conclusion,
-                                    style: TextStyle(fontSize: 15)),
-                                Container(
-                                    margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                                    child: Text("用时  ${_state.timer}'s",
-                                        style: TextStyle(color: Colors.blue))),
-                                Container(
-                                    padding: EdgeInsets.all(10),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Offstage(
-                                              offstage: _state.status ==
-                                                  SudokuGameStatus.success,
-                                              child: IconButton(
-                                                  icon: Icon(Icons.tv),
-                                                  onPressed: null)),
-                                          IconButton(
-                                              icon: Icon(Icons.thumb_up),
-                                              onPressed: null),
-                                          IconButton(
-                                              icon: Icon(Icons.exit_to_app),
-                                              onPressed: () {
-                                                Navigator.pop(context, "exit");
-                                              })
-                                        ]))
-                              ]))
-                        ],
-                      )));
-            }))
-        .then((value) {
-      String signal = value;
-      switch (signal) {
-        case "ad":
-          // @TODO give a extra life
-          break;
-        case "exit":
-        default:
-          Navigator.pop(context);
-          break;
-      }
-    });
+    // route to game over show widget page
+    PageRouteBuilder gameOverPageRouteBuilder = PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (BuildContext context, animation, _) {
+          // sound effect : victory or failure
+          playSoundEffect();
+          // game over show widget
+          Widget gameOverWidget = Scaffold(
+              backgroundColor: Colors.white.withOpacity(0.85),
+              body: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: Text(title,
+                                  style: TextStyle(
+                                      color: isWinner
+                                          ? Colors.black
+                                          : Colors.redAccent,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold)))),
+                      Expanded(
+                          flex: 2,
+                          child: Column(children: [
+                            Text(conclusion, style: TextStyle(fontSize: 16)),
+                            Container(
+                                margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
+                                child: Text("用时  ${_state.timer}'s",
+                                    style: TextStyle(color: Colors.blue))),
+                            Container(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Offstage(
+                                          offstage: _state.status ==
+                                              SudokuGameStatus.success,
+                                          child: IconButton(
+                                              icon: Icon(Icons.tv),
+                                              onPressed: null)),
+                                      IconButton(
+                                          icon: Icon(Icons.thumb_up),
+                                          onPressed: null),
+                                      IconButton(
+                                          icon: Icon(Icons.exit_to_app),
+                                          onPressed: () {
+                                            Navigator.pop(context, "exit");
+                                          })
+                                    ]))
+                          ]))
+                    ],
+                  )));
+
+          return ScaleTransition(
+              scale: Tween(begin: 3.0, end: 1.0).animate(animation),
+              child: gameOverWidget);
+        });
+    String signal = await Navigator.of(context).push(gameOverPageRouteBuilder);
+    switch (signal) {
+      case "ad":
+        // @TODO give extra life logic coding
+        // may do something to give user extra life , like watch ad video / make comment of this app ?
+        break;
+      case "exit":
+      default:
+        Navigator.pop(context);
+        break;
+    }
   }
 
   // fill zone [ 1 - 9 ]
@@ -591,7 +599,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
               Expanded(
                   flex: 1,
                   child: Row(children: <Widget>[
-                    _lifePng,
+                    lifePng,
                     Text(" x ${_state.life}", style: TextStyle(fontSize: 18))
                   ])),
               // indicator
@@ -609,7 +617,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                        _ideaPng,
+                        ideaPng,
                         Text(" x ${_state.hint}",
                             style: TextStyle(fontSize: 18))
                       ])))

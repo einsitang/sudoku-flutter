@@ -17,7 +17,7 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
     TextStyle pageTextStyle = TextStyle(color: Colors.white);
 
     Widget titleView =
-        Align(child: Text("游戏暂停", style: TextStyle(fontSize: 22)));
+        Align(child: Text("游戏暂停", style: TextStyle(fontSize: 26)));
     Widget bodyView = Align(
         child: Column(children: [
       Expanded(flex: 3, child: titleView),
@@ -33,15 +33,15 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
     ]));
 
     var onDoubleTap = () {
-      print("双击退出当前暂停");
+      log.d("double click : leave this stack");
       Navigator.pop(context);
     };
     var onTap = () {
-      print("你单击有鸟用，双击啊");
+      log.d("single click , do nothing");
     };
     return GestureDetector(
         child: Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.95),
+            backgroundColor: Colors.black.withOpacity(0.98),
             body: DefaultTextStyle(child: bodyView, style: pageTextStyle)),
         onTap: onTap,
         onDoubleTap: onDoubleTap);
