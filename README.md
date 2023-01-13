@@ -3,7 +3,7 @@
 
 ## about
 
-![SUDOKU-FILTTER](document/img/sudoku-flutter-logo.png)
+![SUDOKU-FILTTER](assets/image/sudoku_logo.png)
 
 A open source Sudoku game application powered by Flutter .
 

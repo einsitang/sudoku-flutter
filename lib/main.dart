@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:sudoku/constant.dart';
+import 'package:sudoku/effect/input_effect.dart';
 import 'package:sudoku/page/bootstrap.dart';
 import 'package:sudoku/page/sudoku_game.dart';
 import 'package:sudoku/state/sudoku_state.dart';
@@ -20,9 +20,14 @@ void main() {
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
+  // initialization effect when application build before
+  _initEffect() async {
+    await InputSoundEffect.init();
+  }
+
   Future<SudokuState> _loadState() async {
-    SudokuState sudokuState = await SudokuState.resumeFromDB();
-    return sudokuState;
+    await _initEffect();
+    return await SudokuState.resumeFromDB();
   }
 
   @override
@@ -40,7 +45,8 @@ class MyApp extends StatelessWidget {
                       textDirection: TextDirection.ltr)));
         }
         if (snapshot.hasError) {
-          log.e(snapshot.error, snapshot.stackTrace);
+          log.w("here is builder future throws error you shoud see it");
+          log.w(snapshot.error);
         }
         SudokuState sudokuState = snapshot.data ?? SudokuState();
         BootstrapPage bootstrapPage = BootstrapPage(title: "Loading");

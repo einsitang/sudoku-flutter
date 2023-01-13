@@ -2,15 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/constant.dart';
+import 'package:sudoku/effect/input_effect.dart';
 import 'package:sudoku/page/sudoku_pause_cover.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 final Logger log = Logger();
+
+final AudioPlayer tipsPlayer = AudioPlayer();
 
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   foregroundColor: Colors.black54,
@@ -52,17 +56,17 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   _aboutDialogAction(BuildContext context) {
     Widget appIcon = GestureDetector(
         child: Image(
-            image: AssetImage("assets/image/about_me.jpg"),
-            width: 30,
-            height: 30),
+            image: AssetImage("assets/image/sudoku_logo.png"),
+            width: 45,
+            height: 45),
         onDoubleTap: () {
           WidgetBuilder columnWidget = (BuildContext context) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image(image: AssetImage("assets/image/about_me.jpg")),
+                  Image(image: AssetImage("assets/image/sudoku_logo.png")),
                   CupertinoButton(
-                    child: Text("死月半子"),
+                    child: Text("Sudoku"),
                     onPressed: () {
                       Navigator.pop(context, false);
                     },
@@ -77,7 +81,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         children: <Widget>[
           GestureDetector(
             child: Text(
-              "visit repository on github",
+              "Github Repository",
               style: TextStyle(color: Colors.blue),
             ),
             onTap: () async {
@@ -207,7 +211,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       if (!hasNumStock) {
         fillOnPressed = null;
       } else {
-        fillOnPressed = () {
+        fillOnPressed = () async {
           log.d("input : $num");
           if (_isOnlyReadGrid(_chooseSudokuBox)) {
             // 非填空项
@@ -233,12 +237,13 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                 // 游戏结束
                 return _gameOver();
               }
+
               showCupertinoDialog(
                 context: context,
                 builder: (context) => CupertinoAlertDialog(
                   title: Text("Oops..."),
-                  content:
-                      Text("\nWrong Input\nYou can't afford ${_state.life} more turnovers"),
+                  content: Text(
+                      "\nWrong Input\nYou can't afford ${_state.life} more turnovers"),
                   actions: [
                     CupertinoDialogAction(
                       child: Text('Got It'),
@@ -249,9 +254,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   ],
                 ),
               );
-              // showDialog(
-              //     context: context,
-              //     builder: (_) => AlertDialog(content: Text("输入错误")));
+              await InputSoundEffect.tipWrongSound();
 
               return;
             }
@@ -516,11 +519,11 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   /// 笔记网格控件
   ///
   Widget _markGridWidget(
-      BuildContext context, int index, {GestureTapCallback? onTap}) {
+      BuildContext context, int index, GestureTapCallback onTap) {
     Widget markGrid = InkWell(
         highlightColor: Colors.blue,
         customBorder: Border.all(color: Colors.blue),
-        // onTap: onTap,
+        onTap: onTap,
         child: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.all(1),
@@ -541,7 +544,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                       style: TextStyle(
                           color: _chooseSudokuBox == index
                               ? Colors.white
-                              : Color.fromARGB(255, 0x16, 0x85, 0xA9),
+                              : Color.fromARGB(255, 0x16, 0x69, 0xA9),
                           fontSize: 12));
                 })));
 
@@ -627,9 +630,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                     _state.mark[index].any((element) => element);
 
                 if (isUserMark) {
-                  return _markGridWidget(context, index);
-                  // return _markGridWidget(
-                  //     context, index, _wellOnTapBuilder(index));
+                  return _markGridWidget(
+                      context, index, _wellOnTapBuilder(index));
                 }
 
                 return _gridInWellWidget(
@@ -719,7 +721,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
   // 开始计时
   void _beginTimer() {
-    log.d("开始计时");
+    log.d("timer begin");
     if (_timer == null) {
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         if (_state.status == SudokuGameStatus.gaming) {
