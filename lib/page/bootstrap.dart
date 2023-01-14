@@ -3,10 +3,12 @@ import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:logger/logger.dart' hide Level;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
+import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 
 final Logger log = Logger();
@@ -45,6 +47,9 @@ Widget _scanButton(BuildContext context) {
 
 Widget _continueGameButton(BuildContext context) {
   return ScopedModelDescendant<SudokuState>(builder: (context, child, state) {
+    String buttonLabel = AppLocalizations.of(context)!.menuContinueGame;
+    String continueMessage =
+        "${LocalizationUtils.localizationLevelName(context, state.level ?? Level.easy)} - ${state.timer}";
     return Offstage(
         offstage: state.status != SudokuGameStatus.pause,
         child: Container(
@@ -55,14 +60,13 @@ Widget _continueGameButton(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                      child: Text("继续游戏",
+                      child: Text(buttonLabel,
                           style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold))),
                   Container(
-                      child: Text(
-                          '${LevelNames[state.level]} - ${state.timer}',
-                          style: TextStyle(fontSize: 13)))
+                      child:
+                          Text(continueMessage, style: TextStyle(fontSize: 13)))
                 ],
               ),
               onPressed: () {
@@ -82,6 +86,7 @@ void _internalSudokuGenerate(List<dynamic> args) {
 }
 
 Future _sudokuGenerate(BuildContext context, Level level) async {
+  String sudokuGenerateText = AppLocalizations.of(context)!.sudokuGenerateText;
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -92,7 +97,7 @@ Future _sudokuGenerate(BuildContext context, Level level) async {
                 CircularProgressIndicator(),
                 Container(
                     margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text("正在为你加载数独,请稍后"))
+                    child: Text(sudokuGenerateText))
               ]))));
 
   ReceivePort receivePort = ReceivePort();
@@ -118,28 +123,30 @@ Widget _newGameButton(BuildContext context) {
       (_) => CupertinoButton(
           color: Colors.blue,
           child: Text(
-            "新游戏",
+            AppLocalizations.of(context)!.menuNewGame,
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           onPressed: () {
-            Widget cancelView = SizedBox(
+            // cancel new game button
+            Widget cancelButton = SizedBox(
                 height: 60,
                 width: MediaQuery.of(context).size.width,
                 child: Container(
                     margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: CupertinoButton(
 //                      color: Colors.red,
-                      child: Text("取消"),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
                     )));
 
+            // iterative difficulty build buttons
             List<Widget> buttons = [];
-            LevelNames.forEach((level, name) {
-              var levelName = name;
-
-              Widget button = SizedBox(
+            Level.values.forEach((Level level) {
+              String levelName =
+                  LocalizationUtils.localizationLevelName(context, level);
+              buttons.add(SizedBox(
                   height: 60,
                   width: MediaQuery.of(context).size.width,
                   child: Container(
@@ -150,24 +157,22 @@ Widget _newGameButton(BuildContext context) {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
-                          log.d("begin generator Sudoku with level : $level");
+                          log.d(
+                              "begin generator Sudoku with level : $levelName");
                           await _sudokuGenerate(context, level);
                           Navigator.popAndPushNamed(context, "/gaming");
 
-                          Container(
-                              color: Colors.white,
-                              alignment: Alignment.center,
-                              child: Center(
-                                  child: Text('Sudoku loading...',
-                                      style: TextStyle(color: Colors.black),
-                                      textDirection: TextDirection.ltr)));
+                          // Container(
+                          //     color: Colors.white,
+                          //     alignment: Alignment.center,
+                          //     child: Center(
+                          //         child: Text('Sudoku loading...',
+                          //             style: TextStyle(color: Colors.black),
+                          //             textDirection: TextDirection.ltr)));
                         },
-                      )));
-
-              buttons.add(button);
+                      ))));
             });
-
-            buttons.add(cancelView);
+            buttons.add(cancelButton);
 
             showCupertinoModalBottomSheet(
               context: context,

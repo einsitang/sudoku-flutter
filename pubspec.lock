@@ -302,7 +302,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
@@ -466,10 +466,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_macos
-      sha256: "2a97e7fbb7ae9dcd0dfc1220a78e9ec3e71da691912e617e8715ff2a13086ae8"
+      sha256: cd57cb98a30ce9d12fdd1896d9d3b0517ce689f942de6ccd2708cd39b3d18a7c
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   path_provider_platform_interface:
     dependency: transitive
     description:
@@ -639,10 +639,10 @@ packages:
     dependency: "direct main"
     description:
       name: sudoku_dart
-      sha256: b14e02a24908970ca59da5640bfb91c2ee24f6d072606fe4d2432668ff7ed61b
+      sha256: "362a2558349098fd5409673e17ea5d5383b552d7257a7a195a014657de3477f0"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.4"
   term_glyph:
     dependency: transitive
     description:

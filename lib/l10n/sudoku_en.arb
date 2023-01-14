@@ -1,0 +1,22 @@
+{
+  "menuNewGame":"New Game",
+  "@menuNewGame":{
+    "description":"menu of 'new gme' button text"
+  },
+  "menuContinueGame": "Continue Game",
+  "@menuContinueGame":{
+    "description":"menu of 'continue game' button text"
+  },
+  "cancel": "Cancel",
+  "levelEasy": "Easy",
+  "levelMedium": "Medium",
+  "levelHard": "Hard",
+  "levelExpert": "Expert",
+  "sudokuGenerateText": "Wait for sudoku generated...",
+
+  "gameStatusInitialize" : "Initialize",
+  "gameStatusGaming" : "Gaming",
+  "gameStatusPause" : "Pause",
+  "gameStatusFailure" : "Failure",
+  "gameStatusVictory" : "Victory"
+}

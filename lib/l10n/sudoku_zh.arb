@@ -1,0 +1,22 @@
+{
+  "menuNewGame":"新游戏",
+  "@menuNewGame":{
+    "description":"menu of 'new gme' button text"
+  },
+  "menuContinueGame": "继续游戏",
+  "@menuContinueGame":{
+    "description":"menu of 'continue game' button text"
+  },
+  "cancel": "取消",
+  "levelEasy": "简单",
+  "levelMedium": "中等",
+  "levelHard": "困难",
+  "levelExpert": "专家",
+  "sudokuGenerateText": "正在为你加载数独,请稍后...",
+
+  "gameStatusInitialize" : "初始化",
+  "gameStatusGaming" : "进行中",
+  "gameStatusPause" : "暂停",
+  "gameStatusFailure" : "失败",
+  "gameStatusVictory" : "胜利"
+}

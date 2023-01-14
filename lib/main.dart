@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/effect/sound_effect.dart';
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
               alignment: Alignment.center,
               child: Center(
-                  child: Text('Sudoku loading...',
+                  child: Text('Sudoku Application initializing...',
                       style: TextStyle(color: Colors.black),
                       textDirection: TextDirection.ltr)));
         }
@@ -72,6 +74,14 @@ class MyApp extends StatelessWidget {
               // closer together (more dense) than on mobile platforms.
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate
+            ],
+            locale: Locale("en"),
+            supportedLocales: AppLocalizations.supportedLocales,
             home: bootstrapPage,
             routes: <String, WidgetBuilder>{
               "/bootstrap": (context) => bootstrapPage,

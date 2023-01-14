@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
+import 'package:sudoku/util/localization_util.dart';
 
 class SudokuPauseCoverPage extends StatefulWidget {
   SudokuPauseCoverPage({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
       Expanded(
           flex: 5,
           child: Column(children: [
-            Text("难度 [${LevelNames[_state.level]}] 已用时 ${_state.timer}")
+            Text("难度 [${LocalizationUtils.localizationLevelName(context, _state.level!)}] 已用时 ${_state.timer}")
           ])),
       Expanded(
         flex: 1,

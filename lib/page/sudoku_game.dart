@@ -9,6 +9,7 @@ import 'package:sudoku/constant.dart';
 import 'package:sudoku/effect/sound_effect.dart';
 import 'package:sudoku/page/sudoku_pause_cover.dart';
 import 'package:sudoku/state/sudoku_state.dart';
+import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -128,13 +129,15 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     Function playSoundEffect;
 
     // @TODO this place wait for I18N support
+    final String leveLabel =
+        LocalizationUtils.localizationLevelName(context, _state.level!);
     if (isWinner) {
       title = "Well Done!";
-      conclusion = "恭喜你完成 [${LevelNames[_state.level]}] 数独挑战";
+      conclusion = "恭喜你完成 [$leveLabel] 数独挑战";
       playSoundEffect = SoundEffect.solveVictory;
     } else {
       title = "Failure";
-      conclusion = "很遗憾,本轮 [${LevelNames[_state.level]}] 数独错误次数太多，挑战失败!";
+      conclusion = "很遗憾,本轮 [$leveLabel] 数独错误次数太多，挑战失败!";
       playSoundEffect = SoundEffect.gameOver;
     }
 
@@ -249,22 +252,24 @@ class _SudokuGamePageState extends State<SudokuGamePage>
               }
 
               showCupertinoDialog(
-                context: context,
-                builder: (context) => CupertinoAlertDialog(
-                  title: Text("Oops..."),
-                  content: Text(
-                      "\nWrong Input\nYou can't afford ${_state.life} more turnovers"),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: Text('Got It'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ),
-              );
-              await SoundEffect.stuffError();
+                  context: context,
+                  builder: (context) {
+                    // sound stuff error
+                    SoundEffect.stuffError();
+                    return CupertinoAlertDialog(
+                      title: Text("Oops..."),
+                      content: Text(
+                          "\nWrong Input\nYou can't afford ${_state.life} more turnovers"),
+                      actions: [
+                        CupertinoDialogAction(
+                          child: Text('Got It'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  });
 
               return;
             }
@@ -568,11 +573,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       setState(() {
         _chooseSudokuBox = index;
       });
-
       if (_state.sudoku!.puzzle[index] != -1) {
         return;
       }
-
       log.d('choose position : $index');
     };
   }
@@ -591,6 +594,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          /// status zone
+          /// life / tips / timer on here
           Container(
             height: 50,
             padding: EdgeInsets.all(10.0),
@@ -608,7 +613,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                 child: Container(
                     alignment: AlignmentDirectional.center,
                     child: Text(
-                        "${LevelNames[_state.level]} - ${_state.timer} - ${StatusNames[_state.status]}")),
+                        "${LocalizationUtils.localizationLevelName(context, _state.level!)} - ${_state.timer} - ${LocalizationUtils.localizationGameStatus(context, _state.status)}")),
               ),
               // tips
               Expanded(
@@ -623,6 +628,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                       ])))
             ]),
           ),
+
+          /// 9 x 9 cells sudoku puzzle board
+          /// the whole sudoku game draw it here
           GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -647,7 +655,10 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                 return _gridInWellWidget(
                     context, index, num, _wellOnTapBuilder(index));
               })),
-          // 此处输入框
+
+          /// user input zone
+          /// use fillZone choose number fill cells or mark notes
+          /// use toolZone to pause / exit game
           Container(margin: EdgeInsets.fromLTRB(0, 5, 0, 5)),
           _fillZone(context),
           _toolZone(context)

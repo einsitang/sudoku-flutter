@@ -18,21 +18,6 @@ class _Default {
   static const int hint = 2;
 }
 
-const LevelNames = {
-  Level.easy: "简单",
-  Level.medium: "中等",
-  Level.hard: "困难",
-  Level.expert: "专家"
-};
-
-const StatusNames = {
-  SudokuGameStatus.initialize: "初始化",
-  SudokuGameStatus.gaming: "进行中",
-  SudokuGameStatus.pause: "暂停",
-  SudokuGameStatus.fail: "失败",
-  SudokuGameStatus.success: "胜利"
-};
-
 @HiveType(typeId: 6)
 enum SudokuGameStatus {
   @HiveField(0)
