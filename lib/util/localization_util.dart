@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 
+/// LocalizationUtils
 class LocalizationUtils {
   static String localizationLevelName(BuildContext context, Level level) {
     switch (level) {
@@ -32,4 +33,5 @@ class LocalizationUtils {
         return AppLocalizations.of(context)!.gameStatusVictory;
     }
   }
+
 }

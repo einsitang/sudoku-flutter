@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 
 class SudokuPauseCoverPage extends StatefulWidget {
   SudokuPauseCoverPage({Key? key}) : super(key: key);
@@ -17,19 +18,25 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
   Widget build(BuildContext context) {
     TextStyle pageTextStyle = TextStyle(color: Colors.white);
 
+    // define i18n begin
+    var levelText = AppLocalizations.of(context)!.levelText;
+    var pauseGameText = AppLocalizations.of(context)!.pauseGameText;
+    var elapsedTimeText = AppLocalizations.of(context)!.elapsedTimeText;
+    var continueGameContentText = AppLocalizations.of(context)!.continueGameContentText;
+    // define i18n end
     Widget titleView =
-        Align(child: Text("游戏暂停", style: TextStyle(fontSize: 26)));
+        Align(child: Text(pauseGameText, style: TextStyle(fontSize: 26)));
     Widget bodyView = Align(
         child: Column(children: [
       Expanded(flex: 3, child: titleView),
       Expanded(
           flex: 5,
           child: Column(children: [
-            Text("难度 [${LocalizationUtils.localizationLevelName(context, _state.level!)}] 已用时 ${_state.timer}")
+            Text("$levelText [${LocalizationUtils.localizationLevelName(context, _state.level!)}] $elapsedTimeText : ${_state.timer}")
           ])),
       Expanded(
         flex: 1,
-        child: Align(alignment: Alignment.center, child: Text("双击屏幕继续游戏")),
+        child: Align(alignment: Alignment.center, child: Text(continueGameContentText)),
       )
     ]));
 

@@ -7,7 +7,7 @@
   "@menuContinueGame":{
     "description":"menu of 'continue game' button text"
   },
-  "cancel": "取消",
+  "levelCancel": "取消",
   "levelEasy": "简单",
   "levelMedium": "中等",
   "levelHard": "困难",
@@ -18,5 +18,19 @@
   "gameStatusGaming" : "进行中",
   "gameStatusPause" : "暂停",
   "gameStatusFailure" : "失败",
-  "gameStatusVictory" : "胜利"
+  "gameStatusVictory" : "胜利",
+
+  "levelText" : "难度",
+  "tipsText" : "提示",
+  "enableMarkText" : "启用笔记",
+  "closeMarkText" : "关闭笔记",
+  "exitGameText" : "退出游戏",
+  "exitGameContentText": "是否要结束本轮数独？",
+  "openText" : "打开",
+  "cancelText" : "取消",
+  "pauseText" : "暂停",
+  "markText" : "笔记",
+  "pauseGameText" : "游戏暂停",
+  "elapsedTimeText" : "耗时",
+  "continueGameContentText" : "双击屏幕继续游戏"
 }

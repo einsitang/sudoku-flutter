@@ -12,6 +12,7 @@ import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 
 final Logger log = Logger();
 
@@ -315,13 +316,16 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                     width: 40,
                     height: 40),
                 onPressed: () {
-                  log.d('清除 ${_chooseSudokuBox + 1} 选型 , 如果他不是固定值的话');
+                  log.d("""
+                  when ${_chooseSudokuBox + 1} is not a puzzle , then clean the choose \n
+                  清除 ${_chooseSudokuBox + 1} 选型 , 如果他不是固定值的话
+                  """);
                   if (_isOnlyReadGrid(_chooseSudokuBox)) {
-                    // 只读格
+                    // read only item , skip it - 只读格
                     return;
                   }
                   if (_state.status != SudokuGameStatus.gaming) {
-                    // 未在游戏进行时
+                    // not playing , skip it - 未在游戏进行时
                     return;
                   }
                   _state.cleanMark(_chooseSudokuBox);
@@ -365,29 +369,39 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     };
     var tipsOnPressed;
     var markOnPressed = () {
-      log.d("启用笔记功能");
+      log.d("enable mark function - 启用笔记功能");
       setState(() {
         _markOpen = !_markOpen;
       });
     };
+    // define i18n text begin
+    var exitGameText = AppLocalizations.of(context)!.exitGameText;
+    var cancelText = AppLocalizations.of(context)!.cancelText;
+    var pauseText = AppLocalizations.of(context)!.pauseText;
+    var tipsText = AppLocalizations.of(context)!.tipsText;
+    var enableMarkText = AppLocalizations.of(context)!.enableMarkText;
+    var closeMarkText = AppLocalizations.of(context)!.closeMarkText;
+    var markText = AppLocalizations.of(context)!.markText;
+    var exitGameContentText = AppLocalizations.of(context)!.exitGameContentText;
+    // define i18n text end
     var exitGameOnPressed = () async {
       await showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
                 title:
-                    Text("退出游戏", style: TextStyle(fontWeight: FontWeight.bold)),
-                content: Text("是否要结束本轮数独？"),
+                    Text(exitGameText, style: TextStyle(fontWeight: FontWeight.bold)),
+                content: Text(exitGameContentText),
                 actions: [
                   TextButton(
-                    child: Text("退出游戏"),
+                    child: Text(exitGameText),
                     style: flatButtonStyle,
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
                   ),
                   TextButton(
-                    child: Text("取消"),
+                    child: Text(cancelText),
                     style: primaryFlatButtonStyle,
                     onPressed: () {
                       Navigator.pop(context, false);
@@ -416,7 +430,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   child: CupertinoButton(
                       padding: EdgeInsets.all(5),
                       onPressed: pauseOnPressed,
-                      child: Text("暂停", style: TextStyle(fontSize: 15))))),
+                      child: Text(pauseText, style: TextStyle(fontSize: 15))))),
           // 提示
           Expanded(
               flex: 1,
@@ -425,7 +439,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   child: CupertinoButton(
                       padding: EdgeInsets.all(5),
                       onPressed: tipsOnPressed,
-                      child: Text("提示", style: TextStyle(fontSize: 15))))),
+                      child: Text(tipsText, style: TextStyle(fontSize: 15))))),
           // 笔记
           Expanded(
               flex: 1,
@@ -434,7 +448,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   child: CupertinoButton(
                       padding: EdgeInsets.all(5),
                       onPressed: markOnPressed,
-                      child: Text("${_markOpen ? '关闭' : '启用'}笔记",
+                      child: Text("${_markOpen ? closeMarkText : enableMarkText}",
                           style: TextStyle(fontSize: 15))))),
           // 退出
           Expanded(
@@ -444,7 +458,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   child: CupertinoButton(
                       padding: EdgeInsets.all(5),
                       onPressed: exitGameOnPressed,
-                      child: Text("退出游戏", style: TextStyle(fontSize: 15)))))
+                      child: Text(exitGameText, style: TextStyle(fontSize: 15)))))
         ]));
   }
 
@@ -456,12 +470,12 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   /// 计算网格背景色
   Color _gridInWellBgColor(int index) {
     Color gridWellBackgroundColor;
-    // 同宫
+    // same zones
     List<int> zoneIndexes =
         Matrix.getZoneIndexes(zone: Matrix.getZone(index: index));
-    // 同行
+    // same rows
     List<int> rowIndexes = Matrix.getRowIndexes(Matrix.getRow(index));
-    // 同列
+    // same columns
     List<int> colIndexes = Matrix.getColIndexes(Matrix.getCol(index));
 
     Set indexSet = Set();

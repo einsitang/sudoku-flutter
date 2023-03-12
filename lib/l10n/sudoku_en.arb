@@ -7,7 +7,7 @@
   "@menuContinueGame":{
     "description":"menu of 'continue game' button text"
   },
-  "cancel": "Cancel",
+  "levelCancel": "Cancel",
   "levelEasy": "Easy",
   "levelMedium": "Medium",
   "levelHard": "Hard",
@@ -18,5 +18,19 @@
   "gameStatusGaming" : "Gaming",
   "gameStatusPause" : "Pause",
   "gameStatusFailure" : "Failure",
-  "gameStatusVictory" : "Victory"
+  "gameStatusVictory" : "Victory",
+
+  "levelText" : "Level",
+  "tipsText" : "Tips",
+  "enableMarkText" : "Enable Mark",
+  "closeMarkText" : "Close Mark",
+  "exitGameText" : "Exit Game",
+  "exitGameContentText": "Whether to end this round of Sudoku ?",
+  "openText" : "Open",
+  "cancelText" : "Cancel",
+  "pauseText" : "Pause",
+  "markText" : "Mark",
+  "pauseGameText" : "Paused",
+  "elapsedTimeText" : "elapsed time",
+  "continueGameContentText" : "Double click the screen to continue playing"
 }

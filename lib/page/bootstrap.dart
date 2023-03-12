@@ -135,7 +135,7 @@ Widget _newGameButton(BuildContext context) {
                     margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: CupertinoButton(
 //                      color: Colors.red,
-                      child: Text(AppLocalizations.of(context)!.cancel),
+                      child: Text(AppLocalizations.of(context)!.levelCancel),
                       onPressed: () {
                         Navigator.of(context).pop(false);
                       },
