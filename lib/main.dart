@@ -80,12 +80,12 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate
             ],
-            locale: Locale("en"),
+            // locale: Locale("en"), // i18n debug
             supportedLocales: AppLocalizations.supportedLocales,
             home: bootstrapPage,
             routes: <String, WidgetBuilder>{
               "/bootstrap": (context) => bootstrapPage,
-              "/newGame": (context) => SudokuGamePage(title: "Sudoku"),
+              "/newGame": (context) => sudokuGamePage,
               "/gaming": (context) => sudokuGamePage
             },
           ),
