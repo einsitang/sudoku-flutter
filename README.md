@@ -15,7 +15,7 @@ you can build the Sudoku Game just  for your own.
 
 ## screenshots
 
-![Bootstrap](./document/img/Jietu20200830-234059_jpg.jpg)![Game](./document/img/Jietu20200830-234139_jpg.jpg)
+![Bootstrap](./document/img/WX20230312-193408.jpg)![Game](./document/img/WX20230312-193423.jpg)
 
 ## plan-to-do
 - [:bangbang:] sudoku solver with camera scan

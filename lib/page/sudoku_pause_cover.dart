@@ -19,10 +19,10 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
     TextStyle pageTextStyle = TextStyle(color: Colors.white);
 
     // define i18n begin
-    var levelText = AppLocalizations.of(context)!.levelText;
-    var pauseGameText = AppLocalizations.of(context)!.pauseGameText;
-    var elapsedTimeText = AppLocalizations.of(context)!.elapsedTimeText;
-    var continueGameContentText = AppLocalizations.of(context)!.continueGameContentText;
+    final String levelText = AppLocalizations.of(context)!.levelText;
+    final String pauseGameText = AppLocalizations.of(context)!.pauseGameText;
+    final String elapsedTimeText = AppLocalizations.of(context)!.elapsedTimeText;
+    final String continueGameContentText = AppLocalizations.of(context)!.continueGameContentText;
     // define i18n end
     Widget titleView =
         Align(child: Text(pauseGameText, style: TextStyle(fontSize: 26)));

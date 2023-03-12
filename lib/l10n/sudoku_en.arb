@@ -32,5 +32,7 @@
   "markText" : "Mark",
   "pauseGameText" : "Paused",
   "elapsedTimeText" : "elapsed time",
-  "continueGameContentText" : "Double click the screen to continue playing"
+  "continueGameContentText" : "Double click the screen to continue playing",
+  "winnerConclusionText" : "Congratulations on completing the [%level%] Sudoku challenge!",
+  "failureConclusionText": "Unfortunately, this round of [%level%] Sudoku errors too many times, challenge failed!"
 }

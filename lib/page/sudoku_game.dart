@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -12,7 +13,6 @@ import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 
 final Logger log = Logger();
 
@@ -130,15 +130,26 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     Function playSoundEffect;
 
     // @TODO this place wait for I18N support
-    final String leveLabel =
+
+    // define i18n begin
+    final String elapsedTimeText =
+        AppLocalizations.of(context)!.elapsedTimeText;
+    final String winnerConclusionText =
+        AppLocalizations.of(context)!.winnerConclusionText;
+    final String failureConclusionText =
+        AppLocalizations.of(context)!.failureConclusionText;
+    final String levelLable =
         LocalizationUtils.localizationLevelName(context, _state.level!);
+    // define i18n end
     if (isWinner) {
       title = "Well Done!";
-      conclusion = "恭喜你完成 [$leveLabel] 数独挑战";
+      // conclusion = "恭喜你完成 [$levelLable] 数独挑战";
+      conclusion = winnerConclusionText.replaceFirst("%level%", levelLable);
       playSoundEffect = SoundEffect.solveVictory;
     } else {
       title = "Failure";
-      conclusion = "很遗憾,本轮 [$leveLabel] 数独错误次数太多，挑战失败!";
+      // conclusion = "很遗憾,本轮 [$levelLable] 数独错误次数太多，挑战失败!";
+      conclusion = failureConclusionText.replaceFirst("%level%", levelLable);
       playSoundEffect = SoundEffect.gameOver;
     }
 
@@ -170,10 +181,16 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                       Expanded(
                           flex: 2,
                           child: Column(children: [
-                            Text(conclusion, style: TextStyle(fontSize: 16)),
+                            Container(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  25.0, 0.0, 25.0, 0.0),
+                              child: Text(conclusion,
+                                  style: TextStyle(fontSize: 16, height: 1.5)),
+                            ),
                             Container(
                                 margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                                child: Text("用时  ${_state.timer}'s",
+                                child: Text(
+                                    "$elapsedTimeText : ${_state.timer}'s",
                                     style: TextStyle(color: Colors.blue))),
                             Container(
                                 padding: EdgeInsets.all(10),
@@ -381,7 +398,6 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     var tipsText = AppLocalizations.of(context)!.tipsText;
     var enableMarkText = AppLocalizations.of(context)!.enableMarkText;
     var closeMarkText = AppLocalizations.of(context)!.closeMarkText;
-    var markText = AppLocalizations.of(context)!.markText;
     var exitGameContentText = AppLocalizations.of(context)!.exitGameContentText;
     // define i18n text end
     var exitGameOnPressed = () async {
@@ -389,8 +405,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
           context: context,
           builder: (context) {
             return AlertDialog(
-                title:
-                    Text(exitGameText, style: TextStyle(fontWeight: FontWeight.bold)),
+                title: Text(exitGameText,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 content: Text(exitGameContentText),
                 actions: [
                   TextButton(
@@ -448,7 +464,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   child: CupertinoButton(
                       padding: EdgeInsets.all(5),
                       onPressed: markOnPressed,
-                      child: Text("${_markOpen ? closeMarkText : enableMarkText}",
+                      child: Text(
+                          "${_markOpen ? closeMarkText : enableMarkText}",
                           style: TextStyle(fontSize: 15))))),
           // 退出
           Expanded(
@@ -458,7 +475,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   child: CupertinoButton(
                       padding: EdgeInsets.all(5),
                       onPressed: exitGameOnPressed,
-                      child: Text(exitGameText, style: TextStyle(fontSize: 15)))))
+                      child:
+                          Text(exitGameText, style: TextStyle(fontSize: 15)))))
         ]));
   }
 
