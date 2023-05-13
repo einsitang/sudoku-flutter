@@ -1,0 +1,26 @@
+workflows:
+  sudoku-flutter-workflow:
+    environment:
+      java: 11
+      flutter: 3.7.0
+      android_signing:
+        - ANDROID_KEYJKS
+      groups:
+        - githubtoken
+    scripts:
+      - name: build apk with flutter
+        script: flutter build apk
+    artifacts:
+      - build/app/outputs/apk/**/*.apk
+    publishing:
+      scripts:
+        - name: publish to Github
+          script: | 
+            #!/usr/bin/env zsh
+            
+            gh auth status \
+
+            gh release create "${CM_TAG}" \
+            --title "Sudoku-Flutter#${CM_TAG} codemagic build" \
+            build/app/outputs/apk/**/*.apk
+
