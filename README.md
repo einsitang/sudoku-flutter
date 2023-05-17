@@ -24,6 +24,7 @@ you can build the Sudoku Game just  for your own.
 ## environment
 - dart SDK: '>=2.18.6 <3.0.0' // Null-Safety
 - flutter SDK: '^3.0.0'
+- jdk 11
 
 ## dependency
 - [sudoku_dart](https://github.com/forfuns/sudoku-dart) (sudoku core opensource  lib  )
