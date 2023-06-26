@@ -30,7 +30,7 @@
   "cancelText" : "Annuler",
   "pauseText" : "Pause",
   "markText" : "Note",
-  "pauseGameText" : "mettre le jeu en pause",
+  "pauseGameText" : "mettre le jeu en paused",
   "elapsedTimeText" : "durée",
   "continueGameContentText" : "Double-cliquez sur l’écran pour continuer à jouer",
   "winnerConclusionText" : "Congratulations on completing the [%level%] Sudoku challenge!",
