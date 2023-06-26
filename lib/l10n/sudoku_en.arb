@@ -22,8 +22,8 @@
 
   "levelText" : "Level",
   "tipsText" : "Tips",
-  "enableMarkText" : "Enable Mark",
-  "closeMarkText" : "Close Mark",
+  "enableMarkText" : "Enable Note",
+  "closeMarkText" : "Close Note",
   "exitGameText" : "Exit Game",
   "exitGameContentText": "Whether to end this round of Sudoku ?",
   "openText" : "Open",
