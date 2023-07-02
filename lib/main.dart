@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate
             ],
-            // locale: Locale("en"), // i18n debug
+//             locale: Locale("en"), // i18n debug
             supportedLocales: AppLocalizations.supportedLocales,
             home: bootstrapPage,
             routes: <String, WidgetBuilder>{

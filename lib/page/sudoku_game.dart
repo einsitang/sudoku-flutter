@@ -261,7 +261,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
             _state.switchRecord(_chooseSudokuBox, num);
             // 判断真伪
             if (_state.record[_chooseSudokuBox] != -1 &&
-                _state.sudoku!.answer[_chooseSudokuBox] != num) {
+                _state.sudoku!.solution[_chooseSudokuBox] != num) {
               // 填入错误数字 wrong answer on _chooseSudokuBox with num
               _state.lifeLoss();
               if (_state.life <= 0) {
@@ -522,7 +522,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       BuildContext context, int index, int num, GestureTapCallback onTap) {
     Sudoku sudoku = _state.sudoku!;
     List<int> puzzle = sudoku.puzzle;
-    List<int> answer = sudoku.answer;
+    List<int> solution = sudoku.solution;
     List<int> record = _state.record;
     bool readOnly = true;
     bool isWrong = false;
@@ -531,7 +531,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       num = record[index];
       readOnly = false;
 
-      if (record[index] != -1 && record[index] != answer[index]) {
+      if (record[index] != -1 && record[index] != solution[index]) {
         isWrong = true;
       }
     }

@@ -27,7 +27,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: '^0.17.0'
-  sudoku_dart: '^1.0.4'
+  sudoku_dart: '^1.1.0'
   logger: "^1.1.0"
   sprintf: "^7.0.0"
   scoped_model: "^2.0.0"
