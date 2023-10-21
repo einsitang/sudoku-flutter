@@ -20,6 +20,9 @@
   "gameStatusFailure" : "失败",
   "gameStatusVictory" : "胜利",
 
+  "wrongInputAlertText" : "填写错误\n你还可以尝试 %attempts% 次",
+  "gotItText" : "明白",
+
   "levelText" : "难度",
   "tipsText" : "提示",
   "enableMarkText" : "启用笔记",

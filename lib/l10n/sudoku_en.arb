@@ -20,6 +20,9 @@
   "gameStatusFailure" : "Failure",
   "gameStatusVictory" : "Victory",
 
+  "wrongInputAlertText" : "Wrong Input\nYou can't afford %attempts% more turnovers",
+  "gotItText" : "Got It",
+
   "levelText" : "Level",
   "tipsText" : "Tips",
   "enableMarkText" : "Enable Note",

@@ -99,7 +99,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
             ),
             onTap: () async {
               if (await canLaunchUrlString(Constant.githubRepository)) {
-                await launchUrlString(Constant.githubRepository);
+                await launchUrlString(Constant.githubRepository,
+                    mode: LaunchMode.externalApplication);
               } else {
                 log.e(
                     "can't open browser to url : ${Constant.githubRepository}");
@@ -269,6 +270,11 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                 return _gameOver();
               }
 
+              // "\nWrong Input\nYou can't afford ${_state.life} more turnovers"
+              String wrongInputAlertText = AppLocalizations.of(context)!.wrongInputAlertText;
+              wrongInputAlertText = wrongInputAlertText.replaceFirst("%attempts%", "${_state.life}");
+              String gotItText = AppLocalizations.of(context)!.gotItText;
+
               showCupertinoDialog(
                   context: context,
                   builder: (context) {
@@ -276,11 +282,10 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                     SoundEffect.stuffError();
                     return CupertinoAlertDialog(
                       title: Text("Oops..."),
-                      content: Text(
-                          "\nWrong Input\nYou can't afford ${_state.life} more turnovers"),
+                      content: Text(wrongInputAlertText),
                       actions: [
                         CupertinoDialogAction(
-                          child: Text('Got It'),
+                          child: Text(gotItText),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -292,6 +297,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
               return;
             }
             // 判断进度
+            // If the filling is complete and no error checking is triggered, it indicates success
             if (_state.isComplete) {
               _pauseTimer();
               _state.updateStatus(SudokuGameStatus.success);
