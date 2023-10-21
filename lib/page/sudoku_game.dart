@@ -18,7 +18,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 final Logger log = Logger();
 
-final AudioPlayer tipsPlayer = AudioPlayer();
+// final AudioPlayer tipsPlayer = AudioPlayer();
 
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   foregroundColor: Colors.black54,
@@ -423,6 +423,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         for (int i = 0; i < puzzle.length; i++) {
           int index = (i + randomBeginPoint) % puzzle.length;
           if (puzzle[index] == -1 && record[index] == -1) {
+            SoundEffect.answerTips();
             _state.setRecord(index, solution[index]);
             _state.hintLoss();
             _chooseSudokuBox = index;

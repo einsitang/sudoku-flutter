@@ -7,12 +7,15 @@ class SoundEffect {
   static final AudioPlayer _wrongAudio = new AudioPlayer();
   static final AudioPlayer _victoryAudio = new AudioPlayer();
   static final AudioPlayer _gameOverAudio = new AudioPlayer();
+  // show user tips sound effect
+  static final AudioPlayer _answerTipAudio = new AudioPlayer();
 
   static init() async {
     if (!_init) {
       await _wrongAudio.setAsset("assets/audio/wrong_tip.mp3");
       await _victoryAudio.setAsset("assets/audio/victory_tip.mp3");
       await _gameOverAudio.setAsset("assets/audio/gameover_tip.mp3");
+      await _answerTipAudio.setAsset("assets/audio/answer_tip.mp3");
     }
     _init = true;
   }
@@ -40,5 +43,13 @@ class SoundEffect {
     }
     await _gameOverAudio.seek(Duration.zero);
     await _gameOverAudio.play();
+  }
+
+  static answerTips() async {
+    if (!_init) {
+      await init();
+    }
+    await _answerTipAudio.seek(Duration.zero);
+    await _answerTipAudio.play();
   }
 }
