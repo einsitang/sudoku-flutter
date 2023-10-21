@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -99,8 +101,13 @@ class _SudokuGamePageState extends State<SudokuGamePage>
             ),
             onTap: () async {
               if (await canLaunchUrlString(Constant.githubRepository)) {
-                await launchUrlString(Constant.githubRepository,
-                    mode: LaunchMode.externalApplication);
+                if (Platform.isAndroid) {
+                  await launchUrlString(Constant.githubRepository,
+                      mode: LaunchMode.platformDefault);
+                } else {
+                  await launchUrlString(Constant.githubRepository,
+                      mode: LaunchMode.externalApplication);
+                }
               } else {
                 log.e(
                     "can't open browser to url : ${Constant.githubRepository}");
@@ -123,6 +130,15 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
   bool _isOnlyReadGrid(int index) => (_state.sudoku?.puzzle[index] ?? 0) != -1;
 
+  // 游戏盘点，检查是否游戏结束
+  // check the game is done
+  void _gameStackCount(){
+    if (_state.isComplete) {
+      _pauseTimer();
+      _state.updateStatus(SudokuGameStatus.success);
+      return _gameOver();
+    }
+  }
   /// game over trigger function
   /// 游戏结束触发 执行判断逻辑
   void _gameOver() async {
@@ -271,8 +287,10 @@ class _SudokuGamePageState extends State<SudokuGamePage>
               }
 
               // "\nWrong Input\nYou can't afford ${_state.life} more turnovers"
-              String wrongInputAlertText = AppLocalizations.of(context)!.wrongInputAlertText;
-              wrongInputAlertText = wrongInputAlertText.replaceFirst("%attempts%", "${_state.life}");
+              String wrongInputAlertText =
+                  AppLocalizations.of(context)!.wrongInputAlertText;
+              wrongInputAlertText = wrongInputAlertText.replaceFirst(
+                  "%attempts%", "${_state.life}");
               String gotItText = AppLocalizations.of(context)!.gotItText;
 
               showCupertinoDialog(
@@ -296,13 +314,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
               return;
             }
-            // 判断进度
-            // If the filling is complete and no error checking is triggered, it indicates success
-            if (_state.isComplete) {
-              _pauseTimer();
-              _state.updateStatus(SudokuGameStatus.success);
-              return _gameOver();
-            }
+            _gameStackCount();
           }
         };
       }
@@ -364,6 +376,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   }
 
   Widget _toolZone(BuildContext context) {
+
+    // pause button tap function
     var pauseOnPressed = () {
       if (_state.status != SudokuGameStatus.gaming) {
         return;
@@ -390,7 +404,36 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         });
       });
     };
+
+    // tips button tap function
     var tipsOnPressed;
+    if (_state!.hint > 0) {
+      tipsOnPressed = () {
+        // tips next cell answer
+        log.d("top tips button");
+        int hint = _state!.hint;
+        if (hint <= 0) {
+          return;
+        }
+        List<int> puzzle = _state.sudoku!.puzzle;
+        List<int> solution = _state.sudoku!.solution;
+        List<int> record = _state.record;
+        // random point tips
+        int randomBeginPoint = new Random().nextInt(puzzle.length);
+        for (int i = 0; i < puzzle.length; i++) {
+          int index = (i + randomBeginPoint) % puzzle.length;
+          if (puzzle[index] == -1 && record[index] == -1) {
+            _state.setRecord(index, solution[index]);
+            _state.hintLoss();
+            _chooseSudokuBox = index;
+            _gameStackCount();
+            return;
+          }
+        }
+      };
+    }
+
+    // mark button tap function
     var markOnPressed = () {
       log.d("enable mark function - 启用笔记功能");
       setState(() {
@@ -433,8 +476,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
           }).then((val) {
         bool confirm = val;
         if (confirm == true) {
-          // 退出游戏
-          log.d("exit the game !!");
+          // exit the game 退出游戏
           ScopedModel.of<SudokuState>(context).initialize();
           Navigator.pop(context);
         }
@@ -453,7 +495,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                       padding: EdgeInsets.all(5),
                       onPressed: pauseOnPressed,
                       child: Text(pauseText, style: TextStyle(fontSize: 15))))),
-          // 提示
+          // tips 提示
           Expanded(
               flex: 1,
               child: Align(
@@ -462,7 +504,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                       padding: EdgeInsets.all(5),
                       onPressed: tipsOnPressed,
                       child: Text(tipsText, style: TextStyle(fontSize: 15))))),
-          // 笔记
+          // mark 笔记
           Expanded(
               flex: 1,
               child: Align(
