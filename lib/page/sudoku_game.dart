@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/constant.dart';
@@ -122,7 +121,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                   children: [
                     Text("Sudoku powered by Flutter",
                         style: TextStyle(fontSize: 12)),
-                    Text("https://github.com/einsitang/sudoku-flutter",
+                    Text(Constant.githubRepository,
                         style: TextStyle(fontSize: 12))
                   ]))
         ]);
@@ -132,13 +131,14 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
   // 游戏盘点，检查是否游戏结束
   // check the game is done
-  void _gameStackCount(){
+  void _gameStackCount() {
     if (_state.isComplete) {
       _pauseTimer();
       _state.updateStatus(SudokuGameStatus.success);
       return _gameOver();
     }
   }
+
   /// game over trigger function
   /// 游戏结束触发 执行判断逻辑
   void _gameOver() async {
@@ -155,18 +155,16 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         AppLocalizations.of(context)!.winnerConclusionText;
     final String failureConclusionText =
         AppLocalizations.of(context)!.failureConclusionText;
-    final String levelLable =
+    final String levelLabel =
         LocalizationUtils.localizationLevelName(context, _state.level!);
     // define i18n end
     if (isWinner) {
       title = "Well Done!";
-      // conclusion = "恭喜你完成 [$levelLable] 数独挑战";
-      conclusion = winnerConclusionText.replaceFirst("%level%", levelLable);
+      conclusion = winnerConclusionText.replaceFirst("%level%", levelLabel);
       playSoundEffect = SoundEffect.solveVictory;
     } else {
       title = "Failure";
-      // conclusion = "很遗憾,本轮 [$levelLable] 数独错误次数太多，挑战失败!";
-      conclusion = failureConclusionText.replaceFirst("%level%", levelLable);
+      conclusion = failureConclusionText.replaceFirst("%level%", levelLabel);
       playSoundEffect = SoundEffect.gameOver;
     }
 
@@ -376,7 +374,6 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   }
 
   Widget _toolZone(BuildContext context) {
-
     // pause button tap function
     var pauseOnPressed = () {
       if (_state.status != SudokuGameStatus.gaming) {
@@ -407,11 +404,11 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
     // tips button tap function
     var tipsOnPressed;
-    if (_state!.hint > 0) {
+    if (_state.hint > 0) {
       tipsOnPressed = () {
         // tips next cell answer
         log.d("top tips button");
-        int hint = _state!.hint;
+        int hint = _state.hint;
         if (hint <= 0) {
           return;
         }

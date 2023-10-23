@@ -162,13 +162,6 @@ Widget _newGameButton(BuildContext context) {
                           await _sudokuGenerate(context, level);
                           Navigator.popAndPushNamed(context, "/gaming");
 
-                          // Container(
-                          //     color: Colors.white,
-                          //     alignment: Alignment.center,
-                          //     child: Center(
-                          //         child: Text('Sudoku loading...',
-                          //             style: TextStyle(color: Colors.black),
-                          //             textDirection: TextDirection.ltr)));
                         },
                       ))));
             });
@@ -208,8 +201,8 @@ class _BootstrapPageState extends State<BootstrapPage> {
                 child: Container(
                     alignment: Alignment.center,
                     color: Colors.white,
-                    width: 400,
-                    height: 400,
+                    width: 280,
+                    height: 280,
                     child: Image(
                       image: AssetImage("assets/image/logo.png"),
                     ))),

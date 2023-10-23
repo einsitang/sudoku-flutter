@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <application
         android:name="${applicationName}"
-        android:label="Sudoku"
+        android:label="@string/app_name"
         android:icon="@mipmap/sudoku_flutter_logo">
         <activity
             android:name=".MainActivity"
