@@ -34,7 +34,7 @@ dependencies:
 #  modal_bottom_sheet: "^2.1.2"
   modal_bottom_sheet:
     git:
-      url: https://github.com/saltedpotatos/modal_bottom_sheet.git
+      url: https://github.com/einsitang/modal_bottom_sheet.git
       path: modal_bottom_sheet
       ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   hive: "^2.2.3"
