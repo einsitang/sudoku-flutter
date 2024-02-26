@@ -99,7 +99,11 @@ $> flutter build apk
 ## more flutter features
 see the [Flutter](https://flutter.dev/) official website
 
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=einsitang/sudoku-flutter&type=Date)](https://star-history.com/#einsitang/sudoku-flutter&Date)
+
 ## the end
 
 thanks for visit this repository , wish you can like it and star it :kissing_heart:
-
