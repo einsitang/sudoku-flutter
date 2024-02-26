@@ -100,7 +100,7 @@ $> flutter build apk
 see the [Flutter](https://flutter.dev/) official website
 
 
-## Star History
+## star history
 
 [![Star History Chart](https://api.star-history.com/svg?repos=einsitang/sudoku-flutter&type=Date)](https://star-history.com/#einsitang/sudoku-flutter&Date)
 
