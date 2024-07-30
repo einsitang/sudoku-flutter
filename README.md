@@ -8,7 +8,7 @@
 
 ![SUDOKU-FILTTER](assets/image/sudoku_logo.png)
 
-A open source Sudoku game application powered by Flutter .
+an open source Sudoku game application powered by Flutter .
 
 you can build the Sudoku Game just  for your own.
 

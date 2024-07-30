@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
@@ -10,6 +11,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
+
+import 'ai_scan.dart';
 
 final Logger log = Logger();
 
@@ -31,16 +34,31 @@ Widget _buttonWrapper(
       child: childBuilder(context));
 }
 
-Widget _scanButton(BuildContext context) {
+Widget _aiSolverButton(BuildContext context) {
+  String buttonLabel = AppLocalizations.of(context)!.menuAISolver;
   return Offstage(
-      offstage: true,
+      offstage: false,
       child: _buttonWrapper(
           context,
           (content) => CupertinoButton(
                 color: Colors.blue,
-                child: Text("扫独解题"),
-                onPressed: () {
-                  log.d("scan");
+                child: Text("$buttonLabel (test)"),
+                onPressed: () async {
+                  log.d("AI scan");
+                  WidgetsFlutterBinding.ensureInitialized();
+                  final cameras = await availableCameras();
+                  final firstCamera = cameras.first;
+                  final aiScanPage = AIScanPage(camera: firstCamera);
+
+                  // test page
+                  // final aiScanPage = AIDetectTestPage();
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder: (BuildContext context, _, __) {
+                            return aiScanPage;
+                          }));
                 },
               )));
 }
@@ -74,47 +92,6 @@ Widget _continueGameButton(BuildContext context) {
               }),
         ));
   });
-}
-
-void _internalSudokuGenerate(List<dynamic> args) {
-  Level level = args[0];
-  SendPort sendPort = args[1];
-
-  Sudoku sudoku = Sudoku.generate(level);
-  log.d("数独生成完毕");
-  sendPort.send(sudoku);
-}
-
-Future _sudokuGenerate(BuildContext context, Level level) async {
-  String sudokuGenerateText = AppLocalizations.of(context)!.sudokuGenerateText;
-  showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Dialog(
-          child: Container(
-              padding: EdgeInsets.all(10),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                CircularProgressIndicator(),
-                Container(
-                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(sudokuGenerateText))
-              ]))));
-
-  ReceivePort receivePort = ReceivePort();
-
-  Isolate isolate = await Isolate.spawn(
-      _internalSudokuGenerate, [level, receivePort.sendPort]);
-  var data = await receivePort.first;
-  Sudoku sudoku = data;
-  SudokuState state = ScopedModel.of<SudokuState>(context);
-  state.initialize(sudoku: sudoku, level: level);
-  state.updateStatus(SudokuGameStatus.pause);
-  receivePort.close();
-  isolate.kill(priority: Isolate.immediate);
-  log.d("receivePort.listen done!");
-
-  // dismiss dialog
-  Navigator.pop(context);
 }
 
 Widget _newGameButton(BuildContext context) {
@@ -161,7 +138,6 @@ Widget _newGameButton(BuildContext context) {
                               "begin generator Sudoku with level : $levelName");
                           await _sudokuGenerate(context, level);
                           Navigator.popAndPushNamed(context, "/gaming");
-
                         },
                       ))));
             });
@@ -184,6 +160,47 @@ Widget _newGameButton(BuildContext context) {
               },
             );
           }));
+}
+
+void _internalSudokuGenerate(List<dynamic> args) {
+  Level level = args[0];
+  SendPort sendPort = args[1];
+
+  Sudoku sudoku = Sudoku.generate(level);
+  log.d("数独生成完毕");
+  sendPort.send(sudoku);
+}
+
+Future _sudokuGenerate(BuildContext context, Level level) async {
+  String sudokuGenerateText = AppLocalizations.of(context)!.sudokuGenerateText;
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+          child: Container(
+              padding: EdgeInsets.all(10),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                CircularProgressIndicator(),
+                Container(
+                    margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(sudokuGenerateText))
+              ]))));
+
+  ReceivePort receivePort = ReceivePort();
+
+  Isolate isolate = await Isolate.spawn(
+      _internalSudokuGenerate, [level, receivePort.sendPort]);
+  var data = await receivePort.first;
+  Sudoku sudoku = data;
+  SudokuState state = ScopedModel.of<SudokuState>(context);
+  state.initialize(sudoku: sudoku, level: level);
+  state.updateStatus(SudokuGameStatus.pause);
+  receivePort.close();
+  isolate.kill(priority: Isolate.immediate);
+  log.d("receivePort.listen done!");
+
+  // dismiss dialog
+  Navigator.pop(context);
 }
 
 class _BootstrapPageState extends State<BootstrapPage> {
@@ -215,7 +232,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
                   // new game
                   _newGameButton(context),
                   // scanner ?
-                  _scanButton(context),
+                  _aiSolverButton(context),
                 ]))
           ],
         )));

@@ -7,6 +7,7 @@
   "@menuContinueGame":{
     "description":"menu of 'continue game' button text"
   },
+  "menuAISolver" : "AI Solver",
   "levelCancel": "Cancel",
   "levelEasy": "Easy",
   "levelMedium": "Medium",
