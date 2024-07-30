@@ -2,7 +2,7 @@ workflows:
   sudoku-flutter-workflow:
     environment:
       java: 11
-      flutter: 3.7.0
+      flutter: 3.22.3
       android_signing:
         - ANDROID_KEYJKS
       groups:
