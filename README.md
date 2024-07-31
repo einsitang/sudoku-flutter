@@ -21,15 +21,17 @@ Download apk for android (preview) -> [github release page](https://github.com/e
 ![Bootstrap](./document/img/WX20230312-193408.jpg)![Game](./document/img/WX20230312-193423.jpg)
 
 ## plan-to-do
-- [:bangbang:] sudoku solver with camera scan
+- [:bangbang:] AI sudoku solver with camera
 
 
 ## environment
-- dart SDK: '>=2.18.6 <3.0.0' // Null-Safety
+- dart SDK: '>=3.0.0 <3.5.0' // records feature support
 - flutter SDK: '^3.0.0'
 - jdk 11
 
 ## dependency
+- [opencv_dart](https://github.com/rainyl/opencv_dart)
+- [tflite_flutter](https://github.com/tensorflow/flutter-tflite)
 - [sudoku_dart](https://github.com/forfuns/sudoku-dart) (sudoku core opensource  lib  )
 - [Hive](https://github.com/hivedb/hive)
 - [scoped_model](https://github.com/brianegan/scoped_model)
