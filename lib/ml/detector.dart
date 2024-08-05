@@ -31,9 +31,12 @@ class DetectorFactory {
   static Future<Predictor<YoloV8Input, YoloV8Output>>
       getDigitsDetector() async {
     _digitsDetector ??= await YoloV8Detector.load(
-        imgsz: (imgSize, imgSize),
-        modelPath: digitsModelPath,
-        metadataPath: digitsModelMetadataPath);
+      imgsz: (imgSize, imgSize),
+      modelPath: digitsModelPath,
+      metadataPath: digitsModelMetadataPath,
+      confThreshold: 0.45,
+      iouThreshold: 0.45,
+    );
     return _digitsDetector!;
   }
 }

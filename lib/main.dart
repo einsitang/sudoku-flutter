@@ -9,6 +9,8 @@ import 'package:sudoku/page/bootstrap.dart';
 import 'package:sudoku/page/sudoku_game.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 
+import 'ml/detector.dart';
+
 final Logger log = Logger();
 
 void main() {
@@ -20,15 +22,20 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
   // initialization effect when application build before
   _initEffect() async {
     await SoundEffect.init();
   }
 
+  _modelWarmedUp() async {
+    // warmed up sudoku-detector and digits-detector
+    await DetectorFactory.getSudokuDetector();
+    await DetectorFactory.getDigitsDetector();
+  }
+
   Future<SudokuState> _loadState() async {
     await _initEffect();
+    await _modelWarmedUp();
     return await SudokuState.resumeFromDB();
   }
 
@@ -47,7 +54,7 @@ class MyApp extends StatelessWidget {
                       textDirection: TextDirection.ltr)));
         }
         if (snapshot.hasError) {
-          log.w("here is builder future throws error you shoud see it");
+          log.w("here is builder future throws error you should see it");
           log.w(snapshot.error);
         }
         SudokuState sudokuState = snapshot.data ?? SudokuState();
@@ -59,19 +66,7 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             title: 'Sudoku',
             theme: ThemeData(
-              // This is the theme of your application.
-              //
-              // Try running your application with "flutter run". You'll see the
-              // application has a blue toolbar. Then, without quitting the app, try
-              // changing the primarySwatch below to Colors.green and then invoke
-              // "hot reload" (press "r" in the console where you ran "flutter run",
-              // or simply save your changes to "hot reload" in a Flutter IDE).
-              // Notice that the counter didn't reset back to zero; the application
-              // is not restarted.
               primarySwatch: Colors.blue,
-              // This makes the visual density adapt to the platform that you run
-              // the app on. For desktop platforms, the controls will be smaller and
-              // closer together (more dense) than on mobile platforms.
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             localizationsDelegates: [

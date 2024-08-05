@@ -45,13 +45,13 @@ Widget _aiSolverButton(BuildContext context) {
                 child: Text("$buttonLabel (test)"),
                 onPressed: () async {
                   log.d("AI scan");
+
                   WidgetsFlutterBinding.ensureInitialized();
+
                   final cameras = await availableCameras();
                   final firstCamera = cameras.first;
                   final aiScanPage = AIScanPage(camera: firstCamera);
 
-                  // test page
-                  // final aiScanPage = AIDetectTestPage();
                   Navigator.push(
                       context,
                       PageRouteBuilder(

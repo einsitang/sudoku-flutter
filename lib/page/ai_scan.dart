@@ -4,8 +4,11 @@ import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
 import 'package:logger/logger.dart';
 import 'package:sudoku/page/ai_detect_paint.dart';
+import 'package:sudoku/util/image_util.dart';
 
 import '../ml/detector.dart';
 import '../ml/yolov8/yolov8_input.dart';
@@ -68,7 +71,7 @@ class AIScanPageState extends State<AIScanPage> {
                 var _centerWidget = Center(
                   child: _isPredicting
                       ? CircularProgressIndicator()
-                      : Text("请对准数独进行识别",
+                      : Text("请对准数独拍照进行识别",
                           style: TextStyle(color: Colors.white, fontSize: 20)),
                 );
 
@@ -123,38 +126,71 @@ class AIScanPageState extends State<AIScanPage> {
               return;
             }
 
-            // change state to show loading indicator
+            // show loading indicator
             setState(() {
               _isPredicting = true;
             });
 
             var sudokuPredictor = await DetectorFactory.getSudokuDetector();
-            await DetectorFactory.getDigitsDetector(); // preloading , next step will use digits detector to predict sudoku box numbers
+            var digitsPredictor = await DetectorFactory.getDigitsDetector();
 
             // 静态图片用于测试推理结果 - static image is using on test predict result
-            // String imagePath = "assets/image/4.jpg";
-            // var imgBytes = await rootBundle.load(imagePath);
-            // var byteData = imgBytes.buffer.asUint8List();
+            // String imagePath = "assets/image/10.png";
+            // var imgByteData = await rootBundle.load(imagePath);
+            // var imgBuffData = imgByteData.buffer.asUint8List();
+            // ui.Image uiImage = await decodeImageFromList(imgBuffData);
 
+            // 数独检测 , 此处需要补充对图片进行剪切处理,降低图片尺寸也许可以加快推理时间？
             final image = await _controller.takePicture();
-            final byteData = await image.readAsBytes();
-            var input = YoloV8Input.readImgBytes(byteData);
-            YoloV8Output output = sudokuPredictor.predict(input);
+            final imgBuffData =  await image.readAsBytes();
+            ui.Image uiImage = await decodeImageFromList(imgBuffData);
+            var input = YoloV8Input.readImgBytes(imgBuffData);
+            YoloV8Output sudokuOutput = sudokuPredictor.predict(input);
+
+            final uiShowImg,showImgBuffData,detectOutput;
+
+            if(sudokuOutput.boxes.isNotEmpty){
+              final box = sudokuOutput.boxes[0];
+              final x = box.x;
+              final y = box.y;
+              final w = box.w;
+              final h = box.h;
+              // crop sudoku part of image
+              final cropImg = img.copyCrop(
+                await ImageUtil.convertFlutterUiToImage(uiImage),
+                x: x.toInt(),
+                y: y.toInt(),
+                width: w.toInt(),
+                height: h.toInt(),
+              );
+
+
+              final uiCropImg = await ImageUtil.convertImageToFlutterUi(cropImg);
+              final cropImgBufData = img.encodeJpg(cropImg).buffer.asUint8List();
+              YoloV8Output digitsOutput = digitsPredictor.predict(YoloV8Input.readImgBytes(cropImgBufData));
+
+              uiShowImg = uiCropImg;
+              showImgBuffData = cropImgBufData;
+              detectOutput = digitsOutput;
+            }else{
+              uiShowImg = uiImage;
+              showImgBuffData = imgBuffData;
+              detectOutput = sudokuOutput;
+            }
 
             // disable loading indicator
             setState(() {
               _isPredicting = false;
             });
 
-            ui.Image uiImage = await decodeImageFromList(byteData);
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => AIDetectPaintPage(
-                    image: uiImage, imageData: byteData, output: output),
+                    image: uiShowImg, imageData: showImgBuffData, output: detectOutput),
               ),
             );
           } catch (e) {
-            log.e(e.toString(), e);
+            log.e(e.toString());
           }
         },
         child: const Icon(Icons.camera_alt),

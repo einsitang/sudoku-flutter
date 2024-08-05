@@ -45,14 +45,18 @@ dependencies:
   cupertino_icons: ^1.0.5
   url_launcher: ^6.1.7
   just_audio: ^0.9.31
-  tflite_flutter: ^0.10.4
   camera: ^0.11.0+1
   path_provider: ^2.1.3
   path: ^1.9.0
   image: ^4.2.0
-  dart_tensor: ^1.0.4
-  opencv_dart: ^1.2.0
   yaml: ^3.1.2
+  tflite_flutter: ^0.10.4
+  opencv_dart: ^1.2.0
+#  dart_tensor: ^1.0.4
+  dart_tensor:
+    git:
+      url: https://github.com/einsitang/dart_tensor.git
+      ref: c50d8df6c555ae0836f80808783c2cde821f7093
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +83,7 @@ flutter:
   assets:
     - assets/image/
     - assets/audio/
+    - assets/tf_model/
     - assets/tf_model/sudoku/
     - assets/tf_model/digits/
 
