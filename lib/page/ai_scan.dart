@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:sudoku/page/ai_detect_paint.dart';
 
@@ -129,30 +130,31 @@ class AIScanPageState extends State<AIScanPage> {
             });
 
             var sudokuPredictor = await DetectorFactory.getSudokuDetector();
-            await DetectorFactory.getDigitsDetector(); // preloading , next step will use digits detector to predict sudoku box numbers
+            var digitsPredictor = await DetectorFactory.getDigitsDetector();
 
             // 静态图片用于测试推理结果 - static image is using on test predict result
-            // String imagePath = "assets/image/4.jpg";
-            // var imgBytes = await rootBundle.load(imagePath);
-            // var byteData = imgBytes.buffer.asUint8List();
+            String imagePath = "assets/image/10.png";
+            var imgBytes = await rootBundle.load(imagePath);
+            var byteData = imgBytes.buffer.asUint8List();
 
-            final image = await _controller.takePicture();
-            final byteData = await image.readAsBytes();
+            // final image = await _controller.takePicture();
+            // final byteData = await image.readAsBytes();
             var input = YoloV8Input.readImgBytes(byteData);
-            YoloV8Output output = sudokuPredictor.predict(input);
+            // YoloV8Output output = sudokuPredictor.predict(input);
+            YoloV8Output output = digitsPredictor.predict(input);
 
             // disable loading indicator
             setState(() {
               _isPredicting = false;
             });
 
-            ui.Image uiImage = await decodeImageFromList(byteData);
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AIDetectPaintPage(
-                    image: uiImage, imageData: byteData, output: output),
-              ),
-            );
+            // ui.Image uiImage = await decodeImageFromList(byteData);
+            // await Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => AIDetectPaintPage(
+            //         image: uiImage, imageData: byteData, output: output),
+            //   ),
+            // );
           } catch (e) {
             log.e(e.toString(), e);
           }

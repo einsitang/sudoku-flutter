@@ -9,6 +9,8 @@ import 'package:sudoku/page/bootstrap.dart';
 import 'package:sudoku/page/sudoku_game.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 
+import 'ml/detector.dart';
+
 final Logger log = Logger();
 
 void main() {
@@ -27,8 +29,15 @@ class MyApp extends StatelessWidget {
     await SoundEffect.init();
   }
 
+  _modelWarmedUp() async {
+    // warmed up sudoku-detector and digits-detector
+    await DetectorFactory.getSudokuDetector();
+    await DetectorFactory.getDigitsDetector();
+  }
+
   Future<SudokuState> _loadState() async {
     await _initEffect();
+    await _modelWarmedUp();
     return await SudokuState.resumeFromDB();
   }
 
@@ -47,7 +56,7 @@ class MyApp extends StatelessWidget {
                       textDirection: TextDirection.ltr)));
         }
         if (snapshot.hasError) {
-          log.w("here is builder future throws error you shoud see it");
+          log.w("here is builder future throws error you should see it");
           log.w(snapshot.error);
         }
         SudokuState sudokuState = snapshot.data ?? SudokuState();

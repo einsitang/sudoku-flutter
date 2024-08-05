@@ -15,7 +15,7 @@ class DetectorFactory {
       "assets/tf_model/sudoku/metadata.yaml";
 
   static const String digitsModelPath =
-      "assets/tf_model/digits/digits_float16.tflite";
+      "assets/tf_model/digits/digits_float32.tflite";
   static const String digitsModelMetadataPath =
       "assets/tf_model/digits/metadata.yaml";
 
@@ -31,9 +31,24 @@ class DetectorFactory {
   static Future<Predictor<YoloV8Input, YoloV8Output>>
       getDigitsDetector() async {
     _digitsDetector ??= await YoloV8Detector.load(
-        imgsz: (imgSize, imgSize),
-        modelPath: digitsModelPath,
-        metadataPath: digitsModelMetadataPath);
+      imgsz: (imgSize, imgSize),
+      modelPath: digitsModelPath,
+      metadataPath: digitsModelMetadataPath,
+      confThreshold: 0.45,
+      iouThreshold: 0.45,
+    );
     return _digitsDetector!;
+  }
+
+  static Predictor<YoloV8Input, YoloV8Output>? _yolov8nDetector;
+  static Future<Predictor<YoloV8Input,YoloV8Output>> getYolov8nDetector() async {
+    _yolov8nDetector ??= await YoloV8Detector.load(
+      imgsz: (imgSize, imgSize),
+      modelPath: "assets/tf_model/yolov8n_float16.tflite",
+      metadataPath: "assets/tf_model/yolov8n_metadata.yaml",
+      confThreshold: 0.55,
+      iouThreshold: 0.45,
+    );
+    return _yolov8nDetector!;
   }
 }

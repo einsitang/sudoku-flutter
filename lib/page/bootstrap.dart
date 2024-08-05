@@ -8,10 +8,12 @@ import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:logger/logger.dart' hide Level;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:sudoku/page/ai_detect_test.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 
+import '../ml/detector.dart';
 import 'ai_scan.dart';
 
 final Logger log = Logger();
@@ -45,19 +47,22 @@ Widget _aiSolverButton(BuildContext context) {
                 child: Text("$buttonLabel (test)"),
                 onPressed: () async {
                   log.d("AI scan");
+
                   WidgetsFlutterBinding.ensureInitialized();
-                  final cameras = await availableCameras();
-                  final firstCamera = cameras.first;
-                  final aiScanPage = AIScanPage(camera: firstCamera);
+
+                  // final cameras = await availableCameras();
+                  // final firstCamera = cameras.first;
+                  // final aiScanPage = AIScanPage(camera: firstCamera);
 
                   // test page
                   // final aiScanPage = AIDetectTestPage();
+                  final aiTestPage = AIDetectTestPage();
                   Navigator.push(
                       context,
                       PageRouteBuilder(
                           opaque: false,
                           pageBuilder: (BuildContext context, _, __) {
-                            return aiScanPage;
+                            return aiTestPage;
                           }));
                 },
               )));

@@ -39,7 +39,9 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     double iouThreshold = 0.45,
   }) async {
     final options = InterpreterOptions()..addDelegate(GpuDelegateV2());
+    // final options = InterpreterOptions();
     var interpreter = await Interpreter.fromAsset(modelPath, options: options);
+
 
     String yamlContent = await rootBundle.loadString(metadataPath);
     var metadata = loadYaml(yamlContent);
@@ -106,12 +108,13 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
       List confs = item.sublist(4);
       var confsMat =
           cv.Mat.fromList(1, 1, cv.MatType.CV_32FC1, List<double>.from(confs));
-      var (_, maxScore, _, maxClassLoc) = cv.minMaxLoc(confsMat);
+      // var (_, maxScore, _, maxClassLoc) = cv.minMaxLoc(confsMat);
+      var (maxScore,maxClassLoc) = _maxLoc(confs);
 
       // filter lower then confThreshold may skip same epochs
-      if (maxScore < confThreshold) {
-        continue;
-      }
+      // if (maxScore < confThreshold) {
+      //   continue;
+      // }
 
       double x = (item[0] - (0.5 * item[2]));
       double y = (item[1] - (0.5 * item[3]));
@@ -120,7 +123,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
 
       boxes.add(cv.Rect(x.toInt(), y.toInt(), w.toInt(), h.toInt()));
       scores.add(maxScore);
-      classIds.add(maxClassLoc.y);
+      classIds.add(maxClassLoc);
 
       x = (x.toInt() - pad.$1) / gain;
       y = (y.toInt() - pad.$2) / gain;
@@ -148,6 +151,22 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     }
 
     return detectionBoxes;
+  }
+
+  (double,int) _maxLoc(List list){
+    int loc = 0;
+    var v = null;
+
+    for(var (index,item) in list.indexed){
+      if(v == null){
+        v = item;
+      }
+      if(item > v){
+        v = item;
+        loc = index;
+      }
+    }
+    return (v,loc);
   }
 
   /**
@@ -184,13 +203,14 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
             preprocessBegin.microsecondsSinceEpoch) /
         1000;
     var postprocessTimes = (postprocessEnd.microsecondsSinceEpoch -
-        postprocessBegin.microsecondsSinceEpoch) /
+            postprocessBegin.microsecondsSinceEpoch) /
         1000;
     var inferenceTimes = (postprocessBegin.microsecondsSinceEpoch -
             inferenceBegin.microsecondsSinceEpoch) /
         1000;
 
-    log.d("preprocessTimes:$preprocessTimes ms, postprocessTimes: $postprocessTimes ms, inferenceTimes: $inferenceTimes ms");
+    log.d(
+        "preprocessTimes:$preprocessTimes ms, postprocessTimes: $postprocessTimes ms, inferenceTimes: $inferenceTimes ms");
 
     return YoloV8Output(
         preprocessTimes: preprocessTimes,
