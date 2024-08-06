@@ -140,7 +140,7 @@ class AIScanPageState extends State<AIScanPage> {
             // var imgBuffData = imgByteData.buffer.asUint8List();
             // ui.Image uiImage = await decodeImageFromList(imgBuffData);
 
-            // 数独检测 , 此处需要补充对图片进行剪切处理,降低图片尺寸也许可以加快推理时间？
+            // @TODO 数独检测 , 此处需要补充对图片进行剪切处理,降低图片尺寸也许可以加快推理时间？
             final image = await _controller.takePicture();
             final imgBuffData =  await image.readAsBytes();
             ui.Image uiImage = await decodeImageFromList(imgBuffData);
@@ -148,7 +148,6 @@ class AIScanPageState extends State<AIScanPage> {
             YoloV8Output sudokuOutput = sudokuPredictor.predict(input);
 
             final uiShowImg,showImgBuffData,detectOutput;
-
             if(sudokuOutput.boxes.isNotEmpty){
               final box = sudokuOutput.boxes[0];
               final x = box.x;

@@ -146,8 +146,6 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     String title, conclusion;
     Function playSoundEffect;
 
-    // @TODO this place wait for I18N support
-
     // define i18n begin
     final String elapsedTimeText =
         AppLocalizations.of(context)!.elapsedTimeText;

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:dart_tensor/dart_tensor.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
   final String metadataPath;
   final double confThreshold;
   final double iouThreshold;
+  final bool enableInt8Quantize;
   late final Interpreter interpreter;
   late final YamlMap classes;
 
@@ -30,6 +32,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     required this.metadataPath,
     required this.confThreshold,
     required this.iouThreshold,
+    required this.enableInt8Quantize,
   });
 
   static Future<YoloV8Detector> load({
@@ -38,6 +41,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     required String metadataPath,
     double confThreshold = 0.5,
     double iouThreshold = 0.45,
+    bool enableInt8Quantize = false,
   }) async {
     // default enable GPU
     final options = InterpreterOptions();
@@ -53,13 +57,15 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     var classes = metadata['names'];
 
     return YoloV8Detector._internal(
-        interpreter: interpreter,
-        classes: classes,
-        imgsz: imgsz,
-        modelPath: modelPath,
-        metadataPath: metadataPath,
-        confThreshold: confThreshold,
-        iouThreshold: iouThreshold);
+      interpreter: interpreter,
+      classes: classes,
+      imgsz: imgsz,
+      modelPath: modelPath,
+      metadataPath: metadataPath,
+      confThreshold: confThreshold,
+      iouThreshold: iouThreshold,
+      enableInt8Quantize: enableInt8Quantize,
+    );
   }
 
   preprocess(YoloV8Input input) {
@@ -92,8 +98,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
   postprocess(List output, {required int oHeight, required int oWidth}) {
     var arr = output[0];
 
-    DartTensor dt = DartTensor();
-    arr = dt.linalg.transpose(arr);
+    arr = DartTensor().linalg.transpose(arr);
 
     List<cv.Rect> boxes = [];
     List<(double, double, double, double)> boxValues = [];
@@ -183,17 +188,50 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     Tensor inputTensor = interpreter.getInputTensor(0);
     Tensor outputTensor = interpreter.getOutputTensor(0);
 
+    QuantizationParams inputQuantization = inputTensor.params;
+    QuantizationParams outputQuantization = outputTensor.params;
+
     var output = ListShape(
             List<int>.filled(outputTensor.shape.reduce((v, c) => v * c), 0))
         .reshape(outputTensor.shape);
 
     DateTime preprocessBegin = DateTime.now();
-    var _input = ListShape(preprocess(input)).reshape(inputTensor.shape);
+    final Float32List _float32Input = preprocess(input);
+    var _input;
+    if (enableInt8Quantize) {
+      // INT8 量化预处理 will enableInt8Quantize == true quantization process
+      final _int8Input = _float32Input
+          .map((e) =>
+              (e / inputQuantization.scale + inputQuantization.zeroPoint)
+                  .round())
+          .toList();
+      _input = ListShape(_int8Input).reshape(inputTensor.shape);
+    } else {
+      // 非量化处理
+      _input = ListShape(_float32Input).reshape(inputTensor.shape);
+    }
+
     DateTime inferenceBegin = DateTime.now();
     this.interpreter.run(_input, output);
+
     DateTime postprocessBegin = DateTime.now();
-    List<YoloV8DetectionBox> boxes =
-        postprocess(output, oHeight: input.mat.height, oWidth: input.mat.width);
+    List<YoloV8DetectionBox> boxes;
+    if (enableInt8Quantize) {
+      // INT8 量化后处理 will enableInt8Quantize == true quantization process
+      var _output = DartTensor()
+          .utils
+          .flatten(output)
+          .map((e) =>
+              ((e - outputQuantization.zeroPoint) * outputQuantization.scale))
+          .toList();
+      var _postprocessOutput = ListShape(_output).reshape(outputTensor.shape);
+      boxes = postprocess(_postprocessOutput,
+          oHeight: input.mat.height, oWidth: input.mat.width);
+    } else {
+      // 非量化处理
+      boxes = postprocess(output,
+          oHeight: input.mat.height, oWidth: input.mat.width);
+    }
     DateTime postprocessEnd = DateTime.now();
 
     var preprocessTimes = (inferenceBegin.microsecondsSinceEpoch -
