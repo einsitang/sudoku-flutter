@@ -4,15 +4,13 @@ import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:logger/logger.dart';
-import 'package:sudoku/page/ai_detect_paint.dart';
+import 'package:sudoku/ml/detector.dart';
+import 'package:sudoku/ml/yolov8/yolov8_input.dart';
+import 'package:sudoku/ml/yolov8/yolov8_output.dart';
+import 'package:sudoku/page/ai_detection.dart';
 import 'package:sudoku/util/image_util.dart';
-
-import '../ml/detector.dart';
-import '../ml/yolov8/yolov8_input.dart';
-import '../ml/yolov8/yolov8_output.dart';
 
 final Logger log = Logger();
 
@@ -72,42 +70,34 @@ class AIScanPageState extends State<AIScanPage> {
                   child: _isPredicting
                       ? CircularProgressIndicator()
                       : Text("请对准数独拍照进行识别",
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                          style: TextStyle(color: Colors.white54, fontSize: 20)),
                 );
 
                 // 罩层 Overlay
-                var _max = max(constraints.maxWidth, constraints.maxHeight);
-                var _min = min(constraints.maxWidth, constraints.maxHeight);
-                var _m = _max - _min;
-                _m = _m * 1.2 / 2;
-
-                var longBorderSide =
-                    BorderSide(color: Color.fromRGBO(0, 0, 0, 0.8), width: _m);
-                var shortBorderSide = BorderSide(
-                    color: Color.fromRGBO(0, 0, 0, 0.8), width: _m / 3);
+                final (lrScale, tbScale) = _getLensOverlayScale(context);
 
                 var _overlayWidget = Container(
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
                     decoration: BoxDecoration(
                       border: Border(
-                        top: constraints.maxHeight > constraints.maxWidth
-                            ? longBorderSide
-                            : shortBorderSide,
-                        bottom: constraints.maxHeight > constraints.maxWidth
-                            ? longBorderSide
-                            : shortBorderSide,
-                        left: constraints.maxHeight > constraints.maxWidth
-                            ? shortBorderSide
-                            : longBorderSide,
-                        right: constraints.maxHeight > constraints.maxWidth
-                            ? shortBorderSide
-                            : longBorderSide,
+                        top: BorderSide(
+                            color: Color.fromRGBO(0, 0, 0, 0.8),
+                            width: tbScale * constraints.maxHeight),
+                        bottom: BorderSide(
+                            color: Color.fromRGBO(0, 0, 0, 0.8),
+                            width: tbScale * constraints.maxHeight),
+                        left: BorderSide(
+                            color: Color.fromRGBO(0, 0, 0, 0.8),
+                            width: lrScale * constraints.maxWidth),
+                        right: BorderSide(
+                            color: Color.fromRGBO(0, 0, 0, 0.8),
+                            width: lrScale * constraints.maxWidth),
                       ),
                     ));
 
                 return Stack(
-                    children: [_cameraWidget, _centerWidget, _overlayWidget]);
+                    children: [_cameraWidget, _overlayWidget, _centerWidget]);
               },
             );
           } else {
@@ -117,83 +107,141 @@ class AIScanPageState extends State<AIScanPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
-
-            if (!context.mounted) {
-              return;
-            }
-
-            // show loading indicator
-            setState(() {
-              _isPredicting = true;
-            });
-
-            var sudokuPredictor = await DetectorFactory.getSudokuDetector();
-            var digitsPredictor = await DetectorFactory.getDigitsDetector();
-
-            // 静态图片用于测试推理结果 - static image is using on test predict result
-            // String imagePath = "assets/image/10.png";
-            // var imgByteData = await rootBundle.load(imagePath);
-            // var imgBuffData = imgByteData.buffer.asUint8List();
-            // ui.Image uiImage = await decodeImageFromList(imgBuffData);
-
-            // @TODO 数独检测 , 此处需要补充对图片进行剪切处理,降低图片尺寸也许可以加快推理时间？
-            final image = await _controller.takePicture();
-            final imgBuffData =  await image.readAsBytes();
-            ui.Image uiImage = await decodeImageFromList(imgBuffData);
-            var input = YoloV8Input.readImgBytes(imgBuffData);
-            YoloV8Output sudokuOutput = sudokuPredictor.predict(input);
-
-            final uiShowImg,showImgBuffData,detectOutput;
-            if(sudokuOutput.boxes.isNotEmpty){
-              final box = sudokuOutput.boxes[0];
-              final x = box.x;
-              final y = box.y;
-              final w = box.w;
-              final h = box.h;
-              // crop sudoku part of image
-              final cropImg = img.copyCrop(
-                await ImageUtil.convertFlutterUiToImage(uiImage),
-                x: x.toInt(),
-                y: y.toInt(),
-                width: w.toInt(),
-                height: h.toInt(),
-              );
-
-
-              final uiCropImg = await ImageUtil.convertImageToFlutterUi(cropImg);
-              final cropImgBufData = img.encodeJpg(cropImg).buffer.asUint8List();
-              YoloV8Output digitsOutput = digitsPredictor.predict(YoloV8Input.readImgBytes(cropImgBufData));
-
-              uiShowImg = uiCropImg;
-              showImgBuffData = cropImgBufData;
-              detectOutput = digitsOutput;
-            }else{
-              uiShowImg = uiImage;
-              showImgBuffData = imgBuffData;
-              detectOutput = sudokuOutput;
-            }
-
-            // disable loading indicator
-            setState(() {
-              _isPredicting = false;
-            });
-
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AIDetectPaintPage(
-                    image: uiShowImg, imageData: showImgBuffData, output: detectOutput),
-              ),
-            );
-          } catch (e) {
-            log.e(e.toString());
-          }
-        },
-        child: const Icon(Icons.camera_alt),
+        onPressed: _predictPicture,
+        child: const Icon(Icons.lens_blur),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  /**
+   * 预测照片中的数独
+   */
+  _predictPicture() async {
+    try {
+      // Ensure that the camera is initialized.
+      await _initializeControllerFuture;
+
+      if (!context.mounted) {
+        return;
+      }
+
+      // show loading indicator
+      setState(() {
+        _isPredicting = true;
+      });
+
+      var sudokuPredictor = await DetectorFactory.getSudokuDetector();
+      var digitsPredictor = await DetectorFactory.getDigitsDetector();
+
+      // 静态图片用于测试推理结果 - static image is using on test predict result
+      // String imagePath = "assets/image/10.png";
+      // var imgByteData = await rootBundle.load(imagePath);
+      // var imgBuffData = imgByteData.buffer.asUint8List();
+      // ui.Image uiImage = await decodeImageFromList(imgBuffData);
+
+      // 数独检测 , 此处需要补充对图片进行剪切处理,降低图片尺寸也许可以加快推理时间？
+      final picture = await _controller.takePicture();
+      final pictureBytes = await picture.readAsBytes();
+      ui.Image uiPicture = await decodeImageFromList(pictureBytes);
+
+      // 原相片大小
+      final pictureHeight = uiPicture.height;
+      final pictureWidth = uiPicture.width;
+
+      // 取中间取景图像 , 排除掉遮罩部分
+      // 计算上下/左右遮罩的比例
+      final (lrScale, tbScale) = _getLensOverlayScale(context);
+
+      // 取景器的x,y,w,h
+      final double lensPicX = pictureWidth * lrScale;
+      final double lensPicY = pictureHeight * tbScale;
+      final double lensPicW = pictureWidth - lensPicX * 2;
+      final double lensPicH = pictureHeight - lensPicY * 2;
+
+      final lensImg = img.copyCrop(
+        await ImageUtil.convertFlutterUiToImage(uiPicture),
+        x: lensPicX.toInt(),
+        y: lensPicY.toInt(),
+        width: lensPicW.toInt(),
+        height: lensPicH.toInt(),
+      );
+      final uiLensImg = await ImageUtil.convertImageToFlutterUi(lensImg);
+      final lensImgBytes = img.encodeJpg(lensImg).buffer.asUint8List();
+
+      var input = YoloV8Input.readImgBytes(lensImgBytes);
+      YoloV8Output sudokuOutput = sudokuPredictor.predict(input);
+
+      final uiShowImg, showImgBytes, detectOutput;
+      if (sudokuOutput.boxes.isNotEmpty) {
+        final box = sudokuOutput.boxes[0];
+        final x = box.x;
+        final y = box.y;
+        final w = box.w;
+        final h = box.h;
+        // crop sudoku part of image
+        final cropSudokuImg = img.copyCrop(
+          await ImageUtil.convertFlutterUiToImage(uiLensImg),
+          x: x.toInt(),
+          y: y.toInt(),
+          width: w.toInt(),
+          height: h.toInt(),
+        );
+
+        final uiCropSudokuImg =
+            await ImageUtil.convertImageToFlutterUi(cropSudokuImg);
+        final cropSudokuImgBytes =
+            img.encodeJpg(cropSudokuImg).buffer.asUint8List();
+        YoloV8Output digitsOutput = digitsPredictor
+            .predict(YoloV8Input.readImgBytes(cropSudokuImgBytes));
+
+        uiShowImg = uiCropSudokuImg;
+        showImgBytes = cropSudokuImgBytes;
+        detectOutput = digitsOutput;
+      } else {
+        uiShowImg = uiLensImg;
+        showImgBytes = lensImgBytes;
+        detectOutput = sudokuOutput;
+      }
+
+      // disable loading indicator
+      setState(() {
+        _isPredicting = false;
+      });
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => AIDetectPaintPage(
+              image: uiShowImg, imageBytes: showImgBytes, output: detectOutput),
+        ),
+      );
+    } catch (e) {
+      log.e(e);
+    }
+  }
+
+  /**
+   * 遮罩占比
+   * return (leftRightScale,topBottomScale)
+   */
+  (double, double) _getLensOverlayScale(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    // 罩层 Overlay
+    var _max = max(screenSize.width, screenSize.height);
+    var _min = min(screenSize.width, screenSize.height);
+    var _m = _max - _min;
+    var _n = _min * 0.1;
+    _m = (_m + _n) / 2;
+    if (screenSize.width > screenSize.height) {
+      // 横向
+      var lrScale = _m / screenSize.width;
+      var tbScale = _n / screenSize.height;
+      return (lrScale, tbScale);
+    } else {
+      // 纵向
+      var lrScale = _n / screenSize.width;
+      var tbScale = _m / screenSize.height;
+      return (lrScale, tbScale);
+    }
   }
 }

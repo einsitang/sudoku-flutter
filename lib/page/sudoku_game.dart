@@ -675,7 +675,6 @@ class _SudokuGamePageState extends State<SudokuGamePage>
           Container(
             height: 50,
             padding: EdgeInsets.all(10.0),
-//                color: Colors.red,
             child: Row(children: <Widget>[
               Expanded(
                   flex: 1,

@@ -83,7 +83,6 @@ flutter:
   assets:
     - assets/image/
     - assets/audio/
-    - assets/tf_model/
     - assets/tf_model/sudoku/
     - assets/tf_model/digits/
 

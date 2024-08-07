@@ -22,9 +22,11 @@ class DetectorFactory {
   static Future<Predictor<YoloV8Input, YoloV8Output>>
       getSudokuDetector() async {
     _sudokuDetector ??= await YoloV8Detector.load(
-        imgsz: (imgSize, imgSize),
-        modelPath: sudokuModelPath,
-        metadataPath: sudokuModelMetadataPath);
+      imgsz: (imgSize, imgSize),
+      modelPath: sudokuModelPath,
+      metadataPath: sudokuModelMetadataPath,
+      confThreshold: 0.75,
+    );
     return _sudokuDetector!;
   }
 

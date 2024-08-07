@@ -44,7 +44,7 @@ Widget _aiSolverButton(BuildContext context) {
                 color: Colors.blue,
                 child: Text("$buttonLabel (test)"),
                 onPressed: () async {
-                  log.d("AI scan");
+                  log.d("AI Solver Scanner");
 
                   WidgetsFlutterBinding.ensureInitialized();
 
@@ -207,10 +207,10 @@ class _BootstrapPageState extends State<BootstrapPage> {
   @override
   Widget build(BuildContext context) {
     Widget body = Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(20.0),
-        child: Center(
-            child: Column(
+      color: Colors.white,
+      padding: EdgeInsets.all(20.0),
+      child: Center(
+        child: Column(
           children: <Widget>[
             // logo
             Expanded(
@@ -231,11 +231,13 @@ class _BootstrapPageState extends State<BootstrapPage> {
                   _continueGameButton(context),
                   // new game
                   _newGameButton(context),
-                  // scanner ?
+                  // ai solver scanner
                   _aiSolverButton(context),
                 ]))
           ],
-        )));
+        ),
+      ),
+    );
 
     return ScopedModelDescendant<SudokuState>(
         builder: (context, child, model) => Scaffold(body: body));
