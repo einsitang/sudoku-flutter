@@ -21,7 +21,7 @@ Download apk for android (preview) -> [github release page](https://github.com/e
 ![Bootstrap](./document/img/WX20230312-193408.jpg)![Game](./document/img/WX20230312-193423.jpg)
 
 ## plan-to-do
-- [:bangbang:] AI sudoku solver with camera
+- [:bangbang:] AI sudoku solver with camera - beta release on [here](https://github.com/einsitang/sudoku-flutter/releases/tag/beta-202408072-aisolver)
 
 
 ## environment
