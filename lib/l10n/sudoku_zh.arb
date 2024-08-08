@@ -38,5 +38,7 @@
   "elapsedTimeText" : "耗时",
   "continueGameContentText" : "双击屏幕继续游戏",
   "winnerConclusionText" : "恭喜你完成 [%level%] 数独挑战!",
-  "failureConclusionText": "很遗憾,本轮 [%level%] 数独错误次数太多，挑战失败!"
+  "failureConclusionText": "很遗憾,本轮 [%level%] 数独错误次数太多，挑战失败!",
+
+  "aiSolverLensScanTipsText": "请对准数独拍照进行识别"
 }

@@ -41,14 +41,16 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     required String metadataPath,
     double confThreshold = 0.5,
     double iouThreshold = 0.45,
-    bool enableInt8Quantize = false,
+
+    /// int8 quantitative model seem not enough validation,not recommend to use
+    @deprecated bool enableInt8Quantize = false,
   }) async {
     // default enable GPU
     final options = InterpreterOptions();
     if (Platform.isAndroid) {
-      options.addDelegate(XNNPackDelegate());
-    } else {
       options.addDelegate(GpuDelegateV2());
+    } else {
+      options.addDelegate(GpuDelegate());
     }
     var interpreter = await Interpreter.fromAsset(modelPath, options: options);
 
@@ -90,9 +92,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
         ddepth: cv.MatType.CV_32F);
 
     // CHW tp HWC
-    cv.Mat hwcMat = _chw2hwc(blobMat);
-
-    return hwcMat.data.buffer.asFloat32List();
+    return _chw2hwc(blobMat);
   }
 
   postprocess(List output, {required int oHeight, required int oWidth}) {
@@ -127,6 +127,9 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
       scores.add(maxScore);
       classIds.add(maxClassLoc);
 
+      // x = x * oWidth;
+      // y = y * oHeight;
+
       x = (x.toInt() - pad.$1) / gain;
       y = (y.toInt() - pad.$2) / gain;
       w = w.toInt() / gain;
@@ -143,7 +146,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
       var classId = classIds[index];
       detectionBoxes.add(YoloV8DetectionBox(
         classId: classId,
-        className: classes[classId] ??= 'Unknow',
+        className: classes[classId] ??= 'Unknown',
         confidence: scores[index],
         x: x,
         y: y,
@@ -184,6 +187,17 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     return chw.transpose();
   }
 
+  /// 预测逻辑流程 - predict logic workflow
+  ///
+  /// input => preprocess  => _input
+  ///
+  /// quantization of preprocess (⚠️ INT8 quantization work , but seem not well and need improve , not recommend to use)
+  ///
+  /// _input => inference => _output
+  ///
+  /// quantization of postprocess (️⚠️ INT8 quantization work , but seem not well and need improve , not recommend to use)
+  ///
+  /// _output => postprocess => output
   _predict(YoloV8Input input) {
     Tensor inputTensor = interpreter.getInputTensor(0);
     Tensor outputTensor = interpreter.getOutputTensor(0);
@@ -191,47 +205,45 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     QuantizationParams inputQuantization = inputTensor.params;
     QuantizationParams outputQuantization = outputTensor.params;
 
-    var output = ListShape(
-            List<int>.filled(outputTensor.shape.reduce((v, c) => v * c), 0))
-        .reshape(outputTensor.shape);
-
     DateTime preprocessBegin = DateTime.now();
-    final Float32List _float32Input = preprocess(input);
-    var _input;
+
+    final cv.Mat _mat = preprocess(input);
+    Uint8List _input = _mat.data;
     if (enableInt8Quantize) {
-      // INT8 量化预处理 will enableInt8Quantize == true quantization process
-      final _int8Input = _float32Input
+      // INT8 量化预处理
+      final _int8Data = _input.buffer
+          .asFloat32List()
           .map((e) =>
               (e / inputQuantization.scale + inputQuantization.zeroPoint)
                   .round())
           .toList();
-      _input = ListShape(_int8Input).reshape(inputTensor.shape);
-    } else {
-      // 非量化处理
-      _input = ListShape(_float32Input).reshape(inputTensor.shape);
+      _input = Uint8List.fromList(_int8Data);
     }
 
     DateTime inferenceBegin = DateTime.now();
-    this.interpreter.run(_input, output);
+
+    inputTensor.data = _input;
+    this.interpreter.invoke();
 
     DateTime postprocessBegin = DateTime.now();
-    List<YoloV8DetectionBox> boxes;
+    var output;
+    var _output = outputTensor.data;
     if (enableInt8Quantize) {
-      // INT8 量化后处理 will enableInt8Quantize == true quantization process
-      var _output = DartTensor()
-          .utils
-          .flatten(output)
+      // INT8量化后处理 INT8 扩充程 FLOAT32
+      final _quantOutputData = _output
           .map((e) =>
               ((e - outputQuantization.zeroPoint) * outputQuantization.scale))
           .toList();
-      var _postprocessOutput = ListShape(_output).reshape(outputTensor.shape);
-      boxes = postprocess(_postprocessOutput,
-          oHeight: input.mat.height, oWidth: input.mat.width);
+      var _float32Output = Float32List.fromList(_quantOutputData);
+      output = ListShape(_float32Output).reshape(outputTensor.shape);
     } else {
-      // 非量化处理
-      boxes = postprocess(output,
-          oHeight: input.mat.height, oWidth: input.mat.width);
+      output =
+          ListShape(_output.buffer.asFloat32List()).reshape(outputTensor.shape);
     }
+
+    List<YoloV8DetectionBox> boxes =
+        postprocess(output, oHeight: input.mat.height, oWidth: input.mat.width);
+
     DateTime postprocessEnd = DateTime.now();
 
     var preprocessTimes = (inferenceBegin.microsecondsSinceEpoch -

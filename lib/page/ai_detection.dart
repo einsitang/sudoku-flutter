@@ -73,7 +73,6 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
         // begin calculate sudoku rows and cols
         final boxes = widget.output.boxes;
 
-        // can fixable cells
         // 计算单元格大小
         final colBlock = originImageHeight ~/ 9;
         final rowBlock = originImageWidth ~/ 9;
@@ -194,8 +193,9 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
 
             var _btnWidget = Offstage(
               offstage: !hasDetectionSudoku,
-              child: TextButton(
-                child: Text("解题"),
+              child: IconButton(
+                icon: Icon(Icons.visibility),
+                iconSize: 36,
                 onPressed: _solveSudoku,
               ),
             );
@@ -218,7 +218,6 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
                 body: _bodyWidget);
           }
 
-          log.d("loading???");
           return Center(child: CircularProgressIndicator());
         });
   }

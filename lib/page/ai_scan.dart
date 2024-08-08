@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:image/image.dart' as img;
 import 'package:logger/logger.dart';
 import 'package:sudoku/ml/detector.dart';
@@ -69,8 +70,9 @@ class AIScanPageState extends State<AIScanPage> {
                 var _centerWidget = Center(
                   child: _isPredicting
                       ? CircularProgressIndicator()
-                      : Text("请对准数独拍照进行识别",
-                          style: TextStyle(color: Colors.white54, fontSize: 20)),
+                      : Text(AppLocalizations.of(context)!.aiSolverLensScanTipsText,
+                          style:
+                              TextStyle(color: Colors.white54, fontSize: 20)),
                 );
 
                 // 罩层 Overlay
@@ -114,9 +116,8 @@ class AIScanPageState extends State<AIScanPage> {
     );
   }
 
-  /**
-   * 预测照片中的数独
-   */
+  /// 预测照片中的数独
+  ///
   _predictPicture() async {
     try {
       // Ensure that the camera is initialized.
@@ -133,12 +134,6 @@ class AIScanPageState extends State<AIScanPage> {
 
       var sudokuPredictor = await DetectorFactory.getSudokuDetector();
       var digitsPredictor = await DetectorFactory.getDigitsDetector();
-
-      // 静态图片用于测试推理结果 - static image is using on test predict result
-      // String imagePath = "assets/image/10.png";
-      // var imgByteData = await rootBundle.load(imagePath);
-      // var imgBuffData = imgByteData.buffer.asUint8List();
-      // ui.Image uiImage = await decodeImageFromList(imgBuffData);
 
       // 数独检测 , 此处需要补充对图片进行剪切处理,降低图片尺寸也许可以加快推理时间？
       final picture = await _controller.takePicture();
@@ -169,6 +164,12 @@ class AIScanPageState extends State<AIScanPage> {
       final uiLensImg = await ImageUtil.convertImageToFlutterUi(lensImg);
       final lensImgBytes = img.encodeJpg(lensImg).buffer.asUint8List();
 
+      // 静态图片用于测试推理结果 - static image is using on test predict result
+      // String imagePath = "assets/image/10.png";
+      // var imgByteData = await rootBundle.load(imagePath);
+      // var lensImgBytes = imgByteData.buffer.asUint8List();
+      // ui.Image uiLensImg = await decodeImageFromList(lensImgBytes);
+
       var input = YoloV8Input.readImgBytes(lensImgBytes);
       YoloV8Output sudokuOutput = sudokuPredictor.predict(input);
 
@@ -179,6 +180,7 @@ class AIScanPageState extends State<AIScanPage> {
         final y = box.y;
         final w = box.w;
         final h = box.h;
+
         // crop sudoku part of image
         final cropSudokuImg = img.copyCrop(
           await ImageUtil.convertFlutterUiToImage(uiLensImg),
@@ -220,10 +222,9 @@ class AIScanPageState extends State<AIScanPage> {
     }
   }
 
-  /**
-   * 遮罩占比
-   * return (leftRightScale,topBottomScale)
-   */
+  /// 遮罩占比
+  ///
+  /// return (leftRightScale,topBottomScale)
   (double, double) _getLensOverlayScale(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     // 罩层 Overlay
