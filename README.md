@@ -20,6 +20,12 @@ Download apk for android (preview) -> [github release page](https://github.com/e
 
 ![Bootstrap](./document/img/WX20230312-193408.jpg)![Game](./document/img/WX20230312-193423.jpg)
 
+recent update
+
+### bilibili video
+https://www.bilibili.com/video/BV1BKYteEEer
+
+
 ## plan-to-do
 - [:bangbang:] AI sudoku solver with camera - working well :-)
 - amendable detection puzzle on  AI Solver
