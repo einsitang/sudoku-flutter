@@ -20,7 +20,7 @@ feature of AI/ML sudoku detect to solver is basically available now , welcome to
 
 [![document/img/sudoku-detect-bilibili-demo.png](document/img/sudoku-detect-bilibili-demo.png)](https://www.bilibili.com/video/BV1BKYteEEer)
 
-<div style="text-align: center;"> <b>watch</b>: ai solver demo video </div>
+<p align="center" style="text-align: center;"> <b>watch</b>: ai solver demo video </p>
 
 about AI/ML model is train by **yolov8** , you can also visit [ultralytics](https://github.com/ultralytics/ultralytics) to know more
 
