@@ -1,4 +1,4 @@
-import '../predictor.dart';
+import 'package:sudoku/ml/predictor.dart';
 
 /**
  * OUTPUT

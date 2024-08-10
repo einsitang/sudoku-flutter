@@ -146,7 +146,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
       var classId = classIds[index];
       detectionBoxes.add(YoloV8DetectionBox(
         classId: classId,
-        className: classes[classId] ??= 'Unknown',
+        className: classes[classId] ?? 'Unknown',
         confidence: scores[index],
         x: x,
         y: y,

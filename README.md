@@ -10,26 +10,37 @@
 
 an open source Sudoku game application powered by Flutter .
 
-you can build the Sudoku Game just  for your own.
+you can build your own Sudoku Game app, which allows you to quickly learn dart/flutter and its ecologically related application techniques, and is very friendly and instructional for tiro .
 
-Download apk for android (preview) -> [github release page](https://github.com/einsitang/sudoku-flutter/releases)
+
+
+### recent: 
+
+feature of AI/ML sudoku detect to solver is basically available now , welcome to try and feedback .
+
+[![document/img/sudoku-detect-bilibili-demo.png](document/img/sudoku-detect-bilibili-demo.png)](https://www.bilibili.com/video/BV1BKYteEEer)
+
+<div style="text-align: center;"> <b>watch</b>: ai solver demo video </div>
+
+about AI/ML model is train by **yolov8** , you can also visit [ultralytics](https://github.com/ultralytics/ultralytics) to know more
+
+download latest release  apk for android (preview) -> [github release page](https://github.com/einsitang/sudoku-flutter/releases)
 
 
 
 ## screenshots
 
+### iOS
+
 ![Bootstrap](./document/img/WX20230312-193408.jpg)![Game](./document/img/WX20230312-193423.jpg)
 
-recent update
 
-### bilibili video
-https://www.bilibili.com/video/BV1BKYteEEer
 
 
 ## plan-to-do
-- [:bangbang:] AI sudoku solver with camera - working well :-)
-- amendable detection puzzle on  AI Solver
-- AI MODELS optimize with "amendable detection cell"
+- :ballot_box_with_check: AI sudoku solver with camera - working well :-)
+- :black_square_button: amendable detection puzzle on  AI Solver
+- :black_square_button: AI MODELS optimize with "amendable detection cell"
 
 
 ## environment
@@ -105,9 +116,6 @@ $> flutter build iOS
 # android
 $> flutter build apk
 ```
-
-## more flutter features
-see the [Flutter](https://flutter.dev/) official website
 
 
 ## star history

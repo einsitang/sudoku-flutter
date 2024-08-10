@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:opencv_dart/opencv_dart.dart' as cv;
+import 'package:sudoku/ml/predictor.dart';
 
-import '../predictor.dart';
 
 /**
  * INPUT
