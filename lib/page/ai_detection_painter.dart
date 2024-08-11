@@ -21,6 +21,7 @@ class AIDetectionPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var imgPaint = Paint();
+    imgPaint.color = ui.Color.fromRGBO(128, 128, 128, 0.6);
     canvas.drawImage(image, offset, imgPaint);
 
     var boxPaint = ui.Paint()

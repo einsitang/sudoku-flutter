@@ -6,13 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:logger/logger.dart';
 import 'package:sudoku/ml/yolov8/yolov8_output.dart';
-import 'package:sudoku/page/ai_detection_painter.dart';
+import 'package:sudoku/page/ai_detection_main.dart';
 import 'package:sudoku/util/image_util.dart';
-import 'package:sudoku_dart/sudoku_dart.dart';
 
 Logger log = Logger();
 
-class AIDetectPaintPage extends StatefulWidget {
+class AIDetectPaintPage extends StatelessWidget {
   final ui.Image image;
   final Uint8List imageBytes;
   final YoloV8Output output;
@@ -24,22 +23,6 @@ class AIDetectPaintPage extends StatefulWidget {
   });
 
   @override
-  _AIDetectPainPageState createState() => _AIDetectPainPageState();
-}
-
-class _AIDetectPainPageState extends State<AIDetectPaintPage> {
-  var detectPuzzles;
-  var detectSolution;
-
-  @override
-  void initState() {
-    super.initState();
-    // 初始化检测 puzzle and solution
-    detectPuzzles = List.generate(81, (index) => -1);
-    detectSolution = List.generate(81, (index) => -1);
-  }
-
-  @override
   Widget build(BuildContext context) {
     _init() async {
       // device screen size
@@ -48,10 +31,10 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
       final screenHeight = screenSize.height.toInt();
 
       // origin image size
-      final originImageWidth = widget.image.width;
-      final originImageHeight = widget.image.height;
+      final originImageWidth = image.width;
+      final originImageHeight = image.height;
 
-      final uiBytes = await widget.image.toByteData();
+      final uiBytes = await image.toByteData();
 
       final _min = min(screenWidth, screenHeight);
       final widthScale = 0.9 * _min / originImageWidth;
@@ -67,11 +50,12 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
         height: (heightScale * originImageHeight).round(),
       );
       final uiResizeImg = await ImageUtil.convertImageToFlutterUi(resizeImg);
-      final hasDetectionSudoku = widget.output.boxes.isNotEmpty;
+      final hasDetectionSudoku = output.boxes.isNotEmpty;
 
+      final List<DetectRef?> detectRefs = List.generate(81, (_) => null);
       if (hasDetectionSudoku) {
         // begin calculate sudoku rows and cols
-        final boxes = widget.output.boxes;
+        final boxes = output.boxes;
 
         // 计算单元格大小
         final colBlock = originImageHeight ~/ 9;
@@ -92,21 +76,24 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
 
           var colIndex = (x ~/ rowBlock) + ((x % rowBlock > rowBlockN) ? 1 : 0);
           var rowIndex = (y ~/ colBlock) + ((y % colBlock > colBlockN) ? 1 : 0);
-          var index = (rowIndex * 9 + colIndex).toInt();
+          int index = (rowIndex * 9 + colIndex).toInt();
 
-          detectPuzzles[index] = box.classId;
+          detectRefs[index] = DetectRef(
+            index: index,
+            value: box.classId,
+            box: box,
+          );
         });
       }
 
       return (
-        (screenWidth, screenHeight),
-        (originImageWidth, originImageHeight),
         (widthScale, heightScale),
         uiResizeImg,
+        detectRefs,
       );
     }
 
-    return FutureBuilder<((int, int), (int, int), (double, double), ui.Image)>(
+    return FutureBuilder<((double, double), ui.Image, List<DetectRef?>)>(
         future: _init(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -114,123 +101,27 @@ class _AIDetectPainPageState extends State<AIDetectPaintPage> {
               log.e(snapshot.error);
             }
             final (
-              (screenWidth, screenHeight),
-              (originImageWidth, originImageHeight),
               (widthScale, heightScale),
               uiResizeImg,
+              detectRefs,
             ) = snapshot.requireData;
 
-            // 主画面控件
-            var _mainWidget;
-            var hasDetectionSudoku = widget.output.boxes.isNotEmpty;
-
-            if (!hasDetectionSudoku) {
-              _mainWidget = const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.block,
-                    size: 128,
-                    color: Colors.white,
-                    shadows: [ui.Shadow(blurRadius: 1.68)],
-                  ),
-                  Center(
-                    child: Text("Not Detected",
-                        style: TextStyle(
-                          fontSize: 36,
-                          color: Colors.white,
-                          shadows: [ui.Shadow(blurRadius: 1.68)],
-                        )),
-                  ),
-                ],
-              );
-            } else {
-              final _gridWidget = GridView.builder(
-                padding: EdgeInsets.zero,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: false,
-                itemCount: 81,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 9),
-                itemBuilder: ((BuildContext context, int index) {
-                  var cellColor =
-                      detectPuzzles[index] != -1 ? Colors.yellow : Colors.white;
-                  var cellText = "";
-                  if (detectSolution[index] != -1) {
-                    cellText = detectSolution[index].toString();
-                  }
-                  if (detectPuzzles[index] != -1) {
-                    cellText = detectPuzzles[index].toString();
-                  }
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.amberAccent, width: 1.5),
-                    ),
-                    child: Text(
-                      cellText,
-                      style: TextStyle(
-                          shadows: [ui.Shadow(blurRadius: 1.68)],
-                          fontSize: 30,
-                          color: cellColor),
-                    ),
-                  );
-                }),
-              );
-
-              _mainWidget = _gridWidget;
-            }
-
-            var _drawWidget = CustomPaint(
-              child: _mainWidget,
-              painter: AIDetectionPainter(
-                image: uiResizeImg,
-                output: widget.output,
-                offset: ui.Offset(0, 0),
-                widthScale: widthScale,
-                heightScale: heightScale,
-              ),
+            return AIDetectionMainWidget(
+              detectRefs: detectRefs,
+              image: uiResizeImg,
+              imageBytes: imageBytes,
+              widthScale: widthScale,
+              heightScale: heightScale,
+              output: output,
             );
-
-            var _btnWidget = Offstage(
-              offstage: !hasDetectionSudoku,
-              child: IconButton(
-                icon: Icon(Icons.visibility),
-                iconSize: 36,
-                onPressed: _solveSudoku,
-              ),
-            );
-
-            var _bodyWidget = Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: SizedBox(
-                      width: uiResizeImg.width.toDouble(),
-                      height: uiResizeImg.height.toDouble(),
-                      child: _drawWidget),
-                ),
-                Center(child: _btnWidget),
-              ],
-            );
-
-            return Scaffold(
-                appBar: AppBar(title: Text("Detection Result")),
-                body: _bodyWidget);
           }
 
-          return Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.amberAccent,
+              backgroundColor: Colors.white,
+            ),
+          );
         });
-  }
-
-  _solveSudoku() async {
-    log.d("解题中");
-    try {
-      var sudoku = Sudoku(detectPuzzles);
-      setState(() {
-        detectSolution = sudoku.solution;
-      });
-    } catch (e) {
-      log.e(e);
-    }
   }
 }
