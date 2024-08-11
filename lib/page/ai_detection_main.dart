@@ -55,7 +55,6 @@ class AIDetectionMainWidget extends StatefulWidget {
 }
 
 class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
-
   /// amendable cell edit on this "amendPuzzle"
   ///
   /// when amendPuzzle[index] != SUDOKU_EMPTY_DIGIT (-1) , grid cell of index will show value with blue color text
@@ -110,9 +109,109 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
     }
   }
 
+  /// build not detected widget
+  ///
+  _buildNotDetectedWidget() {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.block,
+          size: 128,
+          color: Colors.white,
+          shadows: [ui.Shadow(blurRadius: 1.68)],
+        ),
+        Center(
+          child: Text("Not Detected",
+              style: TextStyle(
+                fontSize: 36,
+                color: Colors.white,
+                shadows: [ui.Shadow(blurRadius: 1.68)],
+              )),
+        ),
+      ],
+    );
+  }
+
+  /// build detected widget
+  ///
+  /// with amendable gridview
+  _buildDetectedWidget() {
+    final detectRefs = widget.detectRefs;
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: false,
+      itemCount: 81,
+      gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 9),
+      itemBuilder: ((BuildContext context, int index) {
+        DetectRef? detectRef = detectRefs[index];
+
+        // default cell text/style/border style
+        // detected by AI , color with yellow
+        // amend of cell by user , color with blue
+        // solutions from Sudoku Solver , color with white
+        var cellTextColor =
+            detectRef != null && detectRef.value != SUDOKU_EMPTY_DIGIT
+                ? Colors.yellow
+                : Colors.white;
+        var cellText = "";
+        var cellBorder = Border.all(color: Colors.amber, width: 1.5);
+
+        if (amendPuzzle[index] != SUDOKU_EMPTY_DIGIT) {
+          // 修正的谜题
+          // if this cell of puzzle been amend , change cell text color to blue
+          cellText = amendPuzzle[index].toString();
+          cellTextColor = Colors.blue;
+        } else if (detectRef != null && detectRef.value != SUDOKU_EMPTY_DIGIT) {
+          // 检测关联的谜题
+          cellText = detectRef.value.toString();
+          cellTextColor = Colors.yellow;
+        } else if (solution[index] != SUDOKU_EMPTY_DIGIT) {
+          // solutions
+          cellText = solution[index].toString();
+          cellTextColor = Colors.white;
+        }
+
+        if (index == selectedBox) {
+          // if choose cell , change the border color to blue
+          cellBorder = Border.all(color: Colors.blue, width: 2.0);
+        }
+
+        var _cellContainer = Container(
+          decoration: BoxDecoration(
+            border: cellBorder,
+          ),
+          child: Text(
+            cellText,
+            style: TextStyle(
+                shadows: [ui.Shadow(blurRadius: 3.68)],
+                fontSize: 30,
+                color: cellTextColor),
+          ),
+        );
+
+        return InkWell(
+          child: _cellContainer,
+          onTap: () {
+            setState(() {
+              if (index == selectedBox) {
+                selectedBox = null;
+                // cancel selectedBox
+              } else {
+                selectedBox = index;
+                // @TODO here should show dialog to input amend value from user
+              }
+            });
+          },
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final detectRefs = widget.detectRefs;
     final uiImage = widget.image;
     final widthScale = widget.widthScale;
     final heightScale = widget.heightScale;
@@ -123,95 +222,9 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
     var hasDetectionSudoku = output.boxes.isNotEmpty;
 
     if (!hasDetectionSudoku) {
-      _mainWidget = const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.block,
-            size: 128,
-            color: Colors.white,
-            shadows: [ui.Shadow(blurRadius: 1.68)],
-          ),
-          Center(
-            child: Text("Not Detected",
-                style: TextStyle(
-                  fontSize: 36,
-                  color: Colors.white,
-                  shadows: [ui.Shadow(blurRadius: 1.68)],
-                )),
-          ),
-        ],
-      );
+      _mainWidget = _buildNotDetectedWidget();
     } else {
-      final _gridWidget = GridView.builder(
-        padding: EdgeInsets.zero,
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: false,
-        itemCount: 81,
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 9),
-        itemBuilder: ((BuildContext context, int index) {
-          DetectRef? detectRef = detectRefs[index];
-
-          // default cell text/style/border
-          var cellTextColor = detectRef != null && detectRef.value != SUDOKU_EMPTY_DIGIT
-              ? Colors.yellow
-              : Colors.white;
-          var cellText = "";
-          var cellBorder = Border.all(color: Colors.amber, width: 1.5);
-
-          if (amendPuzzle[index] != SUDOKU_EMPTY_DIGIT) {
-            // 修正的谜题
-            cellText = amendPuzzle[index].toString();
-            cellTextColor = Colors.blue;
-          } else if (detectRef != null && detectRef.value != SUDOKU_EMPTY_DIGIT) {
-            // 检测关联的谜题
-            cellText = detectRef.value.toString();
-            cellTextColor = Colors.yellow;
-          } else if (solution[index] != SUDOKU_EMPTY_DIGIT) {
-            // solutions
-            cellText = solution[index].toString();
-            cellTextColor = Colors.white;
-          }
-
-          if (index == selectedBox) {
-            // if choose cell , change the border
-            cellBorder = Border.all(color: Colors.blue, width: 2.0);
-          }
-
-          var _cellContainer = Container(
-            decoration: BoxDecoration(
-              border: cellBorder,
-            ),
-            child: Text(
-              cellText,
-              style: TextStyle(
-                  shadows: [ui.Shadow(blurRadius: 3.68)],
-                  fontSize: 30,
-                  color: cellTextColor),
-            ),
-          );
-
-          return InkWell(
-            child: _cellContainer,
-            onTap: () {
-              setState(() {
-                if (selectedBox == null) {
-                  selectedBox = index;
-                } else if (selectedBox == index) {
-                  selectedBox = null;
-                } else {
-                  selectedBox = index;
-
-                  // @TODO here should show dialog to input amend value from user
-                }
-              });
-            },
-          );
-        }),
-      );
-
-      _mainWidget = _gridWidget;
+      _mainWidget = _buildDetectedWidget();
     }
 
     var _drawWidget = CustomPaint(
