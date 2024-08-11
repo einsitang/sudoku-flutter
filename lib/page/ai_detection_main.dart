@@ -64,6 +64,10 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
   late String solveMessage;
   int? selectedBox = null;
 
+  /// cacheable widgets
+  /// _aiDetectionPainter cache instance
+  var _aiDetectionPainter;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +75,15 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
     amendPuzzle = _emptyMatrix();
     solution = _emptyMatrix();
     solveMessage = "";
+
+    /// 初始化 AIDetectionPainter
+    _aiDetectionPainter = AIDetectionPainter(
+      image: widget.image,
+      output: widget.output,
+      offset: ui.Offset(0, 0),
+      widthScale: widget.widthScale,
+      heightScale: widget.heightScale,
+    );
   }
 
   _emptyMatrix() {
@@ -78,7 +91,7 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
   }
 
   _solveSudoku() {
-    log.d("solve sudoku puzzle");
+    log.d("solve sudoku puzzle ...");
     try {
       // merge puzzle from detectRefs and amendPuzzle
       final List<int> puzzle = _emptyMatrix();
@@ -109,31 +122,28 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
     }
   }
 
-  /// build not detected widget
-  ///
-  _buildNotDetectedWidget() {
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.block,
-          size: 128,
-          color: Colors.white,
-          shadows: [ui.Shadow(blurRadius: 1.68)],
-        ),
-        Center(
-          child: Text("Not Detected",
-              style: TextStyle(
-                fontSize: 36,
-                color: Colors.white,
-                shadows: [ui.Shadow(blurRadius: 1.68)],
-              )),
-        ),
-      ],
-    );
-  }
+  /// _notDetectedWidget instance
+  final _notDetectedWidget = const Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: const [
+      Icon(
+        Icons.block,
+        size: 128,
+        color: Colors.white,
+        shadows: [ui.Shadow(blurRadius: 1.68)],
+      ),
+      Center(
+        child: Text("Not Detected",
+            style: TextStyle(
+              fontSize: 36,
+              color: Colors.white,
+              shadows: [ui.Shadow(blurRadius: 1.68)],
+            )),
+      ),
+    ],
+  );
 
-  /// build detected widget
+  /// build detected widget function
   ///
   /// with amendable gridview
   _buildDetectedWidget() {
@@ -194,48 +204,43 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
 
         return InkWell(
           child: _cellContainer,
-          onTap: () {
-            setState(() {
-              if (index == selectedBox) {
-                selectedBox = null;
-                // cancel selectedBox
-              } else {
-                selectedBox = index;
-                // @TODO here should show dialog to input amend value from user
-              }
-            });
-          },
+          onTap: () => _selectedBoxSwitch(index),
         );
       }),
     );
   }
 
+  _selectedBoxSwitch(index) {
+    setState(() {
+      if (index == selectedBox) {
+        selectedBox = null;
+        // cancel selectedBox
+      } else {
+        selectedBox = index;
+        // @TODO here should show dialog to input amend value from user
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final uiImage = widget.image;
-    final widthScale = widget.widthScale;
-    final heightScale = widget.heightScale;
-    final output = widget.output;
 
     // 主画面控件
     var _mainWidget;
-    var hasDetectionSudoku = output.boxes.isNotEmpty;
 
+    var hasDetectionSudoku = widget.output.boxes.isNotEmpty;
     if (!hasDetectionSudoku) {
-      _mainWidget = _buildNotDetectedWidget();
+      _mainWidget = _notDetectedWidget;
     } else {
       _mainWidget = _buildDetectedWidget();
     }
 
     var _drawWidget = CustomPaint(
+      isComplex: true,
+      willChange: true,
       child: _mainWidget,
-      painter: AIDetectionPainter(
-        image: uiImage,
-        output: output,
-        offset: ui.Offset(0, 0),
-        widthScale: widthScale,
-        heightScale: heightScale,
-      ),
+      painter: _aiDetectionPainter,
     );
 
     var _btnWidget = Offstage(
