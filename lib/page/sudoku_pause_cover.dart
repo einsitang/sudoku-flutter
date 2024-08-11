@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
-import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 
 class SudokuPauseCoverPage extends StatefulWidget {
   SudokuPauseCoverPage({Key? key}) : super(key: key);
@@ -21,22 +21,25 @@ class _SudokuPauseCoverPageState extends State<SudokuPauseCoverPage> {
     // define i18n begin
     final String levelText = AppLocalizations.of(context)!.levelText;
     final String pauseGameText = AppLocalizations.of(context)!.pauseGameText;
-    final String elapsedTimeText = AppLocalizations.of(context)!.elapsedTimeText;
-    final String continueGameContentText = AppLocalizations.of(context)!.continueGameContentText;
+    final String elapsedTimeText =
+        AppLocalizations.of(context)!.elapsedTimeText;
+    final String continueGameContentText =
+        AppLocalizations.of(context)!.continueGameContentText;
+    final String theScreenSowText =
+        "$levelText [${LocalizationUtils.localizationLevelName(context, _state.level!)}] $elapsedTimeText : ${_state.timer}";
     // define i18n end
     Widget titleView =
         Align(child: Text(pauseGameText, style: TextStyle(fontSize: 26)));
     Widget bodyView = Align(
         child: Column(children: [
       Expanded(flex: 3, child: titleView),
-      Expanded(
-          flex: 5,
-          child: Column(children: [
-            Text("$levelText [${LocalizationUtils.localizationLevelName(context, _state.level!)}] $elapsedTimeText : ${_state.timer}")
-          ])),
+      Expanded(flex: 5, child: Column(children: [Text(theScreenSowText)])),
       Expanded(
         flex: 1,
-        child: Align(alignment: Alignment.center, child: Text(continueGameContentText)),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(continueGameContentText),
+        ),
       )
     ]));
 

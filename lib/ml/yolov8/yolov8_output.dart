@@ -1,8 +1,7 @@
 import 'package:sudoku/ml/predictor.dart';
 
-/**
- * OUTPUT
- */
+/// YoloV8 Output
+///
 class YoloV8Output extends Output {
   /**
    * 检测列表

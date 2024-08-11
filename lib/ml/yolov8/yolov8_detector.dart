@@ -15,30 +15,31 @@ import 'package:yaml/yaml.dart';
 Logger log = Logger();
 
 class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
-  final (int, int) imgsz;
   final String modelPath;
   final String metadataPath;
   final double confThreshold;
   final double iouThreshold;
   final bool enableInt8Quantize;
+  final (int, int) imgsz;
   late final Interpreter interpreter;
   late final YamlMap classes;
 
   YoloV8Detector._internal({
     required this.interpreter,
     required this.classes,
-    required this.imgsz,
     required this.modelPath,
     required this.metadataPath,
+    required this.imgsz,
     required this.confThreshold,
     required this.iouThreshold,
     required this.enableInt8Quantize,
   });
 
   static Future<YoloV8Detector> load({
-    required (int, int) imgsz,
+
     required String modelPath,
     required String metadataPath,
+    (int, int) imgsz = (640,640),
     double confThreshold = 0.5,
     double iouThreshold = 0.45,
 
@@ -126,9 +127,6 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
       boxes.add(cv.Rect(x.toInt(), y.toInt(), w.toInt(), h.toInt()));
       scores.add(maxScore);
       classIds.add(maxClassLoc);
-
-      // x = x * oWidth;
-      // y = y * oHeight;
 
       x = (x.toInt() - pad.$1) / gain;
       y = (y.toInt() - pad.$2) / gain;

@@ -33,5 +33,4 @@ class LocalizationUtils {
         return AppLocalizations.of(context)!.gameStatusVictory;
     }
   }
-
 }

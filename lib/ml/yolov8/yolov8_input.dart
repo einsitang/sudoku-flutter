@@ -3,10 +3,8 @@ import 'dart:typed_data';
 import 'package:opencv_dart/opencv_dart.dart' as cv;
 import 'package:sudoku/ml/predictor.dart';
 
-
-/**
- * INPUT
- */
+/// YoloV8 Input
+///
 class YoloV8Input extends Input {
   final cv.Mat _mat;
 

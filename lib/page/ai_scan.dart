@@ -70,7 +70,9 @@ class AIScanPageState extends State<AIScanPage> {
                 var _centerWidget = Center(
                   child: _isPredicting
                       ? CircularProgressIndicator()
-                      : Text(AppLocalizations.of(context)!.aiSolverLensScanTipsText,
+                      : Text(
+                          AppLocalizations.of(context)!
+                              .aiSolverLensScanTipsText,
                           style:
                               TextStyle(color: Colors.white54, fontSize: 20)),
                 );

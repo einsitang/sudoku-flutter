@@ -11,13 +11,13 @@ class DetectorFactory {
 
   static const String sudokuModelPath =
       "assets/tf_model/sudoku/sudoku_float16.tflite";
-      // "assets/tf_model/sudoku/sudoku_full_integer_quant.tflite";
+  // "assets/tf_model/sudoku/sudoku_full_integer_quant.tflite";
   static const String sudokuModelMetadataPath =
       "assets/tf_model/sudoku/metadata.yaml";
 
   static const String digitsModelPath =
       "assets/tf_model/digits/digits_float16.tflite";
-      // "assets/tf_model/digits/digits_full_integer_quant.tflite";
+  // "assets/tf_model/digits/digits_full_integer_quant.tflite";
   static const String digitsModelMetadataPath =
       "assets/tf_model/digits/metadata.yaml";
 
