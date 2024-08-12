@@ -57,6 +57,10 @@ dependencies:
     git:
       url: https://github.com/einsitang/dart_tensor.git
       ref: c50d8df6c555ae0836f80808783c2cde821f7093
+  firebase_core: ^3.3.0
+  firebase_crashlytics: ^4.0.4
+  firebase_analytics: ^11.2.1
+  firebase_performance: ^0.10.0+4
 
 dev_dependencies:
   flutter_test:
