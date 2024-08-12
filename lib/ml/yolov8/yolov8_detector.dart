@@ -72,8 +72,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
   }
 
   preprocess(YoloV8Input input) {
-    int IMG_WIDTH = this.imgsz.$1;
-    int IMG_HEIGHT = this.imgsz.$2;
+    var (int IMG_WIDTH,int IMG_HEIGHT) = this.imgsz;
 
     cv.Mat originImgMat = input.mat;
     var oWidth = originImgMat.width;

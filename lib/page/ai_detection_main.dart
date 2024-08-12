@@ -202,7 +202,7 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
           ),
         );
 
-        return InkWell(
+        return GestureDetector(
           child: _cellContainer,
           onTap: () => _selectedBoxSwitch(index),
         );

@@ -482,7 +482,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         height: 50,
         padding: EdgeInsets.all(5),
         child: Row(children: <Widget>[
-          // 暂停游戏
+          // 暂停游戏 pause game button
           Expanded(
               flex: 1,
               child: Align(
@@ -525,13 +525,18 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   }
 
   Widget _willPopWidget(
-      BuildContext context, Widget child, WillPopCallback onWillPop) {
-    return new WillPopScope(child: child, onWillPop: onWillPop);
+      BuildContext context, Widget child, PopInvokedCallback onWillPop) {
+    return PopScope(
+      child: child,
+      canPop: true,
+      onPopInvoked: onWillPop,
+    );
+    // return WillPopScope(child: child, onWillPop: onWillPop);
   }
 
   /// 计算网格背景色
-  Color _gridInWellBgColor(int index) {
-    Color gridWellBackgroundColor;
+  Color _gridCellBgColor(int index) {
+    Color gridCellBackgroundColor;
     // same zones
     List<int> zoneIndexes =
         Matrix.getZoneIndexes(zone: Matrix.getZone(index: index));
@@ -546,70 +551,75 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     indexSet.addAll(colIndexes);
 
     if (index == _chooseSudokuBox) {
-      gridWellBackgroundColor = Color.fromARGB(255, 0x70, 0xF3, 0xFF);
+      gridCellBackgroundColor = Color.fromARGB(255, 0x70, 0xF3, 0xFF);
     } else if (indexSet.contains(_chooseSudokuBox)) {
-      gridWellBackgroundColor = Color.fromARGB(255, 0x44, 0xCE, 0xF6);
+      gridCellBackgroundColor = Color.fromARGB(255, 0x44, 0xCE, 0xF6);
     } else {
       if (Matrix.getZone(index: index).isOdd) {
-        gridWellBackgroundColor = Colors.white;
+        gridCellBackgroundColor = Colors.white;
       } else {
-        gridWellBackgroundColor = Color.fromARGB(255, 0xCC, 0xCC, 0xCC);
+        gridCellBackgroundColor = Color.fromARGB(255, 0xCC, 0xCC, 0xCC);
       }
     }
-    return gridWellBackgroundColor;
+    return gridCellBackgroundColor;
   }
 
   ///
   /// 正常网格控件
   ///
-  Widget _gridInWellWidget(
+  Widget _gridCellWidget(
       BuildContext context, int index, int num, GestureTapCallback onTap) {
     Sudoku sudoku = _state.sudoku!;
     List<int> puzzle = sudoku.puzzle;
     List<int> solution = sudoku.solution;
     List<int> record = _state.record;
-    bool readOnly = true;
-    bool isWrong = false;
     int num = puzzle[index];
+
+    Color textColor = Colors.blueGrey;
+    FontWeight textFontWeight = FontWeight.w800;
     if (puzzle[index] == -1) {
       num = record[index];
-      readOnly = false;
+      // from puzzle number with readonly
+      textFontWeight = FontWeight.normal;
 
       if (record[index] != -1 && record[index] != solution[index]) {
-        isWrong = true;
+        // is wrong input because not match solution
+        textColor = Colors.red;
+      } else {
+        // from user input num
+        textColor = Color.fromARGB(255, 0x16, 0x69, 0xA9);
       }
     }
+    final _cellContainer = Center(
+      child: Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(1),
+        decoration: BoxDecoration(
+            color: _gridCellBgColor(index),
+            border: Border.all(color: Colors.black12)),
+        child: Text(
+          '${num == -1 ? '' : num}',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: textFontWeight,
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+
     return InkWell(
         highlightColor: Colors.blue,
         customBorder: Border.all(color: Colors.blue),
-        child: Center(
-          child: Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.all(1),
-            decoration: BoxDecoration(
-                color: _gridInWellBgColor(index),
-                border: Border.all(color: Colors.black12)),
-            child: Text(
-              '${num == -1 ? '' : num}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: readOnly ? FontWeight.w800 : FontWeight.normal,
-                  color: readOnly
-                      ? Colors.blueGrey
-                      : (isWrong
-                          ? Colors.red
-                          : Color.fromARGB(255, 0x3B, 0x2E, 0x7E))),
-            ),
-          ),
-        ),
+        child: _cellContainer,
         onTap: onTap);
   }
 
   ///
   /// 笔记网格控件
   ///
-  Widget _markGridWidget(
+  Widget _markGridCellWidget(
       BuildContext context, int index, GestureTapCallback onTap) {
     Widget markGrid = InkWell(
         highlightColor: Colors.blue,
@@ -619,7 +629,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
             alignment: Alignment.center,
             margin: EdgeInsets.all(1),
             decoration: BoxDecoration(
-                color: _gridInWellBgColor(index),
+                color: _gridCellBgColor(index),
                 border: Border.all(color: Colors.black12)),
             child: GridView.builder(
                 padding: EdgeInsets.zero,
@@ -642,8 +652,8 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     return markGrid;
   }
 
-  // well onTop function
-  _wellOnTapBuilder(index) {
+  // cell onTop function
+  _cellOnTapBuilder(index) {
     // log.d("_wellOnTapBuilder build $index ...");
     return () {
       setState(() {
@@ -652,7 +662,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       if (_state.sudoku!.puzzle[index] != -1) {
         return;
       }
-      log.d('choose position : $index');
+      // log.d('choose position : $index');
     };
   }
 
@@ -723,12 +733,12 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                     _state.mark[index].any((element) => element);
 
                 if (isUserMark) {
-                  return _markGridWidget(
-                      context, index, _wellOnTapBuilder(index));
+                  return _markGridCellWidget(
+                      context, index, _cellOnTapBuilder(index));
                 }
 
-                return _gridInWellWidget(
-                    context, index, num, _wellOnTapBuilder(index));
+                return _gridCellWidget(
+                    context, index, num, _cellOnTapBuilder(index));
               })),
 
           /// user input zone
@@ -841,7 +851,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
   @override
   Widget build(BuildContext context) {
-    log.d("on build");
+    // log.d("on build");
     Scaffold scaffold = Scaffold(
       appBar: AppBar(title: Text(widget.title), actions: [
         IconButton(
@@ -852,13 +862,15 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         )
       ]),
       body: _willPopWidget(
-          context,
-          ScopedModelDescendant<SudokuState>(
-              builder: (context, child, model) => _bodyWidget(context)),
-          () async {
-        _pause();
-        return true;
-      }),
+        context,
+        ScopedModelDescendant<SudokuState>(
+            builder: (context, child, model) => _bodyWidget(context)),
+        (didPop) async {
+          if (didPop) {
+            _pause();
+          }
+        },
+      ),
     );
 
     return scaffold;

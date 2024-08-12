@@ -26,7 +26,11 @@ about AI/ML model is train by **yolov8** , you can also visit [ultralytics](http
 
 download latest release  apk for android (preview) -> [github release page](https://github.com/einsitang/sudoku-flutter/releases)
 
+### contributing
 
+We are always very happy to have contributions, whether for trivial cleanups or big new features.
+
+about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md) 
 
 ## screenshots
 

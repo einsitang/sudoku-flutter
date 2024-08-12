@@ -22,8 +22,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // initialization effect when application build before
-  _initEffect() async {
+  // warmed up effect when application build before
+  _soundEffectWarmedUp() async {
     await SoundEffect.init();
   }
 
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   }
 
   Future<SudokuState> _loadState() async {
-    await _initEffect();
+    await _soundEffectWarmedUp();
     await _modelWarmedUp();
     return await SudokuState.resumeFromDB();
   }
