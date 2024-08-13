@@ -249,15 +249,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.3.6"
-  dart_tensor:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: c50d8df6c555ae0836f80808783c2cde821f7093
-      resolved-ref: c50d8df6c555ae0836f80808783c2cde821f7093
-      url: "https://github.com/einsitang/dart_tensor.git"
-    source: git
-    version: "1.0.4"
   fake_async:
     dependency: transitive
     description:

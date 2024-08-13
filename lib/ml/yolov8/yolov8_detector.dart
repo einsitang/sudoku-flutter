@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:dart_tensor/dart_tensor.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:opencv_dart/opencv_dart.dart' as cv;
@@ -36,10 +35,9 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
   });
 
   static Future<YoloV8Detector> load({
-
     required String modelPath,
     required String metadataPath,
-    (int, int) imgsz = (640,640),
+    (int, int) imgsz = (640, 640),
     double confThreshold = 0.5,
     double iouThreshold = 0.45,
 
@@ -72,7 +70,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
   }
 
   preprocess(YoloV8Input input) {
-    var (int IMG_WIDTH,int IMG_HEIGHT) = this.imgsz;
+    var (int IMG_WIDTH, int IMG_HEIGHT) = this.imgsz;
 
     cv.Mat originImgMat = input.mat;
     var oWidth = originImgMat.width;
@@ -95,10 +93,29 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     return _chw2hwc(blobMat);
   }
 
+  /// 2-d matrix transpose
+  List _2dTranspose(List list) {
+    List shape = ListShape(list).shape;
+    if (shape.length != 2) {
+      throw new Exception("only support 2-D Tensor");
+    }
+    // can not sure type , so try to get first value check runtime type
+    var initV = list[0][0].runtimeType == double ? 0.0 : 0;
+    shape = shape.reversed.toList(growable: true);
+    List toReturn = List.generate(
+        shape[0], (index) => List.generate(shape[1], (index) => initV));
+    for (int i = 0; i < shape[0]; i++) {
+      for (int j = 0; j < shape[1]; j++) {
+        toReturn[i][j] = list[j][i];
+      }
+    }
+    return toReturn;
+  }
+
   postprocess(List output, {required int oHeight, required int oWidth}) {
     var arr = output[0];
 
-    arr = DartTensor().linalg.transpose(arr);
+    arr = _2dTranspose(arr);
 
     List<cv.Rect> boxes = [];
     List<(double, double, double, double)> boxValues = [];
