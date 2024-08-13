@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBfp5NRy3-0-RxpxncEB0sV9CoXRADiwZo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>532244828552</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sevlow.apps.sudoku</string>
+	<key>PROJECT_ID</key>
+	<string>sudoku-6a968</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sudoku-6a968.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:532244828552:ios:7492785990cafe51936a3d</string>
+</dict>
+</plist>

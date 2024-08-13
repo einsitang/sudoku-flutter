@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "532244828552",
+    "project_id": "sudoku-6a968",
+    "storage_bucket": "sudoku-6a968.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532244828552:android:e39beca8c81af1db936a3d",
+        "android_client_info": {
+          "package_name": "com.sevlow.app.sudoku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCavJIlZYS6YIKX1_zFzy_PhuB-O3VeO8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
