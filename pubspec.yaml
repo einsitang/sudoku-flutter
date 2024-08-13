@@ -51,12 +51,11 @@ dependencies:
   image: ^4.2.0
   yaml: ^3.1.2
   tflite_flutter: ^0.10.4
-  opencv_dart: ^1.2.0
-#  dart_tensor: ^1.0.4
-  dart_tensor:
+#  opencv_dart: ^1.2.0
+  opencv_dart:
     git:
-      url: https://github.com/einsitang/dart_tensor.git
-      ref: c50d8df6c555ae0836f80808783c2cde821f7093
+      url: https://github.com/einsitang/opencv_dart.git
+      ref: 47a80d918a466e4317232b12b225cefcf7f20e6e
 
 dev_dependencies:
   flutter_test:
