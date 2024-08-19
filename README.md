@@ -55,7 +55,6 @@ about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md)
 ## dependency
 - [opencv_dart](https://github.com/rainyl/opencv_dart)
 - [tflite_flutter](https://github.com/tensorflow/flutter-tflite)
-- [dart_tensor](https://github.com/utkarsh0702/dart_tensor)
 - [sudoku_dart](https://github.com/forfuns/sudoku-dart) (sudoku core opensource  lib  )
 - [Hive](https://github.com/hivedb/hive)
 - [scoped_model](https://github.com/brianegan/scoped_model)
