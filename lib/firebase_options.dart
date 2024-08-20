@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'sudoku-6a968.appspot.com',
     iosBundleId: 'com.sevlow.apps.sudoku',
   );
-
 }

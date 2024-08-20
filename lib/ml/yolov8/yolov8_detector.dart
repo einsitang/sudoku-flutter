@@ -44,7 +44,6 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     /// int8 quantitative model seem not enough validation,not recommend to use
     @deprecated bool enableInt8Quantize = false,
   }) async {
-
     var interpreter = await _buildInterpreterFromAsset(modelPath);
     // var interpreter = await Interpreter.fromAsset(modelPath, options: options);
 

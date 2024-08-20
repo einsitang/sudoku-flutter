@@ -23,7 +23,6 @@ class _TestGridPageState extends State<TestGridPage> {
         crossAxisCount: axis,
       ),
       itemBuilder: (context, index) {
-
         return GestureDetector(
           child: Container(
             alignment: Alignment.center,
@@ -33,7 +32,8 @@ class _TestGridPageState extends State<TestGridPage> {
                     : Colors.blue),
             child: Text(
               "$index",
-              style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
           onTap: () {
