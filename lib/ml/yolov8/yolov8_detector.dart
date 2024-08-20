@@ -44,14 +44,9 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     /// int8 quantitative model seem not enough validation,not recommend to use
     @deprecated bool enableInt8Quantize = false,
   }) async {
-    // default enable GPU
-    final options = InterpreterOptions();
-    if (Platform.isAndroid) {
-      options.addDelegate(GpuDelegateV2());
-    } else {
-      options.addDelegate(GpuDelegate());
-    }
-    var interpreter = await Interpreter.fromAsset(modelPath, options: options);
+
+    var interpreter = await _buildInterpreterFromAsset(modelPath);
+    // var interpreter = await Interpreter.fromAsset(modelPath, options: options);
 
     String yamlContent = await rootBundle.loadString(metadataPath);
     var metadata = loadYaml(yamlContent);
@@ -283,5 +278,39 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
   @override
   YoloV8Output predict(YoloV8Input input) {
     return _predict(input);
+  }
+
+  static _buildInterpreterFromAsset(String modelPath) async {
+    // default enable GPU
+    var interpreter = null;
+    final delegates = [];
+    if (Platform.isAndroid) {
+      delegates.add(GpuDelegateV2());
+      delegates.add(XNNPackDelegate());
+    } else {
+      delegates.add(GpuDelegate());
+    }
+
+    // try to use gpu delegate , but didn't know device support delegate
+    final delegateIterator = delegates.iterator;
+    while (delegateIterator.moveNext()) {
+      final gpuDelegate = delegateIterator.current;
+      final options = InterpreterOptions()..addDelegate(gpuDelegate);
+      try {
+        log.i("use gpu delegate: $gpuDelegate");
+        interpreter = await Interpreter.fromAsset(modelPath, options: options);
+        break;
+      } catch (_) {
+        // seem not support gpu delegate , change one
+        log.w("use gpu delegate: $gpuDelegate failure");
+      }
+    }
+
+    if (interpreter == null) {
+      // interpreter without gpu delegate
+      interpreter = await Interpreter.fromAsset(modelPath);
+    }
+
+    return interpreter;
   }
 }

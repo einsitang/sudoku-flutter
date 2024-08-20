@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:image/image.dart' as img;
@@ -12,6 +13,8 @@ import 'package:sudoku/ml/yolov8/yolov8_input.dart';
 import 'package:sudoku/ml/yolov8/yolov8_output.dart';
 import 'package:sudoku/page/ai_detection.dart';
 import 'package:sudoku/util/image_util.dart';
+
+import '../util/crashlytics_util.dart';
 
 final Logger log = Logger();
 
@@ -220,7 +223,9 @@ class AIScanPageState extends State<AIScanPage> {
         ),
       );
     } catch (e) {
-      log.e(e);
+      e as Error;
+      log.e(e, stackTrace: e.stackTrace);
+      CrashlyticsUtil.recordError(e, e.stackTrace);
     }
   }
 
