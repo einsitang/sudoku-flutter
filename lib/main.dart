@@ -92,8 +92,9 @@ class MyApp extends StatelessWidget {
         }
         if (snapshot.hasError) {
           log.w("here is builder future throws error you should see it");
-          final e = snapshot.error as Error;
-          log.w(snapshot.error, stackTrace: e.stackTrace);
+          final e = snapshot.error;
+          final stackTrace = snapshot.stackTrace;
+          log.w(e, stackTrace: stackTrace);
         }
         SudokuState sudokuState = snapshot.data ?? SudokuState();
         BootstrapPage bootstrapPage = BootstrapPage(title: "Loading");

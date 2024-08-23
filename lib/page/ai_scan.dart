@@ -221,10 +221,9 @@ class AIScanPageState extends State<AIScanPage> {
               image: uiShowImg, imageBytes: showImgBytes, output: detectOutput),
         ),
       );
-    } catch (e) {
-      e as Error;
-      log.e(e, stackTrace: e.stackTrace);
-      CrashlyticsUtil.recordError(e, e.stackTrace);
+    } catch (e, stacktrace) {
+      log.e(e, stackTrace: stacktrace);
+      CrashlyticsUtil.recordError(e, stacktrace);
     }
   }
 

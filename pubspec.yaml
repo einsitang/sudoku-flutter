@@ -31,12 +31,12 @@ dependencies:
   logger: "^2.4.0"
   sprintf: "^7.0.0"
   scoped_model: "^2.0.0"
-#  modal_bottom_sheet: "^2.1.2"
-  modal_bottom_sheet:
-    git:
-      url: https://github.com/einsitang/modal_bottom_sheet.git
-      path: modal_bottom_sheet
-      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
+  modal_bottom_sheet: "^3.0.0"
+#  modal_bottom_sheet:
+#    git:
+#      url: https://github.com/einsitang/modal_bottom_sheet.git
+#      path: modal_bottom_sheet
+#      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   hive: "^2.2.3"
   hive_flutter: "^1.1.0"
 
