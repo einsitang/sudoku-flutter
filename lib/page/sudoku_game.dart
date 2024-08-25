@@ -17,8 +17,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 final Logger log = Logger();
 
-// final AudioPlayer tipsPlayer = AudioPlayer();
-
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   foregroundColor: Colors.black54,
   shadowColor: Colors.blue,
@@ -40,13 +38,18 @@ final ButtonStyle primaryFlatButtonStyle = TextButton.styleFrom(
   ),
 );
 
+const ideaAssetImage = AssetImage("assets/image/icon_idea.png");
+const lifeAssetImage = AssetImage("assets/image/icon_life.png");
+const logoAssetImage = AssetImage("assets/image/sudoku_logo.png");
+const eraserAssetImage = AssetImage("assets/image/icon_eraser.png");
+
 const Image ideaPng = Image(
-  image: AssetImage("assets/image/icon_idea.png"),
+  image: ideaAssetImage,
   width: 25,
   height: 25,
 );
 const Image lifePng = Image(
-  image: AssetImage("assets/image/icon_life.png"),
+  image: lifeAssetImage,
   width: 25,
   height: 25,
 );
@@ -69,16 +72,13 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
   _aboutDialogAction(BuildContext context) {
     Widget appIcon = GestureDetector(
-        child: Image(
-            image: AssetImage("assets/image/sudoku_logo.png"),
-            width: 45,
-            height: 45),
+        child: Image(image: logoAssetImage, width: 45, height: 45),
         onDoubleTap: () {
           WidgetBuilder columnWidget = (BuildContext context) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image(image: AssetImage("assets/image/sudoku_logo.png")),
+                  Image(image: logoAssetImage),
                   CupertinoButton(
                     child: Text("Sudoku"),
                     onPressed: () {
@@ -342,10 +342,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
         child: Container(
             child: CupertinoButton(
                 padding: EdgeInsets.all(8),
-                child: Image(
-                    image: AssetImage("assets/image/icon_eraser.png"),
-                    width: 40,
-                    height: 40),
+                child: Image(image: eraserAssetImage, width: 40, height: 40),
                 onPressed: () {
                   log.d("""
                   when ${_chooseSudokuBox + 1} is not a puzzle , then clean the choose \n

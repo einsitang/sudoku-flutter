@@ -1,5 +1,5 @@
 name: sudoku
-description: A new Sudoku Flutter application.
+description: an new Sudoku Flutter application.
 homepage: https://github.com/einsitang/sudoku-flutter
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.0.0+1
+version: 2.0.1+1
 
 environment:
   sdk: '>=3.0.0 <3.5.0'
@@ -51,11 +51,11 @@ dependencies:
   image: ^4.2.0
   yaml: ^3.1.2
   tflite_flutter: ^0.10.4
-#  opencv_dart: ^1.2.1
-  opencv_dart:
-    git:
-      url: https://github.com/einsitang/opencv_dart.git
-      ref: 47a80d918a466e4317232b12b225cefcf7f20e6e
+  opencv_dart: ^1.2.2
+#  opencv_dart:
+#    git:
+#      url: https://github.com/einsitang/opencv_dart.git
+#      ref: 47a80d918a466e4317232b12b225cefcf7f20e6e
   firebase_core: ^3.3.0
   firebase_crashlytics: ^4.0.4
   firebase_analytics: ^11.2.1

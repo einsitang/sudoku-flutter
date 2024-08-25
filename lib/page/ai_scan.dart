@@ -11,9 +11,8 @@ import 'package:sudoku/ml/detector.dart';
 import 'package:sudoku/ml/yolov8/yolov8_input.dart';
 import 'package:sudoku/ml/yolov8/yolov8_output.dart';
 import 'package:sudoku/page/ai_detection.dart';
+import 'package:sudoku/util/crashlytics_util.dart';
 import 'package:sudoku/util/image_util.dart';
-
-import '../util/crashlytics_util.dart';
 
 final Logger log = Logger();
 

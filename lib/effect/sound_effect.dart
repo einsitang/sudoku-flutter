@@ -4,11 +4,11 @@ import 'package:just_audio/just_audio.dart';
 class SoundEffect {
   static bool _init = false;
 
-  static final AudioPlayer _wrongAudio = new AudioPlayer();
-  static final AudioPlayer _victoryAudio = new AudioPlayer();
-  static final AudioPlayer _gameOverAudio = new AudioPlayer();
+  static final AudioPlayer _wrongAudio = AudioPlayer();
+  static final AudioPlayer _victoryAudio = AudioPlayer();
+  static final AudioPlayer _gameOverAudio = AudioPlayer();
   // show user tips sound effect
-  static final AudioPlayer _answerTipAudio = new AudioPlayer();
+  static final AudioPlayer _answerTipAudio = AudioPlayer();
 
   static init() async {
     if (!_init) {
@@ -26,7 +26,6 @@ class SoundEffect {
     }
     await _wrongAudio.seek(Duration.zero);
     await _wrongAudio.play();
-    return;
   }
 
   static solveVictory() async {
