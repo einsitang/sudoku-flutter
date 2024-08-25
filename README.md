@@ -50,7 +50,7 @@ about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md)
 ## environment
 - dart SDK: '>=3.0.0 <3.5.0' // records feature support
 - flutter SDK: '^3.0.0'
-- jdk 11
+- jdk 17 with Gradle Plugin 8.1.1 :new:
 
 ## dependency
 - [opencv_dart](https://github.com/rainyl/opencv_dart)
