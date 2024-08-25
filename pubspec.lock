@@ -138,7 +138,7 @@ packages:
     source: hosted
     version: "0.11.0+1"
   camera_android_camerax:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: camera_android_camerax
       sha256: "011be2ab0e5b3e3aa8094413fa890f8c5c5afd7cfdaef353a992047d4dab5780"
@@ -608,10 +608,11 @@ packages:
   opencv_dart:
     dependency: "direct main"
     description:
-      name: opencv_dart
-      sha256: b45d822988a852ba9c58f092b8003720c13a0bc98906803173a880f06205980b
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: "452994e8868b4d1f547d515cb89b53f0037840ec"
+      resolved-ref: "452994e8868b4d1f547d515cb89b53f0037840ec"
+      url: "https://github.com/einsitang/opencv_dart.git"
+    source: git
     version: "1.2.2"
   package_config:
     dependency: transitive
