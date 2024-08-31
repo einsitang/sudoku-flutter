@@ -52,11 +52,11 @@ dependencies:
   image: ^4.2.0
   yaml: ^3.1.2
   tflite_flutter: 0.10.4
-#  opencv_dart: 1.2.2
-  opencv_dart:
-    git:
-      url: https://github.com/einsitang/opencv_dart.git
-      ref: 452994e8868b4d1f547d515cb89b53f0037840ec
+  opencv_dart: 1.2.3
+#  opencv_dart:
+#    git:
+#      url: https://github.com/einsitang/opencv_dart.git
+#      ref: 452994e8868b4d1f547d515cb89b53f0037840ec
   firebase_core: ^3.3.0
   firebase_crashlytics: ^4.0.4
   firebase_analytics: ^11.2.1
