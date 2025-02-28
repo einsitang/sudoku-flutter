@@ -1,3 +1,5 @@
+# This is a codemagic workflow file
+# However, it is no longer in use. We have transitioned to utilizing the workflow editor instead.
 workflows:
   sudoku-flutter-workflow:
     environment:
