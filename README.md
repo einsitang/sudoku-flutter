@@ -12,7 +12,7 @@
 
 an open source Sudoku game application powered by Flutter .
 
-you can build your own Sudoku Game app, which allows you to quickly learn dart/flutter and its ecologically related application techniques, and is very friendly and instructional for tiro .
+You could try building a Sudoku game app on your own. This way, you'll get to learn Dart and Flutter pretty fast, along with their ecosystem techs. Plus, this app is super friendly and easy to use.  
 
 ### recent:
 
