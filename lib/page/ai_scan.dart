@@ -42,6 +42,7 @@ class AIScanPageState extends State<AIScanPage> {
     _controller = CameraController(
       widget.camera,
       ResolutionPreset.veryHigh,
+      enableAudio: false,
     );
     _initializeControllerFuture = _controller.initialize();
   }
