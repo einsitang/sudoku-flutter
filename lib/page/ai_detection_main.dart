@@ -1,11 +1,8 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:ffi/ffi.dart';
-import 'dart:ffi';
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:logger/logger.dart';
 import 'package:sudoku/ml/yolov8/yolov8_output.dart';
 import 'package:sudoku/native/sudoku.dart';
@@ -74,9 +71,15 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
   /// _aiDetectionPainter cache instance
   var _aiDetectionPainter;
 
+  // animation
+  late final ValueAdapter _animationValue;
+  late AnimationController _animationCtrl;
+
   @override
   void initState() {
     super.initState();
+
+    _animationValue = ValueAdapter(0.0);
 
     amendPuzzle = _emptyMatrix();
     solution = _emptyMatrix();
@@ -133,6 +136,12 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
         solution = sudoku.solution;
         solveMessage = "";
         oneSolution = isOneSolutionSudoku;
+
+        // play animation
+        if (isOneSolutionSudoku) {
+          _animationValue.value = 1;
+          _animationCtrl.forward(from: 0);
+        }
       });
     } catch (e) {
       // seem this puzzle can't be solve because is wrong puzzle
@@ -244,7 +253,21 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
           onTap: () => _selectedBoxSwitch(index),
         );
       }),
-    );
+    )
+        .animate(
+          autoPlay: false,
+          onInit: (ctrl) {
+            _animationCtrl = ctrl;
+          },
+          adapter: _animationValue,
+        )
+        .shimmer(
+          // delay: (ccrSpeed * 3 * zcrSpeed * 5).ms,
+          delay: 200.ms,
+          duration: 500.ms,
+          angle: 0.55,
+          color: Colors.white,
+        );
   }
 
   _selectedBoxSwitch(index) {
@@ -283,7 +306,7 @@ class _AIDetectionMainWidgetState extends State<AIDetectionMainWidget> {
     var _btnWidget = Offstage(
       offstage: !hasDetectionSudoku,
       child: IconButton(
-        icon: Icon(Icons.visibility),
+        icon: Icon(Icons.calculate_outlined),
         iconSize: 36,
         onPressed: _solveSudoku,
       ),

@@ -39,7 +39,7 @@ Widget _buttonWrapper(
 }
 
 Widget _aiSolverButton(BuildContext context) {
-  String buttonLabel = AppLocalizations.of(context)!.menuAISolver;
+  String label = AppLocalizations.of(context)!.menuAISolver;
   return Offstage(
       offstage: false,
       child: _buttonWrapper(
@@ -47,7 +47,7 @@ Widget _aiSolverButton(BuildContext context) {
           (content) => CupertinoButton(
                 color: Colors.blue,
                 child: Text(
-                  "$buttonLabel / test /",
+                  "$label / test /",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "montserrat",
@@ -60,7 +60,8 @@ Widget _aiSolverButton(BuildContext context) {
 
                   final cameras = await availableCameras();
                   final firstCamera = cameras.first;
-                  final aiScanPage = AIScanPage(camera: firstCamera);
+                  final aiScanPage =
+                      AIScanPage(title: label, camera: firstCamera);
 
                   Navigator.push(
                       context,
@@ -190,9 +191,9 @@ void _internalSudokuGenerate(List<dynamic> args) {
   Sudoku sudoku = Sudoku(puzzle);
   // Sudoku sudoku = Sudoku.generate(level);
   endTime = DateTime.now();
-  var consumingTie = endTime.millisecondsSinceEpoch - beginTime.millisecondsSinceEpoch;
-  log.d(
-      "数独生成完毕 耗时: $consumingTie'ms");
+  var consumingTie =
+      endTime.millisecondsSinceEpoch - beginTime.millisecondsSinceEpoch;
+  log.d("数独生成完毕 耗时: $consumingTie'ms");
   sendPort.send(sudoku);
 }
 

@@ -269,12 +269,6 @@ class _SudokuGamePageState extends State<SudokuGamePage>
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Offstage(
-                                          offstage: _state.status ==
-                                              SudokuGameStatus.success,
-                                          child: IconButton(
-                                              icon: Icon(Icons.tv),
-                                              onPressed: null)),
                                       IconButton(
                                           icon: Icon(Icons.thumb_up),
                                           onPressed: null),
