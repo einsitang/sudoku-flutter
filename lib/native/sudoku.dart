@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:ffi/ffi.dart';
 import 'package:logger/logger.dart' hide Level;
-import 'package:sudoku/native/nativefl.dart';
+import 'package:sudoku/native/nativefl.g.dart';
 
 Logger log = Logger();
 

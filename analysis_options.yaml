@@ -1,0 +1,6 @@
+analyzer:
+  exclude:
+    - test/**
+    - build/**
+    - lib/**.freezed.dart
+    - lib/**.g.dart

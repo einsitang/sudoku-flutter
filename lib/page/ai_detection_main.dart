@@ -1,10 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:ffi/ffi.dart';
-import 'dart:ffi';
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:sudoku/ml/yolov8/yolov8_output.dart';

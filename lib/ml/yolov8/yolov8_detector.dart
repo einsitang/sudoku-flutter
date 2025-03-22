@@ -42,6 +42,7 @@ class YoloV8Detector extends Predictor<YoloV8Input, YoloV8Output> {
     double iouThreshold = 0.45,
 
     /// int8 quantitative model seem not enough validation,not recommend to use
+    // ignore:deprecated_member_use
     @deprecated bool enableInt8Quantize = false,
   }) async {
     var interpreter = await _buildInterpreterFromAsset(modelPath);

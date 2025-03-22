@@ -1,20 +1,7 @@
 name: sudoku
 description: an new Sudoku Flutter application.
 homepage: https://github.com/einsitang/sudoku-flutter
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+publish_to: 'none'
 version: 2.4.0+1
 
 environment:
@@ -32,11 +19,11 @@ dependencies:
   sprintf: "^7.0.0"
   scoped_model: "^2.0.0"
   modal_bottom_sheet: "^3.0.0"
-#  modal_bottom_sheet:
-#    git:
-#      url: https://github.com/einsitang/modal_bottom_sheet.git
-#      path: modal_bottom_sheet
-#      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
+  #  modal_bottom_sheet:
+  #    git:
+  #      url: https://github.com/einsitang/modal_bottom_sheet.git
+  #      path: modal_bottom_sheet
+  #      ref: e7e630e10b27ccab12da27acada9d47a13d79e9a
   hive: "^2.2.3"
   hive_flutter: "^1.1.0"
 
@@ -53,10 +40,10 @@ dependencies:
   yaml: ^3.1.2
   tflite_flutter: ^0.11.0
   opencv_dart: 1.2.3
-#  opencv_dart:
-#    git:
-#      url: https://github.com/einsitang/opencv_dart.git
-#      ref: 452994e8868b4d1f547d515cb89b53f0037840ec
+  #  opencv_dart:
+  #    git:
+  #      url: https://github.com/einsitang/opencv_dart.git
+  #      ref: 452994e8868b4d1f547d515cb89b53f0037840ec
   firebase_core: ^3.3.0
   firebase_crashlytics: ^4.0.4
   firebase_analytics: ^11.2.1
@@ -72,6 +59,7 @@ dev_dependencies:
   hive_generator: ^2.0.0
   build_runner: ^2.4.3
   ffigen: ^16.1.0
+  analyzer: ^6.11.0
 
 flutter:
   generate: true
@@ -92,40 +80,19 @@ flutter:
     - assets/audio/speak/
     - assets/tf_model/sudoku/
     - assets/tf_model/digits/
-    - assets/fonts/
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
   fonts:
-     - family: montserrat
-       fonts:
-         - asset: assets/fonts/Montserrat-VariableFont_wght.ttf
-     - family: handwriting_digits
-       fonts:
-         - asset: assets/fonts/handwriting_digits.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+    - family: montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-VariableFont_wght.ttf
+    - family: handwriting_digits
+      fonts:
+        - asset: assets/fonts/handwriting_digits.ttf
+
 
 ffigen:
   # 生成文件的路径
-  output: lib/native/nativefl.dart
+  output: lib/native/nativefl.g.dart
   # 生成文件的 class name
   name: Nativefl
   # 生成的描述

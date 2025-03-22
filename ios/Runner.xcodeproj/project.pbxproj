@@ -15,6 +15,8 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		E10E5321E9C0ADABD637DEE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 50740E2E8873346E51B0CE58 /* GoogleService-Info.plist */; };
+		F04547BD2D8E9B9600A89562 /* libsudoku.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */; };
+		F04547BE2D8E9B9600A89562 /* libsudoku.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,6 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F04547BE2D8E9B9600A89562 /* libsudoku.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,6 +52,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA46451448FC1B923147505E /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libsudoku.xcframework; path = Pods/../NativeLibs/lib/libsudoku.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F04547BD2D8E9B9600A89562 /* libsudoku.xcframework in Frameworks */,
 				95968459B8400BDFF48AE37C /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,6 +135,7 @@
 		BD175E3A89FCA20399DF3261 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */,
 				CA46451448FC1B923147505E /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -226,8 +232,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo 'donothing'"; /* something problem get stuck here but I have no idea */
-			/* shellScript = "\n#!/bin/bash\nPATH=${PATH}:$FLUTTER_ROOT/bin:$HOME/.pub-cache/bin\nflutterfire upload-crashlytics-symbols --upload-symbols-script-path=$PODS_ROOT/FirebaseCrashlytics/upload-symbols --platform=ios --apple-project-path=${SRCROOT} --env-platform-name=${PLATFORM_NAME} --env-configuration=${CONFIGURATION} --env-project-dir=${PROJECT_DIR} --env-built-products-dir=${BUILT_PRODUCTS_DIR} --env-dwarf-dsym-folder-path=${DWARF_DSYM_FOLDER_PATH} --env-dwarf-dsym-file-name=${DWARF_DSYM_FILE_NAME} --env-infoplist-path=${INFOPLIST_PATH} --default-config=default\n"; */
+			shellScript = "echo 'donothing'";
 		};
 		212D4558D45B4E6E7D992FFD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -400,6 +405,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/NativeLibs/lib",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -436,6 +442,7 @@
 					"$(PROJECT_DIR)/NativeLibs/include",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -536,8 +543,6 @@
 					"\"CoreML\"",
 					"-weak_framework",
 					"\"Metal\"",
-					"-force_load",
-					"$(PROJECT_DIR)/NativeLibs/lib/libsudoku.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -674,6 +679,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/NativeLibs/lib",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -710,6 +716,7 @@
 					"$(PROJECT_DIR)/NativeLibs/include",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -810,8 +817,6 @@
 					"\"CoreML\"",
 					"-weak_framework",
 					"\"Metal\"",
-					"-force_load",
-					"$(PROJECT_DIR)/NativeLibs/lib/libsudoku.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -838,6 +843,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+					"$(PROJECT_DIR)/NativeLibs/lib",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -874,6 +880,7 @@
 					"$(PROJECT_DIR)/NativeLibs/include",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -974,8 +981,6 @@
 					"\"CoreML\"",
 					"-weak_framework",
 					"\"Metal\"",
-					"-force_load",
-					"$(PROJECT_DIR)/NativeLibs/lib/libsudoku.a",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -47,7 +47,7 @@ class SudokuPauseCoverPage extends StatelessWidget {
     };
     return GestureDetector(
         child: Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.98),
+            backgroundColor: Colors.black.withValues(alpha: 0.98),
             body: DefaultTextStyle(child: bodyView, style: pageTextStyle)),
         onTap: onTap,
         onDoubleTap: onDoubleTap);

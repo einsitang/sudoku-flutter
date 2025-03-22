@@ -28,6 +28,8 @@ class DetectorFactory {
       modelPath: sudokuModelPath,
       metadataPath: sudokuModelMetadataPath,
       confThreshold: 0.75,
+
+      // ignore:deprecated_member_use_from_same_package
       enableInt8Quantize: false,
     );
     return _sudokuDetector!;
@@ -41,6 +43,8 @@ class DetectorFactory {
       metadataPath: digitsModelMetadataPath,
       confThreshold: 0.45,
       iouThreshold: 0.45,
+
+      // ignore:deprecated_member_use_from_same_package
       enableInt8Quantize: false,
     );
     return _digitsDetector!;
