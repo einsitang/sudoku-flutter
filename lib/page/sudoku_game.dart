@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
@@ -16,6 +17,8 @@ import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import 'game_over.dart';
 
 final Logger log = Logger();
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
@@ -104,6 +107,14 @@ class SudokuGamePage extends StatefulWidget {
 
 class _SudokuGamePageState extends State<SudokuGamePage>
     with WidgetsBindingObserver {
+  // animation
+  late final ValueAdapter _animationValue;
+  late AnimationController _animationCtrl;
+  var _animationDuration = 1.5.seconds;
+
+  /// if _onTapFuncLock is true , tap event will not work
+  var _onTapFuncLock = false;
+
   /// 选中的格子
   int _chooseSudokuBox = 0;
 
@@ -201,108 +212,40 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   /// 游戏结束触发 执行判断逻辑
   void _gameOver() async {
     bool isWinner = _state.status == SudokuGameStatus.success;
-    String title, conclusion;
-    Function playSoundEffect;
 
-    // define i18n begin
-    final String elapsedTimeText =
-        AppLocalizations.of(context)!.elapsedTimeText;
-    final String winnerConclusionText =
-        AppLocalizations.of(context)!.winnerConclusionText;
-    final String failureConclusionText =
-        AppLocalizations.of(context)!.failureConclusionText;
-    final String levelLabel =
-        LocalizationUtils.localizationLevelName(context, _state.level!);
-    // define i18n end
-    if (isWinner) {
-      title = "Well Done!";
-      conclusion = winnerConclusionText.replaceFirst("%level%", levelLabel);
-      playSoundEffect = SoundEffect.solveVictory;
-    } else {
-      title = "Failure";
-      conclusion = failureConclusionText.replaceFirst("%level%", levelLabel);
-      playSoundEffect = SoundEffect.gameOver;
-    }
+    setState(() {
+      _onTapFuncLock = true;
+      if (isWinner) {
+        // play winner shining animate
+        _animationValue.value = 1.0;
+        _animationCtrl.forward(from: 0.0);
+      }
+    });
+
+    var gameOverPage = GameOverPage(
+      timer: _state.timer,
+      level: _state.level!,
+      isWinner: isWinner,
+    );
 
     // route to game over show widget page
     PageRouteBuilder gameOverPageRouteBuilder = PageRouteBuilder(
         opaque: false,
-        pageBuilder: (BuildContext context, animation, _) {
-          // sound effect : victory or failure
-          playSoundEffect();
-          // game over show widget
-          Widget gameOverWidget = Scaffold(
-              backgroundColor: Colors.white.withValues(alpha: 0.85),
-              body: Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: Text(title,
-                                  style: TextStyle(
-                                    color: isWinner
-                                        ? Colors.black
-                                        : Colors.redAccent,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                  )))),
-                      Expanded(
-                          flex: 2,
-                          child: Column(children: [
-                            Container(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  25.0, 0.0, 25.0, 0.0),
-                              child: Text(conclusion,
-                                  style: TextStyle(fontSize: 16, height: 1.5)),
-                            ),
-                            Container(
-                                margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
-                                child: Text(
-                                    "$elapsedTimeText : ${_state.timer}'s",
-                                    style: TextStyle(color: Colors.blue))),
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Offstage(
-                                          offstage: _state.status ==
-                                              SudokuGameStatus.success,
-                                          child: IconButton(
-                                              icon: Icon(Icons.tv),
-                                              onPressed: null)),
-                                      IconButton(
-                                          icon: Icon(Icons.thumb_up),
-                                          onPressed: null),
-                                      IconButton(
-                                          icon: Icon(Icons.exit_to_app),
-                                          onPressed: () {
-                                            Navigator.pop(context, "exit");
-                                          })
-                                    ]))
-                          ]))
-                    ],
-                  )));
+        pageBuilder: (BuildContext context, animation, _) => ScaleTransition(
+            scale: Tween(begin: 3.0, end: 1.0).animate(animation),
+            child: gameOverPage));
 
-          return ScaleTransition(
-              scale: Tween(begin: 3.0, end: 1.0).animate(animation),
-              child: gameOverWidget);
-        });
-    String signal = await Navigator.of(context).push(gameOverPageRouteBuilder);
-    switch (signal) {
-      case "ad":
-        // @TODO give extra life logic coding
-        // may do something to give user extra life , like watch ad video / make comment of this app ?
-        break;
-      case "exit":
-      default:
-        Navigator.pop(context);
-        break;
-    }
+    // if winner , delay and play winner shining animate
+    Future.delayed(isWinner ? _animationDuration * 1.1 : 0.ms, () async {
+      String signal =
+          await Navigator.of(context).push(gameOverPageRouteBuilder);
+      switch (signal) {
+        case "exit":
+        default:
+          Navigator.pop(context);
+          break;
+      }
+    });
   }
 
   // fill zone [ 1 - 9 ]
@@ -316,6 +259,10 @@ class _SudokuGamePageState extends State<SudokuGamePage>
       } else {
         fillOnPressed = () async {
           log.d("input : $num");
+          if (_onTapFuncLock) {
+            return;
+          }
+
           if (_isOnlyReadGrid(_chooseSudokuBox)) {
             // 非填空项
             return;
@@ -389,11 +336,13 @@ class _SudokuGamePageState extends State<SudokuGamePage>
               child: CupertinoButton(
                   color: _markOpen ? markBgColor : recordBgColor,
                   padding: EdgeInsets.all(1),
-                  child: Text('${index + 1}',
-                      style: TextStyle(
-                          color: _markOpen ? markFontColor : recordFontColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
+                  child: Text(
+                    '${index + 1}',
+                    style: TextStyle(
+                        color: _markOpen ? markFontColor : recordFontColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
                   onPressed: fillOnPressed)));
     });
 
@@ -427,18 +376,14 @@ class _SudokuGamePageState extends State<SudokuGamePage>
           alignment: Alignment.centerLeft,
           child: Row(children: fillTools),
         ));
-    // return Align(
-    //     alignment: Alignment.centerLeft,
-    //     child: Container(
-    //       height: 40,
-    //       width: MediaQuery.of(context).size.width,
-    //       child: Row(children: fillTools),
-    //     ));
   }
 
   Widget _toolZone(BuildContext context) {
     // pause button tap function
     var pauseOnPressed = () {
+      if (_onTapFuncLock) {
+        return;
+      }
       if (_state.status != SudokuGameStatus.gaming) {
         return;
       }
@@ -469,6 +414,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     var tipsOnPressed;
     if (_state.hint > 0) {
       tipsOnPressed = () {
+        if (_onTapFuncLock) {
+          return;
+        }
         // tips next cell answer
         log.d("top tips button");
         int hint = _state.hint;
@@ -499,6 +447,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
 
     // mark button tap function
     var markOnPressed = () {
+      if (_onTapFuncLock) {
+        return;
+      }
       log.d("enable mark function - 启用笔记功能");
       setState(() {
         _markOpen = !_markOpen;
@@ -514,6 +465,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     var exitGameContentText = AppLocalizations.of(context)!.exitGameContentText;
     // define i18n text end
     var exitGameOnPressed = () async {
+      if (_onTapFuncLock) {
+        return;
+      }
       await showDialog(
           context: context,
           builder: (context) {
@@ -853,6 +807,9 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   // cell onTop function
   _cellOnTapBuilder(index) {
     return () {
+      if (_onTapFuncLock) {
+        return;
+      }
       _updateChooseState(index);
     };
   }
@@ -869,71 +826,89 @@ class _SudokuGamePageState extends State<SudokuGamePage>
     }
     var textValueStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.w700);
 
+    /// status zone
+    /// life / tips / timer on here
+    var _indicator = Container(
+      height: 50,
+      padding: EdgeInsets.all(10.0),
+      child: Row(children: <Widget>[
+        Expanded(
+            flex: 1,
+            child: Row(children: <Widget>[
+              lifePng,
+              Text(" x ${_state.life}", style: textValueStyle)
+            ])),
+        // indicator
+        Expanded(
+          flex: 2,
+          child: Container(
+              alignment: AlignmentDirectional.center,
+              child: Text(
+                "${LocalizationUtils.localizationLevelName(context, _state.level!)} - ${_state.timer} - ${LocalizationUtils.localizationGameStatus(context, _state.status)}",
+                style: TextStyle(fontSize: 15),
+              )),
+        ),
+        // tips
+        Expanded(
+            flex: 1,
+            child: Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                  ideaPng,
+                  Text(" x ${_state.hint}", style: textValueStyle)
+                ])))
+      ]),
+    );
+
+    /// 9 x 9 cells sudoku puzzle board
+    /// the whole sudoku game draw it here
+    var _sudokuPuzzleBoard = GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 81,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 9),
+            itemBuilder: ((BuildContext context, int index) {
+              int num = -1;
+              if (_state.sudoku?.puzzle.length == 81) {
+                num = _state.sudoku!.puzzle[index];
+              }
+
+              // 用户做标记
+              bool isUserMark = _state.sudoku!.puzzle[index] == -1 &&
+                  _state.mark[index].any((element) => element);
+
+              return isUserMark
+                  ? _markGridCellWidget(
+                      context, index, _cellOnTapBuilder(index))
+                  : _gridCellWidget(
+                      context, index, num, _cellOnTapBuilder(index));
+            }))
+        .animate(
+      autoPlay: false,
+      adapter: _animationValue,
+      onInit: (ctrl) {
+        _animationCtrl = ctrl;
+      },
+    )
+        .shimmer(
+      duration: _animationDuration,
+      angle: 0.55,
+      size: 0.1,
+      colors: [
+        Colors.white10,
+        Colors.white,
+        Colors.white10,
+      ],
+    );
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          /// status zone
-          /// life / tips / timer on here
-          Container(
-            height: 50,
-            padding: EdgeInsets.all(10.0),
-            child: Row(children: <Widget>[
-              Expanded(
-                  flex: 1,
-                  child: Row(children: <Widget>[
-                    lifePng,
-                    Text(" x ${_state.life}", style: textValueStyle)
-                  ])),
-              // indicator
-              Expanded(
-                flex: 2,
-                child: Container(
-                    alignment: AlignmentDirectional.center,
-                    child: Text(
-                      "${LocalizationUtils.localizationLevelName(context, _state.level!)} - ${_state.timer} - ${LocalizationUtils.localizationGameStatus(context, _state.status)}",
-                      style: TextStyle(fontSize: 15),
-                    )),
-              ),
-              // tips
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                        ideaPng,
-                        Text(" x ${_state.hint}", style: textValueStyle)
-                      ])))
-            ]),
-          ),
-
-          /// 9 x 9 cells sudoku puzzle board
-          /// the whole sudoku game draw it here
-          GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 81,
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 9),
-              itemBuilder: ((BuildContext context, int index) {
-                int num = -1;
-                if (_state.sudoku?.puzzle.length == 81) {
-                  num = _state.sudoku!.puzzle[index];
-                }
-
-                // 用户做标记
-                bool isUserMark = _state.sudoku!.puzzle[index] == -1 &&
-                    _state.mark[index].any((element) => element);
-
-                if (isUserMark) {
-                  return _markGridCellWidget(
-                      context, index, _cellOnTapBuilder(index));
-                }
-
-                return _gridCellWidget(
-                    context, index, num, _cellOnTapBuilder(index));
-              })),
+          _indicator,
+          _sudokuPuzzleBoard,
 
           /// user input zone
           /// use fillZone choose number fill cells or mark notes
@@ -965,6 +940,7 @@ class _SudokuGamePageState extends State<SudokuGamePage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _animationValue = ValueAdapter(0);
     _updateChooseState(0);
     _gaming();
   }

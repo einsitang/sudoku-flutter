@@ -20,8 +20,10 @@ class AIScanPage extends StatefulWidget {
   const AIScanPage({
     super.key,
     required this.camera,
+    required this.title,
   });
 
+  final String title;
   final CameraDescription camera;
 
   @override
@@ -39,7 +41,7 @@ class AIScanPageState extends State<AIScanPage> {
     super.initState();
     _controller = CameraController(
       widget.camera,
-      ResolutionPreset.high,
+      ResolutionPreset.veryHigh,
       enableAudio: false,
     );
     _initializeControllerFuture = _controller.initialize();
@@ -54,7 +56,7 @@ class AIScanPageState extends State<AIScanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Take a picture')),
+      appBar: AppBar(title: Text(widget.title)),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -114,7 +116,7 @@ class AIScanPageState extends State<AIScanPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _predictPicture,
-        child: const Icon(Icons.lens_blur),
+        child: const Icon(Icons.compare),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
