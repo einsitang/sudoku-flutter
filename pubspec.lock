@@ -677,10 +677,11 @@ packages:
   opencv_core:
     dependency: "direct main"
     description:
-      name: opencv_core
-      sha256: "713ce0400bf81996009b3c98dbf25643546574637d35d3604792253317ee3824"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "packages/opencv_core"
+      ref: "72a6f95b2aeb912d9826729651c3efe353d5cce8"
+      resolved-ref: "72a6f95b2aeb912d9826729651c3efe353d5cce8"
+      url: "https://github.com/einsitang/opencv_dart.git"
+    source: git
     version: "1.4.1"
   package_config:
     dependency: transitive
