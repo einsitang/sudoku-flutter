@@ -23,7 +23,7 @@ packages:
     source: sdk
     version: "0.3.3"
   analyzer:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: analyzer
       sha256: "1f14db053a8c23e260789e9b0980fa27f2680dd640932cae5e1137cce0e46e1e"
@@ -58,10 +58,10 @@ packages:
     dependency: transitive
     description:
       name: audio_session
-      sha256: "343e83bc7809fbda2591a49e525d6b63213ade10c76f15813be9aed6657b3261"
+      sha256: "2b7fff16a552486d078bfc09a8cde19f426dc6d6329262b684182597bec5b1ac"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.21"
+    version: "0.1.25"
   boolean_selector:
     dependency: transitive
     description:
@@ -262,6 +262,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.3.8"
+  dartcv4:
+    dependency: transitive
+    description:
+      name: dartcv4
+      sha256: "383231deeaf16a1da4ee0eb098ab969f637a33d7ed84bbdd6b59d213ef1f3bc3"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.3"
   fake_async:
     dependency: transitive
     description:
@@ -338,10 +346,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: "362e52457ed2b7b180964769c1e04d1e0ea0259fdf7025fdfedd019d4ae2bd88"
+      sha256: f4ee170441ca141c5f9ee5ad8737daba3ee9c8e7efb6902aee90b4fbd178ce25
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.17.5"
+    version: "2.18.0"
   firebase_crashlytics:
     dependency: "direct main"
     description:
@@ -558,26 +566,26 @@ packages:
     dependency: "direct main"
     description:
       name: just_audio
-      sha256: d8e8aaf417d33e345299c17f6457f72bd4ba0c549dc34607abb5183a354edc4d
+      sha256: f978d5b4ccea08f267dae0232ec5405c1b05d3f3cd63f82097ea46c015d5c09e
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.9.40"
+    version: "0.9.46"
   just_audio_platform_interface:
     dependency: transitive
     description:
       name: just_audio_platform_interface
-      sha256: "0243828cce503c8366cc2090cefb2b3c871aa8ed2f520670d76fd47aa1ab2790"
+      sha256: "271b93b484c6f494ecd72a107fffbdb26b425f170c665b9777a0a24a726f2f24"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.3.0"
+    version: "4.4.0"
   just_audio_web:
     dependency: transitive
     description:
       name: just_audio_web
-      sha256: b163878529d9b028c53a6972fcd58cae2405bcd11cbfcea620b6fb9f151429d6
+      sha256: "58915be64509a7683c44bf11cd1a23c15a48de104927bee116e3c63c8eeea0d4"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.12"
+    version: "0.4.14"
   leak_tracker:
     dependency: transitive
     description:
@@ -666,14 +674,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.0"
-  opencv_dart:
+  opencv_core:
     dependency: "direct main"
     description:
-      name: opencv_dart
-      sha256: be09f7ca9fd894ade56963562fe092517e3c798ee78574a9929e89b1aba6f3ce
+      name: opencv_core
+      sha256: "713ce0400bf81996009b3c98dbf25643546574637d35d3604792253317ee3824"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.3"
+    version: "1.4.1"
   package_config:
     dependency: transitive
     description:
@@ -1083,18 +1091,18 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.5.1"
+    version: "1.1.1"
   web_socket_channel:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: "58c6666b342a38816b2e7e50ed0f1e261959630becd4c879c4f26bfa14aa5a42"
+      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.4.5"
+    version: "2.4.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -1128,5 +1136,5 @@ packages:
     source: hosted
     version: "2.2.2"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
+  dart: ">=3.6.0 <4.0.0"
   flutter: ">=3.22.0"

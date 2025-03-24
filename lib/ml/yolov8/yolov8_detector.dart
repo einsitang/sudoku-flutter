@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
-import 'package:opencv_dart/opencv_dart.dart' as cv;
+import 'package:opencv_core/opencv.dart' as cv;
 import 'package:sudoku/ml/predictor.dart';
 import 'package:sudoku/ml/yolov8/yolov8_input.dart';
 import 'package:sudoku/ml/yolov8/yolov8_output.dart';
