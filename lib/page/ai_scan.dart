@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
+import 'package:sudoku/l10n/sudoku_localizations.dart';
 import 'package:image/image.dart' as img;
 import 'package:logger/logger.dart';
 import 'package:sudoku/ml/detector.dart';

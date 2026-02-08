@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
+import 'package:sudoku/l10n/sudoku_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 import 'package:scoped_model/scoped_model.dart';

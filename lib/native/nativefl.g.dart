@@ -19,6 +19,34 @@ class Nativefl {
           lookup)
       : _lookup = lookup;
 
+  int _GoStringLen(
+    _GoString_ s,
+  ) {
+    return __GoStringLen(
+      s,
+    );
+  }
+
+  late final __GoStringLenPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function(_GoString_)>>(
+          '_GoStringLen');
+  late final __GoStringLen =
+      __GoStringLenPtr.asFunction<int Function(_GoString_)>();
+
+  ffi.Pointer<ffi.Char> _GoStringPtr(
+    _GoString_ s,
+  ) {
+    return __GoStringPtr(
+      s,
+    );
+  }
+
+  late final __GoStringPtrPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(_GoString_)>>(
+          '_GoStringPtr');
+  late final __GoStringPtr =
+      __GoStringPtrPtr.asFunction<ffi.Pointer<ffi.Char> Function(_GoString_)>();
+
   int renameat(
     int arg0,
     ffi.Pointer<ffi.Char> arg1,
@@ -82,6 +110,20 @@ class Nativefl {
   late final _renameatx_np = _renameatx_npPtr.asFunction<
       int Function(
           int, ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Char>, int)>();
+
+  int printf(
+    ffi.Pointer<ffi.Char> arg0,
+  ) {
+    return _printf(
+      arg0,
+    );
+  }
+
+  late final _printfPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Char>)>>(
+          'printf');
+  late final _printf =
+      _printfPtr.asFunction<int Function(ffi.Pointer<ffi.Char>)>();
 
   late final ffi.Pointer<ffi.Pointer<FILE>> ___stdinp =
       _lookup<ffi.Pointer<FILE>>('__stdinp');
@@ -199,12 +241,12 @@ class Nativefl {
 
   ffi.Pointer<ffi.Char> fgets(
     ffi.Pointer<ffi.Char> arg0,
-    int arg1,
+    int __size,
     ffi.Pointer<FILE> arg2,
   ) {
     return _fgets(
       arg0,
-      arg1,
+      __size,
       arg2,
     );
   }
@@ -458,20 +500,6 @@ class Nativefl {
   late final _perror =
       _perrorPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
 
-  int printf(
-    ffi.Pointer<ffi.Char> arg0,
-  ) {
-    return _printf(
-      arg0,
-    );
-  }
-
-  late final _printfPtr =
-      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Char>)>>(
-          'printf');
-  late final _printf =
-      _printfPtr.asFunction<int Function(ffi.Pointer<ffi.Char>)>();
-
   int putc(
     int arg0,
     ffi.Pointer<FILE> arg1,
@@ -593,13 +621,13 @@ class Nativefl {
     ffi.Pointer<FILE> arg0,
     ffi.Pointer<ffi.Char> arg1,
     int arg2,
-    int arg3,
+    int __size,
   ) {
     return _setvbuf(
       arg0,
       arg1,
       arg2,
-      arg3,
+      __size,
     );
   }
 
@@ -685,7 +713,7 @@ class Nativefl {
   int vfprintf(
     ffi.Pointer<FILE> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return _vfprintf(
       arg0,
@@ -696,15 +724,14 @@ class Nativefl {
 
   late final _vfprintfPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('vfprintf');
+          ffi.Int Function(
+              ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>, va_list)>>('vfprintf');
   late final _vfprintf = _vfprintfPtr.asFunction<
-      int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>, va_list)>();
 
   int vprintf(
     ffi.Pointer<ffi.Char> arg0,
-    ffi.Pointer<__va_list_tag> arg1,
+    va_list arg1,
   ) {
     return _vprintf(
       arg0,
@@ -713,16 +740,15 @@ class Nativefl {
   }
 
   late final _vprintfPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>>('vprintf');
-  late final _vprintf = _vprintfPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>();
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Char>, va_list)>>(
+      'vprintf');
+  late final _vprintf =
+      _vprintfPtr.asFunction<int Function(ffi.Pointer<ffi.Char>, va_list)>();
 
   int vsprintf(
     ffi.Pointer<ffi.Char> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return _vsprintf(
       arg0,
@@ -734,10 +760,9 @@ class Nativefl {
   late final _vsprintfPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('vsprintf');
+              va_list)>>('vsprintf');
   late final _vsprintf = _vsprintfPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, va_list)>();
 
   ffi.Pointer<ffi.Char> ctermid(
     ffi.Pointer<ffi.Char> arg0,
@@ -831,7 +856,7 @@ class Nativefl {
   int __svfscanf(
     ffi.Pointer<FILE> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return ___svfscanf(
       arg0,
@@ -843,10 +868,9 @@ class Nativefl {
   late final ___svfscanfPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('__svfscanf');
+              va_list)>>('__svfscanf');
   late final ___svfscanf = ___svfscanfPtr.asFunction<
-      int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>, va_list)>();
 
   int __swbuf(
     int arg0,
@@ -1057,7 +1081,7 @@ class Nativefl {
   int vfscanf(
     ffi.Pointer<FILE> __stream,
     ffi.Pointer<ffi.Char> __format,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return _vfscanf(
       __stream,
@@ -1068,15 +1092,14 @@ class Nativefl {
 
   late final _vfscanfPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('vfscanf');
+          ffi.Int Function(
+              ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>, va_list)>>('vfscanf');
   late final _vfscanf = _vfscanfPtr.asFunction<
-      int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(ffi.Pointer<FILE>, ffi.Pointer<ffi.Char>, va_list)>();
 
   int vscanf(
     ffi.Pointer<ffi.Char> __format,
-    ffi.Pointer<__va_list_tag> arg1,
+    va_list arg1,
   ) {
     return _vscanf(
       __format,
@@ -1085,17 +1108,16 @@ class Nativefl {
   }
 
   late final _vscanfPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>>('vscanf');
-  late final _vscanf = _vscanfPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>();
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Char>, va_list)>>(
+      'vscanf');
+  late final _vscanf =
+      _vscanfPtr.asFunction<int Function(ffi.Pointer<ffi.Char>, va_list)>();
 
   int vsnprintf(
     ffi.Pointer<ffi.Char> __str,
     int __size,
     ffi.Pointer<ffi.Char> __format,
-    ffi.Pointer<__va_list_tag> arg3,
+    va_list arg3,
   ) {
     return _vsnprintf(
       __str,
@@ -1108,15 +1130,15 @@ class Nativefl {
   late final _vsnprintfPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Size,
-              ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>>('vsnprintf');
+              ffi.Pointer<ffi.Char>, va_list)>>('vsnprintf');
   late final _vsnprintf = _vsnprintfPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(
+          ffi.Pointer<ffi.Char>, int, ffi.Pointer<ffi.Char>, va_list)>();
 
   int vsscanf(
     ffi.Pointer<ffi.Char> __str,
     ffi.Pointer<ffi.Char> __format,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return _vsscanf(
       __str,
@@ -1128,10 +1150,9 @@ class Nativefl {
   late final _vsscanfPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('vsscanf');
+              va_list)>>('vsscanf');
   late final _vsscanf = _vsscanfPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, va_list)>();
 
   int dprintf(
     int arg0,
@@ -1152,7 +1173,7 @@ class Nativefl {
   int vdprintf(
     int arg0,
     ffi.Pointer<ffi.Char> arg1,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return _vdprintf(
       arg0,
@@ -1163,10 +1184,10 @@ class Nativefl {
 
   late final _vdprintfPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(ffi.Int, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('vdprintf');
-  late final _vdprintf = _vdprintfPtr.asFunction<
-      int Function(int, ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>();
+          ffi.Int Function(
+              ffi.Int, ffi.Pointer<ffi.Char>, va_list)>>('vdprintf');
+  late final _vdprintf = _vdprintfPtr
+      .asFunction<int Function(int, ffi.Pointer<ffi.Char>, va_list)>();
 
   int getdelim(
     ffi.Pointer<ffi.Pointer<ffi.Char>> __linep,
@@ -1294,11 +1315,11 @@ class Nativefl {
 
   ffi.Pointer<ffi.Char> fgetln(
     ffi.Pointer<FILE> arg0,
-    ffi.Pointer<ffi.Size> arg1,
+    ffi.Pointer<ffi.Size> __len,
   ) {
     return _fgetln(
       arg0,
-      arg1,
+      __len,
     );
   }
 
@@ -1344,12 +1365,12 @@ class Nativefl {
   void setbuffer(
     ffi.Pointer<FILE> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    int arg2,
+    int __size,
   ) {
     return _setbuffer(
       arg0,
       arg1,
-      arg2,
+      __size,
     );
   }
 
@@ -1377,7 +1398,7 @@ class Nativefl {
   int vasprintf(
     ffi.Pointer<ffi.Pointer<ffi.Char>> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    ffi.Pointer<__va_list_tag> arg2,
+    va_list arg2,
   ) {
     return _vasprintf(
       arg0,
@@ -1389,10 +1410,10 @@ class Nativefl {
   late final _vasprintfPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int Function(ffi.Pointer<ffi.Pointer<ffi.Char>>,
-              ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>>('vasprintf');
+              ffi.Pointer<ffi.Char>, va_list)>>('vasprintf');
   late final _vasprintf = _vasprintfPtr.asFunction<
       int Function(ffi.Pointer<ffi.Pointer<ffi.Char>>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+          va_list)>();
 
   ffi.Pointer<FILE> funopen(
     ffi.Pointer<ffi.Void> arg0,
@@ -1457,6 +1478,56 @@ class Nativefl {
           ffi.Pointer<
               ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>)>>)>();
 
+  int __snprintf_chk(
+    ffi.Pointer<ffi.Char> arg0,
+    int __maxlen,
+    int arg2,
+    int arg3,
+    ffi.Pointer<ffi.Char> arg4,
+  ) {
+    return ___snprintf_chk(
+      arg0,
+      __maxlen,
+      arg2,
+      arg3,
+      arg4,
+    );
+  }
+
+  late final ___snprintf_chkPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Size, ffi.Int, ffi.Size,
+              ffi.Pointer<ffi.Char>)>>('__snprintf_chk');
+  late final ___snprintf_chk = ___snprintf_chkPtr.asFunction<
+      int Function(
+          ffi.Pointer<ffi.Char>, int, int, int, ffi.Pointer<ffi.Char>)>();
+
+  int __vsnprintf_chk(
+    ffi.Pointer<ffi.Char> arg0,
+    int __maxlen,
+    int arg2,
+    int arg3,
+    ffi.Pointer<ffi.Char> arg4,
+    va_list arg5,
+  ) {
+    return ___vsnprintf_chk(
+      arg0,
+      __maxlen,
+      arg2,
+      arg3,
+      arg4,
+      arg5,
+    );
+  }
+
+  late final ___vsnprintf_chkPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Size, ffi.Int, ffi.Size,
+              ffi.Pointer<ffi.Char>, va_list)>>('__vsnprintf_chk');
+  late final ___vsnprintf_chk = ___vsnprintf_chkPtr.asFunction<
+      int Function(ffi.Pointer<ffi.Char>, int, int, int, ffi.Pointer<ffi.Char>,
+          va_list)>();
+
   int __sprintf_chk(
     ffi.Pointer<ffi.Char> arg0,
     int arg1,
@@ -1478,36 +1549,12 @@ class Nativefl {
   late final ___sprintf_chk = ___sprintf_chkPtr.asFunction<
       int Function(ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.Char>)>();
 
-  int __snprintf_chk(
-    ffi.Pointer<ffi.Char> arg0,
-    int arg1,
-    int arg2,
-    int arg3,
-    ffi.Pointer<ffi.Char> arg4,
-  ) {
-    return ___snprintf_chk(
-      arg0,
-      arg1,
-      arg2,
-      arg3,
-      arg4,
-    );
-  }
-
-  late final ___snprintf_chkPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Size, ffi.Int, ffi.Size,
-              ffi.Pointer<ffi.Char>)>>('__snprintf_chk');
-  late final ___snprintf_chk = ___snprintf_chkPtr.asFunction<
-      int Function(
-          ffi.Pointer<ffi.Char>, int, int, int, ffi.Pointer<ffi.Char>)>();
-
   int __vsprintf_chk(
     ffi.Pointer<ffi.Char> arg0,
     int arg1,
     int arg2,
     ffi.Pointer<ffi.Char> arg3,
-    ffi.Pointer<__va_list_tag> arg4,
+    va_list arg4,
   ) {
     return ___vsprintf_chk(
       arg0,
@@ -1520,46 +1567,11 @@ class Nativefl {
 
   late final ___vsprintf_chkPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Char>,
-              ffi.Int,
-              ffi.Size,
-              ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('__vsprintf_chk');
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Int, ffi.Size,
+              ffi.Pointer<ffi.Char>, va_list)>>('__vsprintf_chk');
   late final ___vsprintf_chk = ___vsprintf_chkPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
-
-  int __vsnprintf_chk(
-    ffi.Pointer<ffi.Char> arg0,
-    int arg1,
-    int arg2,
-    int arg3,
-    ffi.Pointer<ffi.Char> arg4,
-    ffi.Pointer<__va_list_tag> arg5,
-  ) {
-    return ___vsnprintf_chk(
-      arg0,
-      arg1,
-      arg2,
-      arg3,
-      arg4,
-      arg5,
-    );
-  }
-
-  late final ___vsnprintf_chkPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Char>,
-              ffi.Size,
-              ffi.Int,
-              ffi.Size,
-              ffi.Pointer<ffi.Char>,
-              ffi.Pointer<__va_list_tag>)>>('__vsnprintf_chk');
-  late final ___vsnprintf_chk = ___vsnprintf_chkPtr.asFunction<
-      int Function(ffi.Pointer<ffi.Char>, int, int, int, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<__va_list_tag>)>();
+      int Function(
+          ffi.Pointer<ffi.Char>, int, int, ffi.Pointer<ffi.Char>, va_list)>();
 
   ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>> signal(
     int arg0,
@@ -1790,10 +1802,10 @@ class Nativefl {
       int Function(int, ffi.Pointer<ffi.Int>, int, ffi.Pointer<rusage>)>();
 
   ffi.Pointer<ffi.Void> alloca(
-    int arg0,
+    int __size,
   ) {
     return _alloca(
-      arg0,
+      __size,
     );
   }
 
@@ -1809,6 +1821,264 @@ class Nativefl {
   int get __mb_cur_max => ___mb_cur_max.value;
 
   set __mb_cur_max(int value) => ___mb_cur_max.value = value;
+
+  ffi.Pointer<ffi.Void> malloc_type_malloc(
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_malloc(
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_mallocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Size, malloc_type_id_t)>>('malloc_type_malloc');
+  late final _malloc_type_malloc = _malloc_type_mallocPtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_calloc(
+    int count,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_calloc(
+      count,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_callocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Size, ffi.Size, malloc_type_id_t)>>('malloc_type_calloc');
+  late final _malloc_type_calloc = _malloc_type_callocPtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(int, int, int)>();
+
+  void malloc_type_free(
+    ffi.Pointer<ffi.Void> ptr,
+    int type_id,
+  ) {
+    return _malloc_type_free(
+      ptr,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_freePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(
+              ffi.Pointer<ffi.Void>, malloc_type_id_t)>>('malloc_type_free');
+  late final _malloc_type_free = _malloc_type_freePtr
+      .asFunction<void Function(ffi.Pointer<ffi.Void>, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_realloc(
+    ffi.Pointer<ffi.Void> ptr,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_realloc(
+      ptr,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_reallocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>, ffi.Size,
+              malloc_type_id_t)>>('malloc_type_realloc');
+  late final _malloc_type_realloc = _malloc_type_reallocPtr.asFunction<
+      ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>, int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_valloc(
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_valloc(
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_vallocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Size, malloc_type_id_t)>>('malloc_type_valloc');
+  late final _malloc_type_valloc = _malloc_type_vallocPtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_aligned_alloc(
+    int alignment,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_aligned_alloc(
+      alignment,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_aligned_allocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(ffi.Size, ffi.Size,
+              malloc_type_id_t)>>('malloc_type_aligned_alloc');
+  late final _malloc_type_aligned_alloc = _malloc_type_aligned_allocPtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(int, int, int)>();
+
+  int malloc_type_posix_memalign(
+    ffi.Pointer<ffi.Pointer<ffi.Void>> memptr,
+    int alignment,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_posix_memalign(
+      memptr,
+      alignment,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_posix_memalignPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Pointer<ffi.Void>>, ffi.Size,
+              ffi.Size, malloc_type_id_t)>>('malloc_type_posix_memalign');
+  late final _malloc_type_posix_memalign =
+      _malloc_type_posix_memalignPtr.asFunction<
+          int Function(ffi.Pointer<ffi.Pointer<ffi.Void>>, int, int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_zone_malloc(
+    ffi.Pointer<malloc_zone_t> zone,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_zone_malloc(
+      zone,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_zone_mallocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(ffi.Pointer<malloc_zone_t>, ffi.Size,
+              malloc_type_id_t)>>('malloc_type_zone_malloc');
+  late final _malloc_type_zone_malloc = _malloc_type_zone_mallocPtr.asFunction<
+      ffi.Pointer<ffi.Void> Function(ffi.Pointer<malloc_zone_t>, int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_zone_calloc(
+    ffi.Pointer<malloc_zone_t> zone,
+    int count,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_zone_calloc(
+      zone,
+      count,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_zone_callocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(ffi.Pointer<malloc_zone_t>, ffi.Size,
+              ffi.Size, malloc_type_id_t)>>('malloc_type_zone_calloc');
+  late final _malloc_type_zone_calloc = _malloc_type_zone_callocPtr.asFunction<
+      ffi.Pointer<ffi.Void> Function(
+          ffi.Pointer<malloc_zone_t>, int, int, int)>();
+
+  void malloc_type_zone_free(
+    ffi.Pointer<malloc_zone_t> zone,
+    ffi.Pointer<ffi.Void> ptr,
+    int type_id,
+  ) {
+    return _malloc_type_zone_free(
+      zone,
+      ptr,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_zone_freePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<malloc_zone_t>, ffi.Pointer<ffi.Void>,
+              malloc_type_id_t)>>('malloc_type_zone_free');
+  late final _malloc_type_zone_free = _malloc_type_zone_freePtr.asFunction<
+      void Function(ffi.Pointer<malloc_zone_t>, ffi.Pointer<ffi.Void>, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_zone_realloc(
+    ffi.Pointer<malloc_zone_t> zone,
+    ffi.Pointer<ffi.Void> ptr,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_zone_realloc(
+      zone,
+      ptr,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_zone_reallocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<malloc_zone_t>,
+              ffi.Pointer<ffi.Void>,
+              ffi.Size,
+              malloc_type_id_t)>>('malloc_type_zone_realloc');
+  late final _malloc_type_zone_realloc =
+      _malloc_type_zone_reallocPtr.asFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<malloc_zone_t>, ffi.Pointer<ffi.Void>, int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_zone_valloc(
+    ffi.Pointer<malloc_zone_t> zone,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_zone_valloc(
+      zone,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_zone_vallocPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(ffi.Pointer<malloc_zone_t>, ffi.Size,
+              malloc_type_id_t)>>('malloc_type_zone_valloc');
+  late final _malloc_type_zone_valloc = _malloc_type_zone_vallocPtr.asFunction<
+      ffi.Pointer<ffi.Void> Function(ffi.Pointer<malloc_zone_t>, int, int)>();
+
+  ffi.Pointer<ffi.Void> malloc_type_zone_memalign(
+    ffi.Pointer<malloc_zone_t> zone,
+    int alignment,
+    int size,
+    int type_id,
+  ) {
+    return _malloc_type_zone_memalign(
+      zone,
+      alignment,
+      size,
+      type_id,
+    );
+  }
+
+  late final _malloc_type_zone_memalignPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(ffi.Pointer<malloc_zone_t>, ffi.Size,
+              ffi.Size, malloc_type_id_t)>>('malloc_type_zone_memalign');
+  late final _malloc_type_zone_memalign =
+      _malloc_type_zone_memalignPtr.asFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<malloc_zone_t>, int, int, int)>();
 
   ffi.Pointer<ffi.Void> malloc(
     int __size,
@@ -1871,11 +2141,28 @@ class Nativefl {
   late final _realloc = _reallocPtr
       .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>, int)>();
 
+  ffi.Pointer<ffi.Void> reallocf(
+    ffi.Pointer<ffi.Void> __ptr,
+    int __size,
+  ) {
+    return _reallocf(
+      __ptr,
+      __size,
+    );
+  }
+
+  late final _reallocfPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<ffi.Void>, ffi.Size)>>('reallocf');
+  late final _reallocf = _reallocfPtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>, int)>();
+
   ffi.Pointer<ffi.Void> valloc(
-    int arg0,
+    int __size,
   ) {
     return _valloc(
-      arg0,
+      __size,
     );
   }
 
@@ -1953,6 +2240,22 @@ class Nativefl {
           ffi.Int Function(
               ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>)>>('atexit');
   late final _atexit = _atexitPtr.asFunction<
+      int Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>)>();
+
+  int at_quick_exit(
+    ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> arg0,
+  ) {
+    return _at_quick_exit(
+      arg0,
+    );
+  }
+
+  late final _at_quick_exitPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Int Function(
+                  ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>)>>(
+      'at_quick_exit');
+  late final _at_quick_exit = _at_quick_exitPtr.asFunction<
       int Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>>)>();
 
   double atof(
@@ -2162,12 +2465,12 @@ class Nativefl {
   int mbstowcs(
     ffi.Pointer<ffi.WChar> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    int arg2,
+    int __n,
   ) {
     return _mbstowcs(
       arg0,
       arg1,
-      arg2,
+      __n,
     );
   }
 
@@ -2181,12 +2484,12 @@ class Nativefl {
   int mbtowc(
     ffi.Pointer<ffi.WChar> arg0,
     ffi.Pointer<ffi.Char> arg1,
-    int arg2,
+    int __n,
   ) {
     return _mbtowc(
       arg0,
       arg1,
-      arg2,
+      __n,
     );
   }
 
@@ -2233,6 +2536,18 @@ class Nativefl {
               ffi.NativeFunction<
                   ffi.Int Function(
                       ffi.Pointer<ffi.Void>, ffi.Pointer<ffi.Void>)>>)>();
+
+  void quick_exit(
+    int arg0,
+  ) {
+    return _quick_exit(
+      arg0,
+    );
+  }
+
+  late final _quick_exitPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('quick_exit');
+  late final _quick_exit = _quick_exitPtr.asFunction<void Function(int)>();
 
   int rand() {
     return _rand();
@@ -2386,12 +2701,12 @@ class Nativefl {
   int wcstombs(
     ffi.Pointer<ffi.Char> arg0,
     ffi.Pointer<ffi.WChar> arg1,
-    int arg2,
+    int __n,
   ) {
     return _wcstombs(
       arg0,
       arg1,
-      arg2,
+      __n,
     );
   }
 
@@ -2567,12 +2882,12 @@ class Nativefl {
   ffi.Pointer<ffi.Char> initstate(
     int arg0,
     ffi.Pointer<ffi.Char> arg1,
-    int arg2,
+    int __size,
   ) {
     return _initstate(
       arg0,
       arg1,
-      arg2,
+      __size,
     );
   }
 
@@ -2905,11 +3220,11 @@ class Nativefl {
 
   void arc4random_addrandom(
     ffi.Pointer<ffi.UnsignedChar> arg0,
-    int arg1,
+    int __datlen,
   ) {
     return _arc4random_addrandom(
       arg0,
-      arg1,
+      __datlen,
     );
   }
 
@@ -3208,11 +3523,11 @@ class Nativefl {
 
   int getloadavg(
     ffi.Pointer<ffi.Double> arg0,
-    int arg1,
+    int __nelem,
   ) {
     return _getloadavg(
       arg0,
-      arg1,
+      __nelem,
     );
   }
 
@@ -3519,23 +3834,6 @@ class Nativefl {
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('srandomdev');
   late final _srandomdev = _srandomdevPtr.asFunction<void Function()>();
 
-  ffi.Pointer<ffi.Void> reallocf(
-    ffi.Pointer<ffi.Void> __ptr,
-    int __size,
-  ) {
-    return _reallocf(
-      __ptr,
-      __size,
-    );
-  }
-
-  late final _reallocfPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Void> Function(
-              ffi.Pointer<ffi.Void>, ffi.Size)>>('reallocf');
-  late final _reallocf = _reallocfPtr
-      .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>, int)>();
-
   int strtonum(
     ffi.Pointer<ffi.Char> __numstr,
     int __minval,
@@ -3604,6 +3902,32 @@ class Nativefl {
   ffi.Pointer<ffi.Char> get suboptarg => _suboptarg.value;
 
   set suboptarg(ffi.Pointer<ffi.Char> value) => _suboptarg.value = value;
+
+  late final ffi.Pointer<ffi.Pointer<ffi.Char>> _VERSION =
+      _lookup<ffi.Pointer<ffi.Char>>('VERSION');
+
+  ffi.Pointer<ffi.Char> get VERSION => _VERSION.value;
+
+  set VERSION(ffi.Pointer<ffi.Char> value) => _VERSION.value = value;
+
+  ffi.Pointer<ffi.Char> get_version() {
+    return _get_version();
+  }
+
+  late final _get_versionPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'get_version');
+  late final _get_version =
+      _get_versionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> Version() {
+    return _Version();
+  }
+
+  late final _VersionPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('Version');
+  late final _Version =
+      _VersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void Generate(
     int level,
@@ -3677,6 +4001,8 @@ typedef __darwin_ptrdiff_t = ffi.Long;
 typedef Dart__darwin_ptrdiff_t = int;
 typedef __darwin_size_t = ffi.UnsignedLong;
 typedef Dart__darwin_size_t = int;
+typedef __builtin_va_list = ffi.Pointer<ffi.Char>;
+typedef __darwin_va_list = __builtin_va_list;
 typedef __darwin_wchar_t = ffi.Int;
 typedef Dart__darwin_wchar_t = int;
 typedef __darwin_rune_t = __darwin_wchar_t;
@@ -3843,6 +4169,7 @@ final class _GoString_ extends ffi.Struct {
   external int n;
 }
 
+typedef va_list = __darwin_va_list;
 typedef fpos_t = __darwin_off_t;
 
 final class __sbuf extends ffi.Struct {
@@ -3917,19 +4244,6 @@ final class __sFILE extends ffi.Struct {
 }
 
 typedef FILE = __sFILE;
-
-final class __va_list_tag extends ffi.Struct {
-  @ffi.UnsignedInt()
-  external int gp_offset;
-
-  @ffi.UnsignedInt()
-  external int fp_offset;
-
-  external ffi.Pointer<ffi.Void> overflow_arg_area;
-
-  external ffi.Pointer<ffi.Void> reg_save_area;
-}
-
 typedef off_t = __darwin_off_t;
 typedef ssize_t = __darwin_ssize_t;
 
@@ -3954,313 +4268,186 @@ typedef id_t = __darwin_id_t;
 typedef sig_atomic_t = ffi.Int;
 typedef Dartsig_atomic_t = int;
 
-final class __darwin_i386_thread_state extends ffi.Struct {
-  @ffi.UnsignedInt()
-  external int __eax;
-
-  @ffi.UnsignedInt()
-  external int __ebx;
-
-  @ffi.UnsignedInt()
-  external int __ecx;
-
-  @ffi.UnsignedInt()
-  external int __edx;
-
-  @ffi.UnsignedInt()
-  external int __edi;
-
-  @ffi.UnsignedInt()
-  external int __esi;
-
-  @ffi.UnsignedInt()
-  external int __ebp;
-
-  @ffi.UnsignedInt()
-  external int __esp;
-
-  @ffi.UnsignedInt()
-  external int __ss;
-
-  @ffi.UnsignedInt()
-  external int __eflags;
-
-  @ffi.UnsignedInt()
-  external int __eip;
-
-  @ffi.UnsignedInt()
-  external int __cs;
-
-  @ffi.UnsignedInt()
-  external int __ds;
-
-  @ffi.UnsignedInt()
-  external int __es;
-
-  @ffi.UnsignedInt()
-  external int __fs;
-
-  @ffi.UnsignedInt()
-  external int __gs;
-}
-
-final class __darwin_fp_control extends ffi.Opaque {}
-
-typedef __darwin_fp_control_t = __darwin_fp_control;
-
-final class __darwin_fp_status extends ffi.Opaque {}
-
-typedef __darwin_fp_status_t = __darwin_fp_status;
-
-final class __darwin_mmst_reg extends ffi.Struct {
-  @ffi.Array.multi([10])
-  external ffi.Array<ffi.Char> __mmst_reg;
-
-  @ffi.Array.multi([6])
-  external ffi.Array<ffi.Char> __mmst_rsrv;
-}
-
-final class __darwin_xmm_reg extends ffi.Struct {
-  @ffi.Array.multi([16])
-  external ffi.Array<ffi.Char> __xmm_reg;
-}
-
-final class __darwin_ymm_reg extends ffi.Struct {
-  @ffi.Array.multi([32])
-  external ffi.Array<ffi.Char> __ymm_reg;
-}
-
-final class __darwin_zmm_reg extends ffi.Struct {
-  @ffi.Array.multi([64])
-  external ffi.Array<ffi.Char> __zmm_reg;
-}
-
-final class __darwin_opmask_reg extends ffi.Struct {
-  @ffi.Array.multi([8])
-  external ffi.Array<ffi.Char> __opmask_reg;
-}
-
-final class __darwin_i386_float_state extends ffi.Opaque {}
-
-final class __darwin_i386_avx_state extends ffi.Opaque {}
-
-final class __darwin_i386_avx512_state extends ffi.Opaque {}
-
-final class __darwin_i386_exception_state extends ffi.Struct {
-  @__uint16_t()
-  external int __trapno;
-
-  @__uint16_t()
-  external int __cpu;
+final class __darwin_arm_exception_state extends ffi.Struct {
+  @__uint32_t()
+  external int __exception;
 
   @__uint32_t()
-  external int __err;
+  external int __fsr;
 
   @__uint32_t()
-  external int __faultvaddr;
+  external int __far;
 }
 
-final class __darwin_x86_debug_state32 extends ffi.Struct {
-  @ffi.UnsignedInt()
-  external int __dr0;
+final class __darwin_arm_exception_state64 extends ffi.Struct {
+  @__uint64_t()
+  external int __far;
 
-  @ffi.UnsignedInt()
-  external int __dr1;
+  @__uint32_t()
+  external int __esr;
 
-  @ffi.UnsignedInt()
-  external int __dr2;
-
-  @ffi.UnsignedInt()
-  external int __dr3;
-
-  @ffi.UnsignedInt()
-  external int __dr4;
-
-  @ffi.UnsignedInt()
-  external int __dr5;
-
-  @ffi.UnsignedInt()
-  external int __dr6;
-
-  @ffi.UnsignedInt()
-  external int __dr7;
+  @__uint32_t()
+  external int __exception;
 }
 
-final class __x86_instruction_state extends ffi.Struct {
-  @ffi.Int()
-  external int __insn_stream_valid_bytes;
+final class __darwin_arm_exception_state64_v2 extends ffi.Struct {
+  @__uint64_t()
+  external int __far;
 
-  @ffi.Int()
-  external int __insn_offset;
+  @__uint64_t()
+  external int __esr;
+}
 
-  @ffi.Int()
-  external int __out_of_synch;
+final class __darwin_arm_thread_state extends ffi.Struct {
+  @ffi.Array.multi([13])
+  external ffi.Array<__uint32_t> __r;
 
-  @ffi.Array.multi([2380])
-  external ffi.Array<__uint8_t> __insn_bytes;
+  @__uint32_t()
+  external int __sp;
 
+  @__uint32_t()
+  external int __lr;
+
+  @__uint32_t()
+  external int __pc;
+
+  @__uint32_t()
+  external int __cpsr;
+}
+
+final class __darwin_arm_thread_state64 extends ffi.Struct {
+  @ffi.Array.multi([29])
+  external ffi.Array<__uint64_t> __x;
+
+  @__uint64_t()
+  external int __fp;
+
+  @__uint64_t()
+  external int __lr;
+
+  @__uint64_t()
+  external int __sp;
+
+  @__uint64_t()
+  external int __pc;
+
+  @__uint32_t()
+  external int __cpsr;
+
+  @__uint32_t()
+  external int __pad;
+}
+
+final class __darwin_arm_vfp_state extends ffi.Struct {
   @ffi.Array.multi([64])
-  external ffi.Array<__uint8_t> __insn_cacheline;
+  external ffi.Array<__uint32_t> __r;
+
+  @__uint32_t()
+  external int __fpscr;
 }
 
-final class __last_branch_record extends ffi.Opaque {}
+final class __darwin_arm_neon_state64 extends ffi.Opaque {}
 
-final class __last_branch_state extends ffi.Opaque {}
+final class __darwin_arm_neon_state extends ffi.Opaque {}
 
-final class __x86_pagein_state extends ffi.Struct {
+final class __arm_pagein_state extends ffi.Struct {
   @ffi.Int()
   external int __pagein_error;
 }
 
-final class __darwin_x86_thread_state64 extends ffi.Struct {
+final class __darwin_arm_sme_state extends ffi.Struct {
   @__uint64_t()
-  external int __rax;
-
-  @__uint64_t()
-  external int __rbx;
+  external int __svcr;
 
   @__uint64_t()
-  external int __rcx;
-
-  @__uint64_t()
-  external int __rdx;
-
-  @__uint64_t()
-  external int __rdi;
-
-  @__uint64_t()
-  external int __rsi;
-
-  @__uint64_t()
-  external int __rbp;
-
-  @__uint64_t()
-  external int __rsp;
-
-  @__uint64_t()
-  external int __r8;
-
-  @__uint64_t()
-  external int __r9;
-
-  @__uint64_t()
-  external int __r10;
-
-  @__uint64_t()
-  external int __r11;
-
-  @__uint64_t()
-  external int __r12;
-
-  @__uint64_t()
-  external int __r13;
-
-  @__uint64_t()
-  external int __r14;
-
-  @__uint64_t()
-  external int __r15;
-
-  @__uint64_t()
-  external int __rip;
-
-  @__uint64_t()
-  external int __rflags;
-
-  @__uint64_t()
-  external int __cs;
-
-  @__uint64_t()
-  external int __fs;
-
-  @__uint64_t()
-  external int __gs;
-}
-
-final class __darwin_x86_thread_full_state64 extends ffi.Struct {
-  external __darwin_x86_thread_state64 __ss64;
-
-  @__uint64_t()
-  external int __ds;
-
-  @__uint64_t()
-  external int __es;
-
-  @__uint64_t()
-  external int __ss;
-
-  @__uint64_t()
-  external int __gsbase;
-}
-
-final class __darwin_x86_float_state64 extends ffi.Opaque {}
-
-final class __darwin_x86_avx_state64 extends ffi.Opaque {}
-
-final class __darwin_x86_avx512_state64 extends ffi.Opaque {}
-
-final class __darwin_x86_exception_state64 extends ffi.Struct {
-  @__uint16_t()
-  external int __trapno;
+  external int __tpidr2_el0;
 
   @__uint16_t()
-  external int __cpu;
-
-  @__uint32_t()
-  external int __err;
-
-  @__uint64_t()
-  external int __faultvaddr;
+  external int __svl_b;
 }
 
-final class __darwin_x86_debug_state64 extends ffi.Struct {
-  @__uint64_t()
-  external int __dr0;
-
-  @__uint64_t()
-  external int __dr1;
-
-  @__uint64_t()
-  external int __dr2;
-
-  @__uint64_t()
-  external int __dr3;
-
-  @__uint64_t()
-  external int __dr4;
-
-  @__uint64_t()
-  external int __dr5;
-
-  @__uint64_t()
-  external int __dr6;
-
-  @__uint64_t()
-  external int __dr7;
+final class __darwin_arm_sve_z_state extends ffi.Struct {
+  @ffi.Array.multi([16, 256])
+  external ffi.Array<ffi.Array<ffi.Char>> __z;
 }
 
-final class __darwin_x86_cpmu_state64 extends ffi.Struct {
+final class __darwin_arm_sve_p_state extends ffi.Struct {
+  @ffi.Array.multi([16, 32])
+  external ffi.Array<ffi.Array<ffi.Char>> __p;
+}
+
+final class __darwin_arm_sme_za_state extends ffi.Struct {
+  @ffi.Array.multi([4096])
+  external ffi.Array<ffi.Char> __za;
+}
+
+final class __darwin_arm_sme2_state extends ffi.Struct {
+  @ffi.Array.multi([64])
+  external ffi.Array<ffi.Char> __zt0;
+}
+
+final class __arm_legacy_debug_state extends ffi.Struct {
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __bvr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __bcr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __wvr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __wcr;
+}
+
+final class __darwin_arm_debug_state32 extends ffi.Struct {
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __bvr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __bcr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __wvr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint32_t> __wcr;
+
+  @__uint64_t()
+  external int __mdscr_el1;
+}
+
+final class __darwin_arm_debug_state64 extends ffi.Struct {
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint64_t> __bvr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint64_t> __bcr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint64_t> __wvr;
+
+  @ffi.Array.multi([16])
+  external ffi.Array<__uint64_t> __wcr;
+
+  @__uint64_t()
+  external int __mdscr_el1;
+}
+
+final class __darwin_arm_cpmu_state64 extends ffi.Struct {
   @ffi.Array.multi([16])
   external ffi.Array<__uint64_t> __ctrs;
 }
 
-final class __darwin_mcontext32 extends ffi.Opaque {}
+final class __darwin_mcontext32 extends ffi.Struct {
+  external __darwin_arm_exception_state __es;
 
-final class __darwin_mcontext_avx32 extends ffi.Opaque {}
+  external __darwin_arm_thread_state __ss;
 
-final class __darwin_mcontext_avx512_32 extends ffi.Opaque {}
+  external __darwin_arm_vfp_state __fs;
+}
 
 final class __darwin_mcontext64 extends ffi.Opaque {}
-
-final class __darwin_mcontext64_full extends ffi.Opaque {}
-
-final class __darwin_mcontext_avx64 extends ffi.Opaque {}
-
-final class __darwin_mcontext_avx64_full extends ffi.Opaque {}
-
-final class __darwin_mcontext_avx512_64 extends ffi.Opaque {}
-
-final class __darwin_mcontext_avx512_64_full extends ffi.Opaque {}
 
 typedef mcontext_t = ffi.Pointer<__darwin_mcontext64>;
 typedef pthread_attr_t = __darwin_pthread_attr_t;
@@ -5093,7 +5280,22 @@ final class rusage_info_v6 extends ffi.Struct {
   @ffi.Uint64()
   external int ri_penergy_nj;
 
-  @ffi.Array.multi([14])
+  @ffi.Uint64()
+  external int ri_secure_time_in_system;
+
+  @ffi.Uint64()
+  external int ri_secure_ptime_in_system;
+
+  @ffi.Uint64()
+  external int ri_neural_footprint;
+
+  @ffi.Uint64()
+  external int ri_lifetime_max_neural_footprint;
+
+  @ffi.Uint64()
+  external int ri_interval_max_neural_footprint;
+
+  @ffi.Array.multi([9])
   external ffi.Array<ffi.Uint64> ri_reserved;
 }
 
@@ -5144,6 +5346,12 @@ final class lldiv_t extends ffi.Struct {
   external int rem;
 }
 
+typedef malloc_type_id_t = ffi.UnsignedLongLong;
+typedef Dartmalloc_type_id_t = int;
+
+final class _malloc_zone_t extends ffi.Opaque {}
+
+typedef malloc_zone_t = _malloc_zone_t;
 typedef dev_t = __darwin_dev_t;
 typedef mode_t = __darwin_mode_t;
 
@@ -5198,11 +5406,13 @@ final class GoSlice extends ffi.Struct {
   external int cap;
 }
 
-const int __DARWIN_ONLY_64_BIT_INO_T = 0;
+const int __has_safe_buffers = 1;
+
+const int __DARWIN_ONLY_64_BIT_INO_T = 1;
 
 const int __DARWIN_ONLY_UNIX_CONFORMANCE = 1;
 
-const int __DARWIN_ONLY_VERS_1050 = 0;
+const int __DARWIN_ONLY_VERS_1050 = 1;
 
 const int __DARWIN_UNIX03 = 1;
 
@@ -5211,10 +5421,6 @@ const int __DARWIN_64_BIT_INO_T = 1;
 const int __DARWIN_VERS_1050 = 1;
 
 const int __DARWIN_NON_CANCELABLE = 0;
-
-const String __DARWIN_SUF_64_BIT_INO_T = '\$INODE64';
-
-const String __DARWIN_SUF_1050 = '\$1050';
 
 const String __DARWIN_SUF_EXTSN = '\$DARWIN_EXTSN';
 
@@ -5230,11 +5436,17 @@ const int __DARWIN_NO_LONG_LONG = 0;
 
 const int _DARWIN_FEATURE_64_BIT_INODE = 1;
 
+const int _DARWIN_FEATURE_ONLY_64_BIT_INODE = 1;
+
+const int _DARWIN_FEATURE_ONLY_VERS_1050 = 1;
+
 const int _DARWIN_FEATURE_ONLY_UNIX_CONFORMANCE = 1;
 
 const int _DARWIN_FEATURE_UNIX_CONFORMANCE = 3;
 
 const int __has_ptrcheck = 0;
+
+const int __has_bounds_safety_attributes = 0;
 
 const int __DARWIN_NULL = 0;
 
@@ -5272,15 +5484,31 @@ const int __API_TO_BE_DEPRECATED = 100000;
 
 const int __API_TO_BE_DEPRECATED_MACOS = 100000;
 
+const int __API_TO_BE_DEPRECATED_MACOSAPPLICATIONEXTENSION = 100000;
+
 const int __API_TO_BE_DEPRECATED_IOS = 100000;
 
-const int __API_TO_BE_DEPRECATED_TVOS = 100000;
-
-const int __API_TO_BE_DEPRECATED_WATCHOS = 100000;
+const int __API_TO_BE_DEPRECATED_IOSAPPLICATIONEXTENSION = 100000;
 
 const int __API_TO_BE_DEPRECATED_MACCATALYST = 100000;
 
+const int __API_TO_BE_DEPRECATED_MACCATALYSTAPPLICATIONEXTENSION = 100000;
+
+const int __API_TO_BE_DEPRECATED_WATCHOS = 100000;
+
+const int __API_TO_BE_DEPRECATED_WATCHOSAPPLICATIONEXTENSION = 100000;
+
+const int __API_TO_BE_DEPRECATED_TVOS = 100000;
+
+const int __API_TO_BE_DEPRECATED_TVOSAPPLICATIONEXTENSION = 100000;
+
 const int __API_TO_BE_DEPRECATED_DRIVERKIT = 100000;
+
+const int __API_TO_BE_DEPRECATED_VISIONOS = 100000;
+
+const int __API_TO_BE_DEPRECATED_VISIONOSAPPLICATIONEXTENSION = 100000;
+
+const int __API_TO_BE_DEPRECATED_KERNELKIT = 100000;
 
 const int __MAC_10_0 = 1000;
 
@@ -5338,6 +5566,8 @@ const int __MAC_10_14_1 = 101401;
 
 const int __MAC_10_14_4 = 101404;
 
+const int __MAC_10_14_5 = 101405;
+
 const int __MAC_10_14_6 = 101406;
 
 const int __MAC_10_15 = 101500;
@@ -5368,9 +5598,67 @@ const int __MAC_12_2 = 120200;
 
 const int __MAC_12_3 = 120300;
 
+const int __MAC_12_4 = 120400;
+
+const int __MAC_12_5 = 120500;
+
+const int __MAC_12_6 = 120600;
+
+const int __MAC_12_7 = 120700;
+
 const int __MAC_13_0 = 130000;
 
 const int __MAC_13_1 = 130100;
+
+const int __MAC_13_2 = 130200;
+
+const int __MAC_13_3 = 130300;
+
+const int __MAC_13_4 = 130400;
+
+const int __MAC_13_5 = 130500;
+
+const int __MAC_13_6 = 130600;
+
+const int __MAC_13_7 = 130700;
+
+const int __MAC_14_0 = 140000;
+
+const int __MAC_14_1 = 140100;
+
+const int __MAC_14_2 = 140200;
+
+const int __MAC_14_3 = 140300;
+
+const int __MAC_14_4 = 140400;
+
+const int __MAC_14_5 = 140500;
+
+const int __MAC_14_6 = 140600;
+
+const int __MAC_14_7 = 140700;
+
+const int __MAC_15_0 = 150000;
+
+const int __MAC_15_1 = 150100;
+
+const int __MAC_15_2 = 150200;
+
+const int __MAC_15_3 = 150300;
+
+const int __MAC_15_4 = 150400;
+
+const int __MAC_15_5 = 150500;
+
+const int __MAC_15_6 = 150600;
+
+const int __MAC_16_0 = 160000;
+
+const int __MAC_26_0 = 260000;
+
+const int __MAC_26_1 = 260100;
+
+const int __MAC_26_2 = 260200;
 
 const int __IPHONE_2_0 = 20000;
 
@@ -5492,11 +5780,187 @@ const int __IPHONE_15_3 = 150300;
 
 const int __IPHONE_15_4 = 150400;
 
+const int __IPHONE_15_5 = 150500;
+
+const int __IPHONE_15_6 = 150600;
+
+const int __IPHONE_15_7 = 150700;
+
+const int __IPHONE_15_8 = 150800;
+
 const int __IPHONE_16_0 = 160000;
 
 const int __IPHONE_16_1 = 160100;
 
 const int __IPHONE_16_2 = 160200;
+
+const int __IPHONE_16_3 = 160300;
+
+const int __IPHONE_16_4 = 160400;
+
+const int __IPHONE_16_5 = 160500;
+
+const int __IPHONE_16_6 = 160600;
+
+const int __IPHONE_16_7 = 160700;
+
+const int __IPHONE_17_0 = 170000;
+
+const int __IPHONE_17_1 = 170100;
+
+const int __IPHONE_17_2 = 170200;
+
+const int __IPHONE_17_3 = 170300;
+
+const int __IPHONE_17_4 = 170400;
+
+const int __IPHONE_17_5 = 170500;
+
+const int __IPHONE_17_6 = 170600;
+
+const int __IPHONE_17_7 = 170700;
+
+const int __IPHONE_18_0 = 180000;
+
+const int __IPHONE_18_1 = 180100;
+
+const int __IPHONE_18_2 = 180200;
+
+const int __IPHONE_18_3 = 180300;
+
+const int __IPHONE_18_4 = 180400;
+
+const int __IPHONE_18_5 = 180500;
+
+const int __IPHONE_18_6 = 180600;
+
+const int __IPHONE_19_0 = 190000;
+
+const int __IPHONE_26_0 = 260000;
+
+const int __IPHONE_26_1 = 260100;
+
+const int __IPHONE_26_2 = 260200;
+
+const int __WATCHOS_1_0 = 10000;
+
+const int __WATCHOS_2_0 = 20000;
+
+const int __WATCHOS_2_1 = 20100;
+
+const int __WATCHOS_2_2 = 20200;
+
+const int __WATCHOS_3_0 = 30000;
+
+const int __WATCHOS_3_1 = 30100;
+
+const int __WATCHOS_3_1_1 = 30101;
+
+const int __WATCHOS_3_2 = 30200;
+
+const int __WATCHOS_4_0 = 40000;
+
+const int __WATCHOS_4_1 = 40100;
+
+const int __WATCHOS_4_2 = 40200;
+
+const int __WATCHOS_4_3 = 40300;
+
+const int __WATCHOS_5_0 = 50000;
+
+const int __WATCHOS_5_1 = 50100;
+
+const int __WATCHOS_5_2 = 50200;
+
+const int __WATCHOS_5_3 = 50300;
+
+const int __WATCHOS_6_0 = 60000;
+
+const int __WATCHOS_6_1 = 60100;
+
+const int __WATCHOS_6_2 = 60200;
+
+const int __WATCHOS_7_0 = 70000;
+
+const int __WATCHOS_7_1 = 70100;
+
+const int __WATCHOS_7_2 = 70200;
+
+const int __WATCHOS_7_3 = 70300;
+
+const int __WATCHOS_7_4 = 70400;
+
+const int __WATCHOS_7_5 = 70500;
+
+const int __WATCHOS_7_6 = 70600;
+
+const int __WATCHOS_8_0 = 80000;
+
+const int __WATCHOS_8_1 = 80100;
+
+const int __WATCHOS_8_3 = 80300;
+
+const int __WATCHOS_8_4 = 80400;
+
+const int __WATCHOS_8_5 = 80500;
+
+const int __WATCHOS_8_6 = 80600;
+
+const int __WATCHOS_8_7 = 80700;
+
+const int __WATCHOS_8_8 = 80800;
+
+const int __WATCHOS_9_0 = 90000;
+
+const int __WATCHOS_9_1 = 90100;
+
+const int __WATCHOS_9_2 = 90200;
+
+const int __WATCHOS_9_3 = 90300;
+
+const int __WATCHOS_9_4 = 90400;
+
+const int __WATCHOS_9_5 = 90500;
+
+const int __WATCHOS_9_6 = 90600;
+
+const int __WATCHOS_10_0 = 100000;
+
+const int __WATCHOS_10_1 = 100100;
+
+const int __WATCHOS_10_2 = 100200;
+
+const int __WATCHOS_10_3 = 100300;
+
+const int __WATCHOS_10_4 = 100400;
+
+const int __WATCHOS_10_5 = 100500;
+
+const int __WATCHOS_10_6 = 100600;
+
+const int __WATCHOS_10_7 = 100700;
+
+const int __WATCHOS_11_0 = 110000;
+
+const int __WATCHOS_11_1 = 110100;
+
+const int __WATCHOS_11_2 = 110200;
+
+const int __WATCHOS_11_3 = 110300;
+
+const int __WATCHOS_11_4 = 110400;
+
+const int __WATCHOS_11_5 = 110500;
+
+const int __WATCHOS_11_6 = 110600;
+
+const int __WATCHOS_12_0 = 120000;
+
+const int __WATCHOS_26_0 = 260000;
+
+const int __WATCHOS_26_1 = 260100;
+
+const int __WATCHOS_26_2 = 260200;
 
 const int __TVOS_9_0 = 90000;
 
@@ -5564,79 +6028,211 @@ const int __TVOS_15_3 = 150300;
 
 const int __TVOS_15_4 = 150400;
 
+const int __TVOS_15_5 = 150500;
+
+const int __TVOS_15_6 = 150600;
+
 const int __TVOS_16_0 = 160000;
 
 const int __TVOS_16_1 = 160100;
 
 const int __TVOS_16_2 = 160200;
 
-const int __WATCHOS_1_0 = 10000;
+const int __TVOS_16_3 = 160300;
 
-const int __WATCHOS_2_0 = 20000;
+const int __TVOS_16_4 = 160400;
 
-const int __WATCHOS_2_1 = 20100;
+const int __TVOS_16_5 = 160500;
 
-const int __WATCHOS_2_2 = 20200;
+const int __TVOS_16_6 = 160600;
 
-const int __WATCHOS_3_0 = 30000;
+const int __TVOS_17_0 = 170000;
 
-const int __WATCHOS_3_1 = 30100;
+const int __TVOS_17_1 = 170100;
 
-const int __WATCHOS_3_1_1 = 30101;
+const int __TVOS_17_2 = 170200;
 
-const int __WATCHOS_3_2 = 30200;
+const int __TVOS_17_3 = 170300;
 
-const int __WATCHOS_4_0 = 40000;
+const int __TVOS_17_4 = 170400;
 
-const int __WATCHOS_4_1 = 40100;
+const int __TVOS_17_5 = 170500;
 
-const int __WATCHOS_4_2 = 40200;
+const int __TVOS_17_6 = 170600;
 
-const int __WATCHOS_4_3 = 40300;
+const int __TVOS_18_0 = 180000;
 
-const int __WATCHOS_5_0 = 50000;
+const int __TVOS_18_1 = 180100;
 
-const int __WATCHOS_5_1 = 50100;
+const int __TVOS_18_2 = 180200;
 
-const int __WATCHOS_5_2 = 50200;
+const int __TVOS_18_3 = 180300;
 
-const int __WATCHOS_5_3 = 50300;
+const int __TVOS_18_4 = 180400;
 
-const int __WATCHOS_6_0 = 60000;
+const int __TVOS_18_5 = 180500;
 
-const int __WATCHOS_6_1 = 60100;
+const int __TVOS_18_6 = 180600;
 
-const int __WATCHOS_6_2 = 60200;
+const int __TVOS_19_0 = 190000;
 
-const int __WATCHOS_7_0 = 70000;
+const int __TVOS_26_0 = 260000;
 
-const int __WATCHOS_7_1 = 70100;
+const int __TVOS_26_1 = 260100;
 
-const int __WATCHOS_7_2 = 70200;
+const int __TVOS_26_2 = 260200;
 
-const int __WATCHOS_7_3 = 70300;
+const int __BRIDGEOS_2_0 = 20000;
 
-const int __WATCHOS_7_4 = 70400;
+const int __BRIDGEOS_3_0 = 30000;
 
-const int __WATCHOS_7_5 = 70500;
+const int __BRIDGEOS_3_1 = 30100;
 
-const int __WATCHOS_7_6 = 70600;
+const int __BRIDGEOS_3_4 = 30400;
 
-const int __WATCHOS_8_0 = 80000;
+const int __BRIDGEOS_4_0 = 40000;
 
-const int __WATCHOS_8_1 = 80100;
+const int __BRIDGEOS_4_1 = 40100;
 
-const int __WATCHOS_8_3 = 80300;
+const int __BRIDGEOS_5_0 = 50000;
 
-const int __WATCHOS_8_4 = 80400;
+const int __BRIDGEOS_5_1 = 50100;
 
-const int __WATCHOS_8_5 = 80500;
+const int __BRIDGEOS_5_3 = 50300;
 
-const int __WATCHOS_9_0 = 90000;
+const int __BRIDGEOS_6_0 = 60000;
 
-const int __WATCHOS_9_1 = 90100;
+const int __BRIDGEOS_6_2 = 60200;
 
-const int __WATCHOS_9_2 = 90200;
+const int __BRIDGEOS_6_4 = 60400;
+
+const int __BRIDGEOS_6_5 = 60500;
+
+const int __BRIDGEOS_6_6 = 60600;
+
+const int __BRIDGEOS_7_0 = 70000;
+
+const int __BRIDGEOS_7_1 = 70100;
+
+const int __BRIDGEOS_7_2 = 70200;
+
+const int __BRIDGEOS_7_3 = 70300;
+
+const int __BRIDGEOS_7_4 = 70400;
+
+const int __BRIDGEOS_7_6 = 70600;
+
+const int __BRIDGEOS_8_0 = 80000;
+
+const int __BRIDGEOS_8_1 = 80100;
+
+const int __BRIDGEOS_8_2 = 80200;
+
+const int __BRIDGEOS_8_3 = 80300;
+
+const int __BRIDGEOS_8_4 = 80400;
+
+const int __BRIDGEOS_8_5 = 80500;
+
+const int __BRIDGEOS_8_6 = 80600;
+
+const int __BRIDGEOS_9_0 = 90000;
+
+const int __BRIDGEOS_9_1 = 90100;
+
+const int __BRIDGEOS_9_2 = 90200;
+
+const int __BRIDGEOS_9_3 = 90300;
+
+const int __BRIDGEOS_9_4 = 90400;
+
+const int __BRIDGEOS_9_5 = 90500;
+
+const int __BRIDGEOS_9_6 = 90600;
+
+const int __BRIDGEOS_10_0 = 100000;
+
+const int __BRIDGEOS_10_1 = 100100;
+
+const int __BRIDGEOS_10_2 = 100200;
+
+const int __DRIVERKIT_19_0 = 190000;
+
+const int __DRIVERKIT_20_0 = 200000;
+
+const int __DRIVERKIT_21_0 = 210000;
+
+const int __DRIVERKIT_22_0 = 220000;
+
+const int __DRIVERKIT_22_4 = 220400;
+
+const int __DRIVERKIT_22_5 = 220500;
+
+const int __DRIVERKIT_22_6 = 220600;
+
+const int __DRIVERKIT_23_0 = 230000;
+
+const int __DRIVERKIT_23_1 = 230100;
+
+const int __DRIVERKIT_23_2 = 230200;
+
+const int __DRIVERKIT_23_3 = 230300;
+
+const int __DRIVERKIT_23_4 = 230400;
+
+const int __DRIVERKIT_23_5 = 230500;
+
+const int __DRIVERKIT_23_6 = 230600;
+
+const int __DRIVERKIT_24_0 = 240000;
+
+const int __DRIVERKIT_24_1 = 240100;
+
+const int __DRIVERKIT_24_2 = 240200;
+
+const int __DRIVERKIT_24_3 = 240300;
+
+const int __DRIVERKIT_24_4 = 240400;
+
+const int __DRIVERKIT_24_5 = 240500;
+
+const int __DRIVERKIT_24_6 = 240600;
+
+const int __DRIVERKIT_25_0 = 250000;
+
+const int __DRIVERKIT_25_1 = 250100;
+
+const int __DRIVERKIT_25_2 = 250200;
+
+const int __VISIONOS_1_0 = 10000;
+
+const int __VISIONOS_1_1 = 10100;
+
+const int __VISIONOS_1_2 = 10200;
+
+const int __VISIONOS_1_3 = 10300;
+
+const int __VISIONOS_2_0 = 20000;
+
+const int __VISIONOS_2_1 = 20100;
+
+const int __VISIONOS_2_2 = 20200;
+
+const int __VISIONOS_2_3 = 20300;
+
+const int __VISIONOS_2_4 = 20400;
+
+const int __VISIONOS_2_5 = 20500;
+
+const int __VISIONOS_2_6 = 20600;
+
+const int __VISIONOS_3_0 = 30000;
+
+const int __VISIONOS_26_0 = 260000;
+
+const int __VISIONOS_26_1 = 260100;
+
+const int __VISIONOS_26_2 = 260200;
 
 const int MAC_OS_X_VERSION_10_0 = 1000;
 
@@ -5694,29 +6290,109 @@ const int MAC_OS_X_VERSION_10_14_1 = 101401;
 
 const int MAC_OS_X_VERSION_10_14_4 = 101404;
 
+const int MAC_OS_X_VERSION_10_14_5 = 101405;
+
 const int MAC_OS_X_VERSION_10_14_6 = 101406;
 
 const int MAC_OS_X_VERSION_10_15 = 101500;
 
 const int MAC_OS_X_VERSION_10_15_1 = 101501;
 
+const int MAC_OS_X_VERSION_10_15_4 = 101504;
+
 const int MAC_OS_X_VERSION_10_16 = 101600;
 
 const int MAC_OS_VERSION_11_0 = 110000;
 
+const int MAC_OS_VERSION_11_1 = 110100;
+
+const int MAC_OS_VERSION_11_3 = 110300;
+
+const int MAC_OS_VERSION_11_4 = 110400;
+
+const int MAC_OS_VERSION_11_5 = 110500;
+
+const int MAC_OS_VERSION_11_6 = 110600;
+
 const int MAC_OS_VERSION_12_0 = 120000;
+
+const int MAC_OS_VERSION_12_1 = 120100;
+
+const int MAC_OS_VERSION_12_2 = 120200;
+
+const int MAC_OS_VERSION_12_3 = 120300;
+
+const int MAC_OS_VERSION_12_4 = 120400;
+
+const int MAC_OS_VERSION_12_5 = 120500;
+
+const int MAC_OS_VERSION_12_6 = 120600;
+
+const int MAC_OS_VERSION_12_7 = 120700;
 
 const int MAC_OS_VERSION_13_0 = 130000;
 
-const int __DRIVERKIT_19_0 = 190000;
+const int MAC_OS_VERSION_13_1 = 130100;
 
-const int __DRIVERKIT_20_0 = 200000;
+const int MAC_OS_VERSION_13_2 = 130200;
 
-const int __DRIVERKIT_21_0 = 210000;
+const int MAC_OS_VERSION_13_3 = 130300;
 
-const int __MAC_OS_X_VERSION_MIN_REQUIRED = 120000;
+const int MAC_OS_VERSION_13_4 = 130400;
 
-const int __MAC_OS_X_VERSION_MAX_ALLOWED = 130100;
+const int MAC_OS_VERSION_13_5 = 130500;
+
+const int MAC_OS_VERSION_13_6 = 130600;
+
+const int MAC_OS_VERSION_13_7 = 130700;
+
+const int MAC_OS_VERSION_14_0 = 140000;
+
+const int MAC_OS_VERSION_14_1 = 140100;
+
+const int MAC_OS_VERSION_14_2 = 140200;
+
+const int MAC_OS_VERSION_14_3 = 140300;
+
+const int MAC_OS_VERSION_14_4 = 140400;
+
+const int MAC_OS_VERSION_14_5 = 140500;
+
+const int MAC_OS_VERSION_14_6 = 140600;
+
+const int MAC_OS_VERSION_14_7 = 140700;
+
+const int MAC_OS_VERSION_15_0 = 150000;
+
+const int MAC_OS_VERSION_15_1 = 150100;
+
+const int MAC_OS_VERSION_15_2 = 150200;
+
+const int MAC_OS_VERSION_15_3 = 150300;
+
+const int MAC_OS_VERSION_15_4 = 150400;
+
+const int MAC_OS_VERSION_15_5 = 150500;
+
+const int MAC_OS_VERSION_15_6 = 150600;
+
+const int MAC_OS_VERSION_16_0 = 160000;
+
+const int MAC_OS_VERSION_26_0 = 260000;
+
+const int MAC_OS_VERSION_26_1 = 260100;
+
+const int MAC_OS_VERSION_26_2 = 260200;
+
+const int __AVAILABILITY_VERSIONS_VERSION_HASH = 93585900;
+
+const String __AVAILABILITY_VERSIONS_VERSION_STRING = 'Local';
+
+const String __AVAILABILITY_FILE = 'AvailabilityVersions.h';
+
+const int __MAC_OS_X_VERSION_MIN_REQUIRED = 150000;
+
+const int __MAC_OS_X_VERSION_MAX_ALLOWED = 260200;
 
 const int __ENABLE_LEGACY_MAC_AVAILABILITY = 1;
 
@@ -5729,6 +6405,18 @@ const int RENAME_EXCL = 4;
 const int RENAME_RESERVED1 = 8;
 
 const int RENAME_NOFOLLOW_ANY = 16;
+
+const int RENAME_RESOLVE_BENEATH = 32;
+
+const int SEEK_SET = 0;
+
+const int SEEK_CUR = 1;
+
+const int SEEK_END = 2;
+
+const int SEEK_HOLE = 3;
+
+const int SEEK_DATA = 4;
 
 const int __SLBF = 1;
 
@@ -5782,19 +6470,13 @@ const int L_tmpnam = 1024;
 
 const int TMP_MAX = 308915776;
 
-const int SEEK_SET = 0;
-
-const int SEEK_CUR = 1;
-
-const int SEEK_END = 2;
-
 const int L_ctermid = 1024;
 
 const int __DARWIN_NSIG = 32;
 
 const int NSIG = 32;
 
-const int _I386_SIGNAL_H_ = 1;
+const int _ARM_SIGNAL_ = 1;
 
 const int SIGHUP = 1;
 
@@ -5860,33 +6542,15 @@ const int SIGUSR1 = 30;
 
 const int SIGUSR2 = 31;
 
-const int FP_PREC_24B = 0;
-
-const int FP_PREC_53B = 2;
-
-const int FP_PREC_64B = 3;
-
-const int FP_RND_NEAR = 0;
-
-const int FP_RND_DOWN = 1;
-
-const int FP_RND_UP = 2;
-
-const int FP_CHOP = 3;
-
-const int FP_STATE_BYTES = 512;
-
-const int _X86_INSTRUCTION_STATE_MAX_INSN_BYTES = 2380;
-
-const int _X86_INSTRUCTION_STATE_CACHELINE_SIZE = 64;
-
-const int __LASTBRANCH_MAX = 32;
+const int __DARWIN_OPAQUE_ARM_THREAD_STATE64 = 0;
 
 const int SIGEV_NONE = 0;
 
 const int SIGEV_SIGNAL = 1;
 
 const int SIGEV_THREAD = 3;
+
+const int SIGEV_KEVENT = 4;
 
 const int ILL_NOOP = 0;
 
@@ -6242,6 +6906,8 @@ const int IOPOL_TYPE_VFS_ALLOW_LOW_SPACE_WRITES = 9;
 
 const int IOPOL_TYPE_VFS_DISALLOW_RW_FOR_O_EVTONLY = 10;
 
+const int IOPOL_TYPE_VFS_ENTITLED_RESERVE_ACCESS = 14;
+
 const int IOPOL_SCOPE_PROCESS = 0;
 
 const int IOPOL_SCOPE_THREAD = 1;
@@ -6274,6 +6940,10 @@ const int IOPOL_MATERIALIZE_DATALESS_FILES_OFF = 1;
 
 const int IOPOL_MATERIALIZE_DATALESS_FILES_ON = 2;
 
+const int IOPOL_MATERIALIZE_DATALESS_FILES_ORIG = 4;
+
+const int IOPOL_MATERIALIZE_DATALESS_FILES_BASIC_MASK = 3;
+
 const int IOPOL_VFS_STATFS_NO_DATA_VOLUME_DEFAULT = 0;
 
 const int IOPOL_VFS_STATFS_FORCE_NO_DATA_VOLUME = 1;
@@ -6294,6 +6964,8 @@ const int IOPOL_VFS_SKIP_MTIME_UPDATE_OFF = 0;
 
 const int IOPOL_VFS_SKIP_MTIME_UPDATE_ON = 1;
 
+const int IOPOL_VFS_SKIP_MTIME_UPDATE_IGNORE = 2;
+
 const int IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_OFF = 0;
 
 const int IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_ON = 1;
@@ -6301,6 +6973,14 @@ const int IOPOL_VFS_ALLOW_LOW_SPACE_WRITES_ON = 1;
 const int IOPOL_VFS_DISALLOW_RW_FOR_O_EVTONLY_DEFAULT = 0;
 
 const int IOPOL_VFS_DISALLOW_RW_FOR_O_EVTONLY_ON = 1;
+
+const int IOPOL_VFS_NOCACHE_WRITE_FS_BLKSIZE_DEFAULT = 0;
+
+const int IOPOL_VFS_NOCACHE_WRITE_FS_BLKSIZE_ON = 1;
+
+const int IOPOL_VFS_ENTITLED_RESERVE_ACCESS_OFF = 0;
+
+const int IOPOL_VFS_ENTITLED_RESERVE_ACCESS_ON = 1;
 
 const int WNOHANG = 1;
 
@@ -6332,13 +7012,13 @@ const int __DARWIN_BIG_ENDIAN = 4321;
 
 const int __DARWIN_PDP_ENDIAN = 3412;
 
-const int __DARWIN_BYTE_ORDER = 1234;
-
 const int LITTLE_ENDIAN = 1234;
 
 const int BIG_ENDIAN = 4321;
 
 const int PDP_ENDIAN = 3412;
+
+const int __DARWIN_BYTE_ORDER = 1234;
 
 const int BYTE_ORDER = 1234;
 
@@ -6347,3 +7027,7 @@ const int EXIT_FAILURE = 1;
 const int EXIT_SUCCESS = 0;
 
 const int RAND_MAX = 2147483647;
+
+const int _MALLOC_TYPE_MALLOC_BACKDEPLOY_PUBLIC = 1;
+
+const String LIBSUDOKU_VERSION = '0.0.0';

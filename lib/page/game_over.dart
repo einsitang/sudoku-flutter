@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
+import 'package:sudoku/l10n/sudoku_localizations.dart';
 import 'package:sudoku/effect/sound_effect.dart';
 import 'package:sudoku/util/localization_util.dart';
 import 'package:sudoku_dart/sudoku_dart.dart';

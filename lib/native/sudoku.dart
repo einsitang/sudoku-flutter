@@ -19,6 +19,8 @@ class SudokuNativeHelper {
 
   SudokuNativeHelper._internal() {
     _nf = Nativefl(_dylib);
+    Pointer<Utf8> version = _nf.Version();
+    log.d("libsudoku.version ==> ${version.toDartString()}");
   }
 
   static get instance {

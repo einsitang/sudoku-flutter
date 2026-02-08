@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/sudoku_localizations.dart';
+import 'package:sudoku/l10n/sudoku_localizations.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sudoku/state/sudoku_state.dart';
 import 'package:sudoku/util/localization_util.dart';

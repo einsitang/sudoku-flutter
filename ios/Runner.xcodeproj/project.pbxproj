@@ -15,8 +15,9 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		E10E5321E9C0ADABD637DEE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 50740E2E8873346E51B0CE58 /* GoogleService-Info.plist */; };
-		F04547BD2D8E9B9600A89562 /* libsudoku.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */; };
-		F04547BE2D8E9B9600A89562 /* libsudoku.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F098FC032F2965060040899D /* DummyLinker.m in Sources */ = {isa = PBXBuildFile; fileRef = F098FC022F2965060040899D /* DummyLinker.m */; };
+		F098FC042F29CBE30040899D /* libsudoku.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F098FC052F29CBEF0040899D /* libsudoku.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +27,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F04547BE2D8E9B9600A89562 /* libsudoku.xcframework in Embed Frameworks */,
+				F098FC042F29CBE30040899D /* libsudoku.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,6 +54,7 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA46451448FC1B923147505E /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F04547BC2D8E9B9600A89562 /* libsudoku.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libsudoku.xcframework; path = Pods/../NativeLibs/lib/libsudoku.xcframework; sourceTree = "<group>"; };
+		F098FC022F2965060040899D /* DummyLinker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DummyLinker.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F04547BD2D8E9B9600A89562 /* libsudoku.xcframework in Frameworks */,
+				F098FC052F29CBEF0040899D /* libsudoku.xcframework in Frameworks */,
 				95968459B8400BDFF48AE37C /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,6 +123,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				F098FC022F2965060040899D /* DummyLinker.m */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F098FC032F2965060040899D /* DummyLinker.m in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
@@ -439,11 +443,11 @@
 					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
 					"$(inherited)",
 					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"$(PROJECT_DIR)/NativeLibs/include",
+					"$(PROJECT_DIR)/NativeLibs/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -452,6 +456,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/NativeLibs/lib/static_lib_bak",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -534,8 +539,6 @@
 					"-framework",
 					"\"nanopb\"",
 					"-framework",
-					"\"opencv_dart\"",
-					"-framework",
 					"\"path_provider_foundation\"",
 					"-framework",
 					"\"url_launcher_ios\"",
@@ -544,7 +547,7 @@
 					"-weak_framework",
 					"\"Metal\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -713,11 +716,11 @@
 					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
 					"$(inherited)",
 					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"$(PROJECT_DIR)/NativeLibs/include",
+					"$(PROJECT_DIR)/NativeLibs/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -726,6 +729,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/NativeLibs/lib/static_lib_bak",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -808,8 +812,6 @@
 					"-framework",
 					"\"nanopb\"",
 					"-framework",
-					"\"opencv_dart\"",
-					"-framework",
 					"\"path_provider_foundation\"",
 					"-framework",
 					"\"url_launcher_ios\"",
@@ -818,7 +820,7 @@
 					"-weak_framework",
 					"\"Metal\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -877,11 +879,11 @@
 					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
 					"$(inherited)",
 					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"$(PROJECT_DIR)/NativeLibs/include",
+					"$(PROJECT_DIR)/NativeLibs/include/**",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -890,6 +892,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)/NativeLibs/lib/static_lib_bak",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -972,8 +975,6 @@
 					"-framework",
 					"\"nanopb\"",
 					"-framework",
-					"\"opencv_dart\"",
-					"-framework",
 					"\"path_provider_foundation\"",
 					"-framework",
 					"\"url_launcher_ios\"",
@@ -982,7 +983,7 @@
 					"-weak_framework",
 					"\"Metal\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevlow.app.sudoku2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
