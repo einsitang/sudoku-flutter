@@ -55,7 +55,7 @@ about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md)
 ## environment
 
 - dart SDK: '>=3.0.0 <4.0.0' 
-- flutter SDK: '^3.0.0' // 3.27.3
+- flutter SDK: '^3.32.1'
 - jdk 17 with Gradle Plugin 8.1.1 :new:
 
 ## dependency
