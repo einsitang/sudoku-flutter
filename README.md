@@ -36,9 +36,9 @@ about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ### iOS
 
-![Bootstrap](./document/img/WX20230312-193408.jpg)![Game](./document/img/WX20230312-193423.jpg)
+![Bootstrap](./document/img/IMG_2699-portrait.png)![Game](./document/img/IMG_2700-portrait.png)
 
-<p align="center">ios screenshot by 2023</p>
+<p align="center">ios screenshot by 2026</p>
 
 ### Android
 
@@ -55,7 +55,7 @@ about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md)
 ## environment
 
 - dart SDK: '>=3.0.0 <4.0.0' 
-- flutter SDK: '^3.0.0' // 3.27.3
+- flutter SDK: '^3.32.1'
 - jdk 17 with Gradle Plugin 8.1.1 :new:
 
 ## dependency
@@ -71,7 +71,7 @@ about contributing please read [CONTRIBUTING.md](CONTRIBUTING.md)
 ## platform support
 
 - android
-- iOS // <- we haven't tested enough yet
+- iOS
 - ~~WEB (no plan support yet)~~
 
 ## install
