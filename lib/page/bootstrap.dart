@@ -285,7 +285,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
         .moveY(
             delay: 800.ms, duration: 500.ms, begin: SizeConfig.screenHeight / 4)
         .then()
-        .scaleXY(duration: 500.ms, begin: 1.30)
+        .scaleXY(duration: 500.ms, begin: 1.25)
         .then()
         .animate(onPlay: (ctrl) => ctrl.repeat(reverse: false))
         .shimmer(
@@ -303,7 +303,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
 
     Widget body = Container(
       color: Colors.white,
-      padding: EdgeInsets.all(25.0),
+      padding: EdgeInsets.all(35.0),
       child: Center(
         child: Column(
           children: <Widget>[
